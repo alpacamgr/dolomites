@@ -1,0 +1,31 @@
+id: fixture-terrain
+title:
+  en: "PLACEHOLDER terrain chapter"
+  de: "PLATZHALTER Gelaende-Kapitel"
+  it: "SEGNAPOSTO capitolo terreno"
+age_start_ma: 0.0
+age_end_ma: 0.0
+ics_stage: "Placeholder"
+ics_chart_version: "fixture"
+summary:
+  en: "Second fixture chapter. Its only purpose is to exercise the crossfade between the globe and the terrain engine while editorial content is missing."
+  de: "Zweites Platzhalter-Kapitel. Es dient nur dazu, den Uebergang zwischen Globus und Gelaende zu pruefen, solange redaktionelle Inhalte fehlen."
+  it: "Secondo capitolo segnaposto. Serve solo a mettere alla prova la transizione tra globo e terreno mentre mancano i contenuti editoriali."
+map_state:
+  layers:
+    - { id: "fixture-terrain-layer", label: illustrative, source_ref: "fixture" }
+facts: []
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: terrain
+  time:
+    unit: ma
+    start: 0
+    end: 0
+  camera:
+    terrain: { lon: 11.8, lat: 46.5, zoom: 9, pitch: 45, bearing: 15 }
+  layers:
+    - { id: "fixture-terrain-layer", label: illustrative, source_ref: "fixture" }

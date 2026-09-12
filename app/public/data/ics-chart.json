@@ -1,0 +1,807 @@
+{
+  "version": "2026-06",
+  "source_ref": "ics-2026",
+  "dataset_id": "ics-2026",
+  "label": "interpreted",
+  "attribution": "International Commission on Stratigraphy, International Chronostratigraphic Chart 2026-06 (data release v2026-06.5, github.com/i-c-stratigraphy/chart), CC BY 4.0. Cohen, K.M., Harper, D.A.T., Gibbard, P.L. & Car, N. (2025) The ICS International Chronostratigraphic Chart this decade. Episodes 48: 105-115.",
+  "license": "CC BY 4.0",
+  "generated": "2026-09-12",
+  "script": "data/scripts/quaternary/build_ics_chart.py",
+  "source": {
+    "url": "https://raw.githubusercontent.com/i-c-stratigraphy/chart/v2026-06.5/chart.ttl",
+    "release": "v2026-06.5",
+    "sha256": "0158959e8fdae2a8bdbb14ca3e424d2370362cd8dfc8af86e7be73c74368b355",
+    "version_in_file": "2026-06"
+  },
+  "notes": [
+    "Boundary ages, colours and parents copied from chart.ttl without change.",
+    "Chart ranks outside contract 4 omitted: Pennsylvanian; their children take the next ancestor as parent.",
+    "Series without an English prefLabel in chart.ttl (Lower/Middle/Upper ...) are named from the chart IRI.",
+    "As published in the chart: Chattian ends at 23.04 Ma but Aquitanian begins at 23.03 Ma."
+  ],
+  "cross_check": {
+    "reference": "research/geology/dolomites-geological-history.md (source 1c, ICS news post on v2026/06)",
+    "boundaries": [
+      {
+        "name": "Base Ladinian",
+        "research_ma": 241.464,
+        "source_ma": 241.464,
+        "match": true
+      },
+      {
+        "name": "Base Anisian",
+        "research_ma": 247.0,
+        "source_ma": 247.0,
+        "match": true
+      },
+      {
+        "name": "Base Olenekian",
+        "research_ma": 250.8,
+        "source_ma": 250.8,
+        "match": true
+      }
+    ]
+  },
+  "intervals": [
+    {
+      "name": "Phanerozoic",
+      "type": "eon",
+      "parent": null,
+      "start_ma": 538.8,
+      "end_ma": 0.0,
+      "color": "#9AD9DD"
+    },
+    {
+      "name": "Paleozoic",
+      "type": "era",
+      "parent": "Phanerozoic",
+      "start_ma": 538.8,
+      "end_ma": 251.902,
+      "color": "#99C08D"
+    },
+    {
+      "name": "Carboniferous",
+      "type": "period",
+      "parent": "Paleozoic",
+      "start_ma": 358.86,
+      "end_ma": 298.9,
+      "color": "#67A599"
+    },
+    {
+      "name": "Upper Pennsylvanian",
+      "type": "epoch",
+      "parent": "Carboniferous",
+      "start_ma": 307.0,
+      "end_ma": 298.9,
+      "color": "#BFD0BA"
+    },
+    {
+      "name": "Gzhelian",
+      "type": "age",
+      "parent": "Upper Pennsylvanian",
+      "start_ma": 303.7,
+      "end_ma": 298.9,
+      "color": "#CCD4C7"
+    },
+    {
+      "name": "Permian",
+      "type": "period",
+      "parent": "Paleozoic",
+      "start_ma": 298.9,
+      "end_ma": 251.902,
+      "color": "#F04028"
+    },
+    {
+      "name": "Cisuralian",
+      "type": "epoch",
+      "parent": "Permian",
+      "start_ma": 298.9,
+      "end_ma": 274.4,
+      "color": "#EF5845"
+    },
+    {
+      "name": "Asselian",
+      "type": "age",
+      "parent": "Cisuralian",
+      "start_ma": 298.9,
+      "end_ma": 293.52,
+      "color": "#E36350"
+    },
+    {
+      "name": "Sakmarian",
+      "type": "age",
+      "parent": "Cisuralian",
+      "start_ma": 293.52,
+      "end_ma": 290.1,
+      "color": "#E36F5C"
+    },
+    {
+      "name": "Artinskian",
+      "type": "age",
+      "parent": "Cisuralian",
+      "start_ma": 290.1,
+      "end_ma": 283.3,
+      "color": "#E37B68"
+    },
+    {
+      "name": "Kungurian",
+      "type": "age",
+      "parent": "Cisuralian",
+      "start_ma": 283.3,
+      "end_ma": 274.4,
+      "color": "#E38776"
+    },
+    {
+      "name": "Guadalupian",
+      "type": "epoch",
+      "parent": "Permian",
+      "start_ma": 274.4,
+      "end_ma": 259.857,
+      "color": "#FB745C"
+    },
+    {
+      "name": "Roadian",
+      "type": "age",
+      "parent": "Guadalupian",
+      "start_ma": 274.4,
+      "end_ma": 266.9,
+      "color": "#FB8069"
+    },
+    {
+      "name": "Wordian",
+      "type": "age",
+      "parent": "Guadalupian",
+      "start_ma": 266.9,
+      "end_ma": 264.28,
+      "color": "#FB8D76"
+    },
+    {
+      "name": "Capitanian",
+      "type": "age",
+      "parent": "Guadalupian",
+      "start_ma": 264.28,
+      "end_ma": 259.857,
+      "color": "#FB9A85"
+    },
+    {
+      "name": "Lopingian",
+      "type": "epoch",
+      "parent": "Permian",
+      "start_ma": 259.857,
+      "end_ma": 251.902,
+      "color": "#FBA794"
+    },
+    {
+      "name": "Wuchiapingian",
+      "type": "age",
+      "parent": "Lopingian",
+      "start_ma": 259.857,
+      "end_ma": 254.14,
+      "color": "#FCB4A2"
+    },
+    {
+      "name": "Changhsingian",
+      "type": "age",
+      "parent": "Lopingian",
+      "start_ma": 254.14,
+      "end_ma": 251.902,
+      "color": "#FCC0B2"
+    },
+    {
+      "name": "Mesozoic",
+      "type": "era",
+      "parent": "Phanerozoic",
+      "start_ma": 251.902,
+      "end_ma": 66.0,
+      "color": "#67C5CA"
+    },
+    {
+      "name": "Triassic",
+      "type": "period",
+      "parent": "Mesozoic",
+      "start_ma": 251.902,
+      "end_ma": 201.4,
+      "color": "#812B92"
+    },
+    {
+      "name": "Lower Triassic",
+      "type": "epoch",
+      "parent": "Triassic",
+      "start_ma": 251.902,
+      "end_ma": 247.0,
+      "color": "#983999"
+    },
+    {
+      "name": "Induan",
+      "type": "age",
+      "parent": "Lower Triassic",
+      "start_ma": 251.902,
+      "end_ma": 250.8,
+      "color": "#A4469F"
+    },
+    {
+      "name": "Olenekian",
+      "type": "age",
+      "parent": "Lower Triassic",
+      "start_ma": 250.8,
+      "end_ma": 247.0,
+      "color": "#B051A5"
+    },
+    {
+      "name": "Middle Triassic",
+      "type": "epoch",
+      "parent": "Triassic",
+      "start_ma": 247.0,
+      "end_ma": 237.0,
+      "color": "#B168B1"
+    },
+    {
+      "name": "Anisian",
+      "type": "age",
+      "parent": "Middle Triassic",
+      "start_ma": 247.0,
+      "end_ma": 241.464,
+      "color": "#BC75B7"
+    },
+    {
+      "name": "Ladinian",
+      "type": "age",
+      "parent": "Middle Triassic",
+      "start_ma": 241.464,
+      "end_ma": 237.0,
+      "color": "#C983BF"
+    },
+    {
+      "name": "Upper Triassic",
+      "type": "epoch",
+      "parent": "Triassic",
+      "start_ma": 237.0,
+      "end_ma": 201.4,
+      "color": "#BD8CC3"
+    },
+    {
+      "name": "Carnian",
+      "type": "age",
+      "parent": "Upper Triassic",
+      "start_ma": 237.0,
+      "end_ma": 227.3,
+      "color": "#C99BCB"
+    },
+    {
+      "name": "Norian",
+      "type": "age",
+      "parent": "Upper Triassic",
+      "start_ma": 227.3,
+      "end_ma": 205.7,
+      "color": "#D6AAD3"
+    },
+    {
+      "name": "Rhaetian",
+      "type": "age",
+      "parent": "Upper Triassic",
+      "start_ma": 205.7,
+      "end_ma": 201.4,
+      "color": "#E3B9DB"
+    },
+    {
+      "name": "Jurassic",
+      "type": "period",
+      "parent": "Mesozoic",
+      "start_ma": 201.4,
+      "end_ma": 143.1,
+      "color": "#34B2C9"
+    },
+    {
+      "name": "Lower Jurassic",
+      "type": "epoch",
+      "parent": "Jurassic",
+      "start_ma": 201.4,
+      "end_ma": 174.7,
+      "color": "#42AED0"
+    },
+    {
+      "name": "Hettangian",
+      "type": "age",
+      "parent": "Lower Jurassic",
+      "start_ma": 201.4,
+      "end_ma": 199.5,
+      "color": "#4EB3D3"
+    },
+    {
+      "name": "Sinemurian",
+      "type": "age",
+      "parent": "Lower Jurassic",
+      "start_ma": 199.5,
+      "end_ma": 192.9,
+      "color": "#67BCD8"
+    },
+    {
+      "name": "Pliensbachian",
+      "type": "age",
+      "parent": "Lower Jurassic",
+      "start_ma": 192.9,
+      "end_ma": 184.2,
+      "color": "#80C5DD"
+    },
+    {
+      "name": "Toarcian",
+      "type": "age",
+      "parent": "Lower Jurassic",
+      "start_ma": 184.2,
+      "end_ma": 174.7,
+      "color": "#99CEE3"
+    },
+    {
+      "name": "Middle Jurassic",
+      "type": "epoch",
+      "parent": "Jurassic",
+      "start_ma": 174.7,
+      "end_ma": 161.5,
+      "color": "#80CFD8"
+    },
+    {
+      "name": "Aalenian",
+      "type": "age",
+      "parent": "Middle Jurassic",
+      "start_ma": 174.7,
+      "end_ma": 170.9,
+      "color": "#9AD9DD"
+    },
+    {
+      "name": "Bajocian",
+      "type": "age",
+      "parent": "Middle Jurassic",
+      "start_ma": 170.9,
+      "end_ma": 168.2,
+      "color": "#A6DDE0"
+    },
+    {
+      "name": "Bathonian",
+      "type": "age",
+      "parent": "Middle Jurassic",
+      "start_ma": 168.2,
+      "end_ma": 165.3,
+      "color": "#B3E2E3"
+    },
+    {
+      "name": "Callovian",
+      "type": "age",
+      "parent": "Middle Jurassic",
+      "start_ma": 165.3,
+      "end_ma": 161.5,
+      "color": "#BFE7E5"
+    },
+    {
+      "name": "Upper Jurassic",
+      "type": "epoch",
+      "parent": "Jurassic",
+      "start_ma": 161.5,
+      "end_ma": 143.1,
+      "color": "#B3E3EE"
+    },
+    {
+      "name": "Oxfordian",
+      "type": "age",
+      "parent": "Upper Jurassic",
+      "start_ma": 161.5,
+      "end_ma": 154.8,
+      "color": "#BFE7F1"
+    },
+    {
+      "name": "Kimmeridgian",
+      "type": "age",
+      "parent": "Upper Jurassic",
+      "start_ma": 154.8,
+      "end_ma": 149.2,
+      "color": "#CCECF4"
+    },
+    {
+      "name": "Tithonian",
+      "type": "age",
+      "parent": "Upper Jurassic",
+      "start_ma": 149.2,
+      "end_ma": 143.1,
+      "color": "#D9F1F7"
+    },
+    {
+      "name": "Cretaceous",
+      "type": "period",
+      "parent": "Mesozoic",
+      "start_ma": 143.1,
+      "end_ma": 66.0,
+      "color": "#7FC64E"
+    },
+    {
+      "name": "Lower Cretaceous",
+      "type": "epoch",
+      "parent": "Cretaceous",
+      "start_ma": 143.1,
+      "end_ma": 100.5,
+      "color": "#8CCD57"
+    },
+    {
+      "name": "Berriasian",
+      "type": "age",
+      "parent": "Lower Cretaceous",
+      "start_ma": 143.1,
+      "end_ma": 137.05,
+      "color": "#8CCD60"
+    },
+    {
+      "name": "Valanginian",
+      "type": "age",
+      "parent": "Lower Cretaceous",
+      "start_ma": 137.05,
+      "end_ma": 132.6,
+      "color": "#99D36A"
+    },
+    {
+      "name": "Hauterivian",
+      "type": "age",
+      "parent": "Lower Cretaceous",
+      "start_ma": 132.6,
+      "end_ma": 125.77,
+      "color": "#A6D975"
+    },
+    {
+      "name": "Barremian",
+      "type": "age",
+      "parent": "Lower Cretaceous",
+      "start_ma": 125.77,
+      "end_ma": 121.4,
+      "color": "#B3DF7F"
+    },
+    {
+      "name": "Aptian",
+      "type": "age",
+      "parent": "Lower Cretaceous",
+      "start_ma": 121.4,
+      "end_ma": 113.2,
+      "color": "#BFE48A"
+    },
+    {
+      "name": "Albian",
+      "type": "age",
+      "parent": "Lower Cretaceous",
+      "start_ma": 113.2,
+      "end_ma": 100.5,
+      "color": "#CCEA97"
+    },
+    {
+      "name": "Upper Cretaceous",
+      "type": "epoch",
+      "parent": "Cretaceous",
+      "start_ma": 100.5,
+      "end_ma": 66.0,
+      "color": "#A6D84A"
+    },
+    {
+      "name": "Cenomanian",
+      "type": "age",
+      "parent": "Upper Cretaceous",
+      "start_ma": 100.5,
+      "end_ma": 93.9,
+      "color": "#B3DE53"
+    },
+    {
+      "name": "Turonian",
+      "type": "age",
+      "parent": "Upper Cretaceous",
+      "start_ma": 93.9,
+      "end_ma": 89.8,
+      "color": "#BFE35D"
+    },
+    {
+      "name": "Coniacian",
+      "type": "age",
+      "parent": "Upper Cretaceous",
+      "start_ma": 89.8,
+      "end_ma": 85.7,
+      "color": "#CCE968"
+    },
+    {
+      "name": "Santonian",
+      "type": "age",
+      "parent": "Upper Cretaceous",
+      "start_ma": 85.7,
+      "end_ma": 83.6,
+      "color": "#D9EF74"
+    },
+    {
+      "name": "Campanian",
+      "type": "age",
+      "parent": "Upper Cretaceous",
+      "start_ma": 83.6,
+      "end_ma": 72.2,
+      "color": "#E6F47F"
+    },
+    {
+      "name": "Maastrichtian",
+      "type": "age",
+      "parent": "Upper Cretaceous",
+      "start_ma": 72.2,
+      "end_ma": 66.0,
+      "color": "#F2FA8C"
+    },
+    {
+      "name": "Cenozoic",
+      "type": "era",
+      "parent": "Phanerozoic",
+      "start_ma": 66.0,
+      "end_ma": 0.0,
+      "color": "#F2F91D"
+    },
+    {
+      "name": "Paleogene",
+      "type": "period",
+      "parent": "Cenozoic",
+      "start_ma": 66.0,
+      "end_ma": 23.04,
+      "color": "#FD9A52"
+    },
+    {
+      "name": "Paleocene",
+      "type": "epoch",
+      "parent": "Paleogene",
+      "start_ma": 66.0,
+      "end_ma": 56.0,
+      "color": "#FDA75F"
+    },
+    {
+      "name": "Danian",
+      "type": "age",
+      "parent": "Paleocene",
+      "start_ma": 66.0,
+      "end_ma": 61.66,
+      "color": "#FDB462"
+    },
+    {
+      "name": "Selandian",
+      "type": "age",
+      "parent": "Paleocene",
+      "start_ma": 61.66,
+      "end_ma": 59.24,
+      "color": "#FEBF65"
+    },
+    {
+      "name": "Thanetian",
+      "type": "age",
+      "parent": "Paleocene",
+      "start_ma": 59.24,
+      "end_ma": 56.0,
+      "color": "#FDBF6F"
+    },
+    {
+      "name": "Eocene",
+      "type": "epoch",
+      "parent": "Paleogene",
+      "start_ma": 56.0,
+      "end_ma": 33.9,
+      "color": "#FDB46C"
+    },
+    {
+      "name": "Ypresian",
+      "type": "age",
+      "parent": "Eocene",
+      "start_ma": 56.0,
+      "end_ma": 48.07,
+      "color": "#FCA773"
+    },
+    {
+      "name": "Lutetian",
+      "type": "age",
+      "parent": "Eocene",
+      "start_ma": 48.07,
+      "end_ma": 41.03,
+      "color": "#FDB482"
+    },
+    {
+      "name": "Bartonian",
+      "type": "age",
+      "parent": "Eocene",
+      "start_ma": 41.03,
+      "end_ma": 37.71,
+      "color": "#FDC091"
+    },
+    {
+      "name": "Priabonian",
+      "type": "age",
+      "parent": "Eocene",
+      "start_ma": 37.71,
+      "end_ma": 33.9,
+      "color": "#FDCDA1"
+    },
+    {
+      "name": "Oligocene",
+      "type": "epoch",
+      "parent": "Paleogene",
+      "start_ma": 33.9,
+      "end_ma": 23.04,
+      "color": "#FEC07A"
+    },
+    {
+      "name": "Rupelian",
+      "type": "age",
+      "parent": "Oligocene",
+      "start_ma": 33.9,
+      "end_ma": 27.3,
+      "color": "#FED99A"
+    },
+    {
+      "name": "Chattian",
+      "type": "age",
+      "parent": "Oligocene",
+      "start_ma": 27.3,
+      "end_ma": 23.04,
+      "color": "#FEE6AA"
+    },
+    {
+      "name": "Neogene",
+      "type": "period",
+      "parent": "Cenozoic",
+      "start_ma": 23.04,
+      "end_ma": 2.58,
+      "color": "#FFE619"
+    },
+    {
+      "name": "Miocene",
+      "type": "epoch",
+      "parent": "Neogene",
+      "start_ma": 23.04,
+      "end_ma": 5.333,
+      "color": "#FFFF00"
+    },
+    {
+      "name": "Aquitanian",
+      "type": "age",
+      "parent": "Miocene",
+      "start_ma": 23.03,
+      "end_ma": 20.45,
+      "color": "#FFFF33"
+    },
+    {
+      "name": "Burdigalian",
+      "type": "age",
+      "parent": "Miocene",
+      "start_ma": 20.45,
+      "end_ma": 15.98,
+      "color": "#FFFF41"
+    },
+    {
+      "name": "Langhian",
+      "type": "age",
+      "parent": "Miocene",
+      "start_ma": 15.98,
+      "end_ma": 13.82,
+      "color": "#FFFF4D"
+    },
+    {
+      "name": "Serravallian",
+      "type": "age",
+      "parent": "Miocene",
+      "start_ma": 13.82,
+      "end_ma": 11.63,
+      "color": "#FFFF59"
+    },
+    {
+      "name": "Tortonian",
+      "type": "age",
+      "parent": "Miocene",
+      "start_ma": 11.63,
+      "end_ma": 7.246,
+      "color": "#FFFF66"
+    },
+    {
+      "name": "Messinian",
+      "type": "age",
+      "parent": "Miocene",
+      "start_ma": 7.246,
+      "end_ma": 5.333,
+      "color": "#FFFF73"
+    },
+    {
+      "name": "Pliocene",
+      "type": "epoch",
+      "parent": "Neogene",
+      "start_ma": 5.333,
+      "end_ma": 2.58,
+      "color": "#FFFF99"
+    },
+    {
+      "name": "Zanclean",
+      "type": "age",
+      "parent": "Pliocene",
+      "start_ma": 5.333,
+      "end_ma": 3.6,
+      "color": "#FFFFB3"
+    },
+    {
+      "name": "Piacenzian",
+      "type": "age",
+      "parent": "Pliocene",
+      "start_ma": 3.6,
+      "end_ma": 2.58,
+      "color": "#FFFFBF"
+    },
+    {
+      "name": "Quaternary",
+      "type": "period",
+      "parent": "Cenozoic",
+      "start_ma": 2.58,
+      "end_ma": 0.0,
+      "color": "#F9F97F"
+    },
+    {
+      "name": "Pleistocene",
+      "type": "epoch",
+      "parent": "Quaternary",
+      "start_ma": 2.58,
+      "end_ma": 0.0117,
+      "color": "#FFEFAF"
+    },
+    {
+      "name": "Gelasian",
+      "type": "age",
+      "parent": "Pleistocene",
+      "start_ma": 2.58,
+      "end_ma": 1.8,
+      "color": "#FFEDB3"
+    },
+    {
+      "name": "Calabrian",
+      "type": "age",
+      "parent": "Pleistocene",
+      "start_ma": 1.8,
+      "end_ma": 0.774,
+      "color": "#FFF2BA"
+    },
+    {
+      "name": "Chibanian",
+      "type": "age",
+      "parent": "Pleistocene",
+      "start_ma": 0.774,
+      "end_ma": 0.129,
+      "color": "#FFF2C7"
+    },
+    {
+      "name": "Upper Pleistocene",
+      "type": "age",
+      "parent": "Pleistocene",
+      "start_ma": 0.129,
+      "end_ma": 0.0117,
+      "color": "#FFF2D3"
+    },
+    {
+      "name": "Holocene",
+      "type": "epoch",
+      "parent": "Quaternary",
+      "start_ma": 0.0117,
+      "end_ma": 0.0,
+      "color": "#FEEBD2"
+    },
+    {
+      "name": "Greenlandian",
+      "type": "age",
+      "parent": "Holocene",
+      "start_ma": 0.0117,
+      "end_ma": 0.0082,
+      "color": "#FEECDB"
+    },
+    {
+      "name": "Northgrippian",
+      "type": "age",
+      "parent": "Holocene",
+      "start_ma": 0.0082,
+      "end_ma": 0.0042,
+      "color": "#FDECE4"
+    },
+    {
+      "name": "Meghalayan",
+      "type": "age",
+      "parent": "Holocene",
+      "start_ma": 0.0042,
+      "end_ma": 0.0,
+      "color": "#FDEDEC"
+    }
+  ]
+}

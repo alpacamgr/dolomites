@@ -1,0 +1,56 @@
+id: world-jurassic-cretaceous
+title:
+  en: "Adria drifts, the Alpine Tethys opens"
+  de: "Adria wandert, die Alpine Tethys öffnet sich"
+  it: "Adria migra, si apre la Tetide Alpina"
+age_start_ma: 201.0
+age_end_ma: 66.0
+ics_stage: Jurassic-Cretaceous
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The single continent breaks apart. A narrow ocean, the Alpine Tethys and its Piemont-Liguria basin, opens between Europe and Adria. The Dolomites, still marine, drown beneath white pelagic mud and dark red ammonite-bearing limestones. What is now a mountain range spends most of these 135 million years as a piece of continental shelf, then of deep sea floor."
+  de: "Der Superkontinent zerbricht. Zwischen Europa und Adria öffnet sich ein schmaler Ozean, die Alpine Tethys mit ihrem Piemont-Liguria-Becken. Die noch marinen Dolomiten versinken unter weißem Pelagikschlamm und tiefroten Ammoniten-Kalken. Was heute ein Gebirge ist, verbringt den größten Teil dieser 135 Millionen Jahre als Kontinentalschelf und dann als Tiefsee-Boden."
+  it: "Il continente unico si frantuma. Tra Europa e Adria si apre un oceano stretto, la Tetide Alpina con il suo bacino di Piemonte-Liguria. Le Dolomiti, ancora marine, affondano sotto fango pelagico bianco e calcari rosso scuro con ammoniti. Ciò che oggi è una catena montuosa passa la maggior parte di questi 135 milioni di anni come piattaforma continentale, poi come fondale profondo."
+map_state:
+  layers:
+    - id: "scotese-wright-2018-model"
+      label: modeled
+      source_ref: "scotese-2018"
+    - id: "scotese-paleodem-2018-v2"
+      label: interpreted
+      source_ref: "scotese-2018"
+facts:
+  - text:
+      en: "The regional Le Breton et al. 2021 reconstruction treats Adria as two plates, northern (Ivrea) and southern (Apulia), and models the Piemont-Liguria basin opening in four stages between 200 and 83 Ma."
+      de: "Die regionale Rekonstruktion von Le Breton et al. 2021 behandelt Adria als zwei Platten, Nord (Ivrea) und Süd (Apulien), und modelliert die Öffnung des Piemont-Liguria-Beckens in vier Etappen zwischen 200 und 83 Ma."
+      it: "La ricostruzione regionale di Le Breton et al. 2021 tratta Adria come due placche, settentrionale (Ivrea) e meridionale (Apulia), e modella l'apertura del bacino di Piemonte-Liguria in quattro fasi tra 200 e 83 Ma."
+    source_ref: "lebreton-2021"
+    confidence: established
+  - text:
+      en: "The mature Piemont-Liguria ocean reached, in this model, a maximum width of about 250 km of oceanic crust; that is much narrower than the wide Tethys of school atlases."
+      de: "Nach diesem Modell erreicht der reife Piemont-Liguria-Ozean eine maximale Breite von etwa 250 km ozeanischer Kruste, deutlich schmaler als die weite Tethys aus Schulatlanten."
+      it: "In questo modello l'oceano di Piemonte-Liguria maturo raggiunge una larghezza massima di circa 250 km di crosta oceanica, molto più stretto della vasta Tetide degli atlanti scolastici."
+    value: "up to about 250 km"
+    source_ref: "lebreton-2021"
+    confidence: established
+  - text:
+      en: "The Bosellini, Gianolla and Stefani synthesis records the Dolomites' Permian to Cretaceous sedimentary succession as the passive margin of Tethys, with the Middle Jurassic marking the oceanic break-up."
+      de: "Die Zusammenschau von Bosellini, Gianolla und Stefani beschreibt die Sedimentabfolge der Dolomiten vom Perm bis in die Kreide als passiven Rand der Tethys, mit dem ozeanischen Aufbrechen im Mittleren Jura."
+      it: "La sintesi di Bosellini, Gianolla e Stefani descrive la successione sedimentaria delle Dolomiti dal Permiano al Cretaceo come margine passivo della Tetide, con la rottura oceanica nel Giurassico Medio."
+    source_ref: "bosellini-2003"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: globe
+  time:
+    unit: ma
+    start: 201
+    end: 66
+  camera:
+    globe: { lat: 25, lon: 15, distance: 2.5 }
+  layers:
+    - { id: "scotese-wright-2018-model", label: modeled, source_ref: "scotese-2018", style: "continents+boundaries" }
+    - { id: "scotese-paleodem-2018-v2", label: interpreted, source_ref: "scotese-2018" }

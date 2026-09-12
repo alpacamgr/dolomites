@@ -1,0 +1,44 @@
+{
+  "dataset_id": "alps2017-uplift",
+  "label": "modeled",
+  "source_ref": "sanchez-2018",
+  "attribution": "S\u00e1nchez L., V\u00f6lksen Ch., Sokolov A., Arenz H., Seitz F. (2018). Present-day surface deformation of the Alpine region inferred from geodetic techniques. Earth System Science Data 10, 1503-1526. Data: PANGAEA 886889, file ALPS2017_DEF_VT.GRD.",
+  "license": "CC BY 3.0",
+  "generated": "2026-09-06",
+  "script": "data/scripts/quaternary/build_curves.py",
+  "x": "ma",
+  "unit": "mm_per_yr",
+  "reference_point": {
+    "lat": 46.5,
+    "lon": 11.8
+  },
+  "grid_cell": {
+    "lat": 46.4,
+    "lon": 11.8,
+    "nominal_size_deg": [
+      0.3,
+      0.2
+    ]
+  },
+  "notes": "Vertical velocity at the nearest cell of the ALPS2017 25 km x 25 km gridded deformation model. Positive = uplift. The pointwise value comes from a geodetic least-squares collocation of ~300 continuous GNSS stations over 12.4 years (2005-2016), reference frame IGb08 epoch 2010.0. Uncertainty is the standard uncertainty of the vertical component (m/yr in source, converted to mm/yr here).",
+  "series": [
+    {
+      "name": "vertical_velocity_mm_per_yr",
+      "values": [
+        [
+          0.0,
+          1.567
+        ]
+      ]
+    },
+    {
+      "name": "vertical_velocity_uncertainty_mm_per_yr",
+      "values": [
+        [
+          0.0,
+          0.45
+        ]
+      ]
+    }
+  ]
+}

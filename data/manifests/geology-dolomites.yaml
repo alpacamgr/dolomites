@@ -1,0 +1,63 @@
+id: geology-dolomites
+title: Dolomites geology - merged open vector geological maps (derived product)
+provider: "Derived by this project from bz-geology-carg, pat-geology-carta-geologica, veneto-litologia-250k, swisstopo-geocover, ispra-geologia-100k-inspire and geosphere-geologicunits-500k"
+version: "build 2026-09-12 (gap-free coverage, six sources)"
+citation: >-
+  Merged from: Provincia autonoma di Bolzano - Alto Adige, P_BZ Carta geologica CARG (CC0 1.0);
+  Provincia autonoma di Trento, Servizio Geologico, Carta Geologica della PAT (CC BY 4.0);
+  Regione del Veneto, Database delle litologie scala 1:250.000 (IODL 2.0); Federal Office of Topography swisstopo,
+  GeoCover (swisstopo OGD terms); ISPRA - Servizio Geologico d'Italia, Carta Geologica d'Italia 1:100.000 (CC BY 4.0);
+  GeoSphere Austria, INSPIRE Geologische Einheiten 1:500.000 (CC BY 4.0). Ages from the ICS International
+  Chronostratigraphic Chart 2026-06 (CC BY 4.0).
+doi: ""
+landing_page: ""
+download_url: ""
+download_date: 2026-09-12
+license:
+  name: "CC BY 4.0 + IODL 2.0 + CC0 1.0 + swisstopo OGD terms (per source; the tiles carry a per-feature 'source')"
+  url: ""
+  attribution_text: >-
+    Provincia autonoma di Bolzano - Alto Adige, Cartografia provinciale - P_BZ Carta geologica CARG - CC0 1.0 |
+    Dati elaborati dal Servizio geologico della Provincia autonoma di Trento - Carta Geologica della PAT - CC BY 4.0 (modified) |
+    Regione del Veneto - Database delle litologie scala 1:250.000 - IODL 2.0 (https://www.dati.gov.it/content/italian-open-data-license-v20) (modified) |
+    Federal Office of Topography swisstopo - GeoCover (modified) |
+    ISPRA - Servizio Geologico d'Italia, Carta Geologica d'Italia 1:100.000 (dataset INSPIRE) - CC BY 4.0 (modified) |
+    © GeoSphere Austria - INSPIRE Geologische Einheiten 1:500.000 Österreich - CC BY 4.0 (modified)
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:3857
+  bbox: [10.3, 45.8, 12.7, 47.2]
+  resolution: "vector, z8-13; source scales 1:10,000 (Trentino), 1:25,000 (South Tyrol, swisstopo), 1:100,000 (ISPRA), 1:250,000 (Veneto), 1:500,000 (GeoSphere)"
+temporal:
+  coverage: "present"
+  step: "static"
+format: "Vector PMTiles v3 (MVT, layer units) exported to static {z}/{x}/{y}.pbf tiles + GeoJSON coverage outlines and gap polygons"
+size_bytes: 0  # see archive_bytes and served_tile_bytes_per_zoom in app/public/data/terrain/geology-dolomites.meta.json
+checksum:
+  algorithm: sha256
+  value: ""  # derived file, rebuilt from the source manifests' checksummed inputs
+honesty_label: observed
+caveats: |
+  - Priority South Tyrol > Trentino > Veneto > swisstopo > ISPRA 1:100k > GeoSphere 1:500k; a lower source only fills area
+    that no higher source covers. The three gap-fill maps are much coarser (1:100,000 surveys of 1880-1980, 1:500,000) and
+    must not be read as detailed mapping at z11-13; the meta gives each source's scale and a scale_note.
+  - All sources form one polygon coverage (noded together), so neighbouring units share edges. At z8-z12 units smaller than
+    about one tile pixel are merged into a neighbour (the area shows that neighbour's unit) and the coverage is simplified
+    topologically; z13 is unsimplified.
+  - Ages and colours are ICS chart boundary ages for the stage names the sources give, not ages published by the maps; the
+    property age_basis says whether the age is the polygon's own map's (source), joined from another cited legend by
+    formation name (legend_join) or a deposit-type rule (class_rule). Ages are withheld where the source's age is not a
+    formation age or its attributes contradict each other (ISPRA per-unit review). See geology-dolomites.meta.json and
+    data/scripts/terrain/geology_age_mapping.json.
+  - Gaps remaining (geology-gaps.geojson): slivers along source and national borders.
+processing:
+  - step: "Read the six sources, map ages (ICS 2026-06, mapping table with evidence), node all boundaries into one coverage with priority, merge small units and coverage-simplify per zoom, encode MVT, write coverage outlines, gap polygons, preview and meta"
+    script: data/scripts/terrain/build_geology_pmtiles.py (+ geology_gapfill_readers.py, review_ispra_100k_units.py)
+    output: data/processed/terrain/geology-dolomites.pmtiles, app/public/data/terrain/geology-dolomites.meta.json, geology-coverage.geojson, geology-gaps.geojson
+  - step: "Export static tiles"
+    script: data/scripts/terrain/export_tiles.py --kind vector --template terrain/geology/{z}/{x}/{y}.pbf
+    output: app/public/data/terrain/geology/
+  - step: "Point-sampling check of the served tiles (per zoom covered / dated / missing vs z13 / bytes)"
+    script: data/scripts/terrain/check_geology_tiles.py
+    output: data/processed/terrain/geology-check/after.json (embedded in the meta)

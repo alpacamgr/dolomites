@@ -1,0 +1,63 @@
+id: veneto-litologia-250k
+title: Database delle diverse litologie che compongono il territorio della Regione Veneto scala 1:250.000
+provider: Regione del Veneto, Sezione Geologia e georisorse
+version: "IDT2 record r_veneto:c0501031_LitologiaReg (metadata dateStamp 2016-03-21; features agg 2012-02-09)"
+citation: >-
+  Regione del Veneto, Sezione Geologia e georisorse. Database delle diverse litologie che compongono il territorio
+  della Regione Veneto scala 1:250.000 (c0501031_LitologiaReg). Geoportale IDT2 Regione del Veneto.
+doi: ""
+landing_page: https://idt2.regione.veneto.it/geoportal/rest/document?id=r_veneto:c0501031_LitologiaReg
+download_url: https://idt2-geoserver.regione.veneto.it/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=rv:c0501031_litologiareg_&outputFormat=application/json&srsName=EPSG:4326
+download_date: 2026-09-12
+license:
+  name: IODL 2.0
+  url: https://www.dati.gov.it/content/italian-open-data-license-v20
+  attribution_text: "Regione del Veneto - Database delle litologie scala 1:250.000 - IODL 2.0 (https://www.dati.gov.it/content/italian-open-data-license-v20)"
+  derivatives_allowed: true
+  share_alike: false
+  evidence: |
+    - IDT2 metadata record (fetched 2026-09-12, saved as data/raw/veneto-litologia-250k/c0501031_LitologiaReg.metadata.xml):
+      gmd:useLimitation "IODL 2.0"; gmd:otherConstraints "http://publications.europa.eu/resource/authority/licence/IODL_2_0"
+      and "Nessun vincolo all'accesso pubblico". The same licence is shown on the RNDT record
+      https://geodati.gov.it/resource/id/r_veneto:c0501031_LitologiaReg.
+    - IODL 2.0 text (dati.gov.it, fetched 2026-09-12): redistribution and derivative works allowed, no share-alike;
+      the licensee must "indicare la fonte delle Informazioni e il nome del Licenziante, includendo, se possibile,
+      una copia di questa licenza o un collegamento (link) ad essa". The attribution_text above does that.
+spatial:
+  crs: EPSG:3003
+  bbox: [10.62, 44.79, 13.10, 46.68]  # computed from the downloaded features
+  resolution: "1:250,000 (record gives equivalent scale denominator 100 000; lineage: digitised 1:100,000 author originals used for the 1:250,000 Carta Geologica del Veneto)"
+temporal:
+  coverage: "present"
+  step: "static"
+format: "GeoJSON from GeoServer WFS 1.0.0, reprojected server-side EPSG:3003 -> EPSG:4326 (5 048 features, whole region)"
+size_bytes: 20186737
+checksum:
+  algorithm: sha256
+  value: "7b51939bba858ea6a1698ec0827b0047b713fce8b2e212e714aaf421df8a2c24"  # c0501031_litologiareg.geojson
+honesty_label: observed
+caveats: |
+  - A regional lithology map at 1:250,000: polygons are lithological classes (uc_lege), much coarser than the
+    1:10,000 provincial maps. In the merged archive it only fills what South Tyrol and Trentino do not cover
+    (Belluno: Civetta, Cortina, Marmolada north-east flank, Pale di San Martino east side).
+  - Ages are the text in the final parentheses of depositi_a ("Dolomia Principale (Trias sup.)"; age_basis source). 18 of
+    the 49 classes in the Dolomites bbox have no age there. Since 2026-09-12: 8 formation classes are dated by joining
+    the formation names they list to the Trentino unit legend, the South Tyrol CARG attributes or ISPRA catalogue / sheet
+    notes, as the envelope of those ages (age_basis legend_join; e.g. "Dolomia Cassiana, D. dello Sciliar, D. del Serla
+    Sup., C. della Marmolada" -> Anisian-Carnian); 8 Quaternary deposit classes (moraine, alluvial, fluvioglacial,
+    lacustrine, eluvial-colluvial, scree, landslide) take the Quaternary as a whole from the Trentino map's classification
+    of the same deposit types as "Depositi quaternari" (age_basis class_rule); "Acque interne" and "Sequenze metamorfiche di
+    Agordo, Recoaro e Comelico" stay null. Every row, its evidence and the judgement calls (e.g. 'et al.' classes dated from
+    the named formations only; the Formazione di Auronzo dated through its synonymy with the lower San Cassiano Formation)
+    are in geology_age_mapping.json. 1 class has only one bound (Ponte Gardena: 'Carbonifero sup.' stays null). Traditional names (Lias, Dogger, Malm) and inf./med./sup. qualifiers are resolved to full
+    chart series, see data/scripts/terrain/geology_age_mapping.json (sources.veneto-litologia-250k).
+  - Five classes occur only outside the Dolomites bbox (coastal and Euganean units) and are not in the mapping table.
+  - The layer's advertised WFS typeName in the metadata (rv:c0501031_litologiareg) no longer exists; the server
+    serves rv:c0501031_litologiareg_ (from its GetCapabilities, 2026-09-12).
+processing:
+  - step: "WFS GetFeature for the whole region as GeoJSON (EPSG:4326), metadata record saved, SHA-256"
+    script: data/scripts/terrain/fetch_geology_veneto.py
+    output: data/raw/veneto-litologia-250k/c0501031_litologiareg.geojson
+  - step: "Clip to the Dolomites bbox, map depositi_a age text to ICS 2026-06 intervals, clip against South Tyrol and Trentino polygons, simplify per zoom, encode MVT into the merged archive"
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: app/public/data/terrain/geology-dolomites.pmtiles

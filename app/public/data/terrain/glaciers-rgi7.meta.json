@@ -1,0 +1,17 @@
+{
+  "dataset_id": "rgi7-region11",
+  "label": "observed",
+  "source_ref": "rgi7-2023",
+  "attribution": "RGI Consortium (2023), Randolph Glacier Inventory 7.0, doi:10.5067/F6JMOVY5NAVZ.",
+  "license": "CC BY 4.0",
+  "generated": "2026-09-06",
+  "script": "data/scripts/quaternary/build_rgi7.py",
+  "region": "11 Central Europe",
+  "source_note": "Downloaded from the open Bremen mirror (cluster.klima.uni-bremen.de/~fmaussion) of the NSIDC-0770 v7 release; identical content to the login-gated NSIDC copy.",
+  "clip_bbox": [
+    10.3,
+    45.8,
+    12.7,
+    47.2
+  ]
+}

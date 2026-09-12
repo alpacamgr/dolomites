@@ -1,0 +1,9 @@
+# Cloudflare static-asset response headers (Workers static assets and Pages use the same _headers format; ADR 0006).
+# Vector tiles are raw MVT; with this content type Cloudflare compresses them at the edge.
+/data/terrain/geology/*
+  Content-Type: application/x-protobuf
+  Cache-Control: public, max-age=86400
+
+# Data files are versioned by the pipeline, not by filename: cache for a day, not forever.
+/data/*
+  Cache-Control: public, max-age=86400

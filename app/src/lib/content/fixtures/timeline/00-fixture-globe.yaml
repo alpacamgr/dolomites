@@ -1,0 +1,31 @@
+id: fixture-globe
+title:
+  en: "PLACEHOLDER globe chapter"
+  de: "PLATZHALTER Globus-Kapitel"
+  it: "SEGNAPOSTO capitolo globo"
+age_start_ma: 300.0
+age_end_ma: 200.0
+ics_stage: "Placeholder"
+ics_chart_version: "fixture"
+summary:
+  en: "This is fixture text used only when the editorial content is not yet present. Nothing on this page should be taken as fact."
+  de: "Dies ist Platzhaltertext, der nur erscheint, solange die redaktionellen Inhalte fehlen. Nichts hier ist als Aussage zu verstehen."
+  it: "Testo segnaposto usato solo quando i contenuti editoriali non sono ancora presenti. Nulla qui va inteso come dato."
+map_state:
+  layers:
+    - { id: "fixture-globe-layer", label: illustrative, source_ref: "fixture" }
+facts: []
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: globe
+  time:
+    unit: ma
+    start: 300
+    end: 200
+  camera:
+    globe: { lat: 10, lon: 15, distance: 2.8 }
+  layers:
+    - { id: "fixture-globe-layer", label: illustrative, source_ref: "fixture" }

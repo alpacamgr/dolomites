@@ -1,0 +1,64 @@
+id: earthbyte-muller2019
+title: "Muller et al. 2019 - Global deforming plate reconstruction (250-0 Ma)"
+provider: EarthByte, University of Sydney
+version: "v2.0 (2020-02-20; Zenodo record 10525286)"
+citation: "Muller, R. D., Zahirovic, S., Williams, S. E., Cannon, J., Seton, M., Bower, D. J., Tetley, M. G., Heine, C., Le Breton, E., Liu, S., Russell, S. H. J., Yang, T., Leonard, J., and Gurnis, M. (2019). A Global Plate Model Including Lithospheric Deformation Along Major Rifts and Orogens Since the Triassic. Tectonics 38, 1884-1907. doi:10.1029/2018TC005462."
+doi: "10.5281/zenodo.10525286"
+landing_page: https://www.earthbyte.org/muller-et-al-2019-deforming-plate-reconstruction-and-seafloor-age-grids-tectonics/
+download_url: https://www.earthbyte.org/webdav/ftp/Data_Collections/Muller_etal_2019_Tectonics/Muller_etal_2019_PlateMotionModel/Muller_etal_2019_PlateMotionModel_v2.0_Tectonics_Updated.zip
+download_date: 2026-09-06
+license:
+  name: "CC BY 4.0"
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >-
+    Plate reconstructions from Muller et al. (2019), 'A Global Plate Model
+    Including Lithospheric Deformation Along Major Rifts and Orogens Since the
+    Triassic', Tectonics 38, doi:10.1029/2018TC005462. Data hosted by
+    EarthByte, University of Sydney, CC BY 4.0.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [-180, -90, 180, 90]
+  resolution: "continental-scale plate polygons; boundary lines"
+temporal:
+  coverage: "250-0 Ma"
+  step: "1 Myr (rotation model resolved at any age)"
+format: "GPML/GPMLZ, ESRI Shapefile, .rot (GPlates rotation file)"
+size_bytes: 10984515
+checksum:
+  algorithm: sha256
+  value: "see data/raw/earthbyte-muller2019/checksums.txt"
+honesty_label: modeled
+superseded_for: globe
+superseded_note: >-
+  Replaced for the globe view (textures, outlines, boundaries, Dolomites
+  marker) by scotese-wright-2018-model per docs/decisions/0005-globe-reference-frame.md
+  (2026-09-06). Kept for the Alpine kinematics narrative and future regional
+  views; no longer read by data/scripts/plates/build.py.
+caveats: |
+  - License confirmed CC BY 4.0 via License.txt at
+    https://www.earthbyte.org/webdav/ftp/Data_Collections/Muller_etal_2019_Tectonics/License.txt
+    (fetched 2026-09-06). The Zenodo record 10525286 landing page also cites
+    Creative Commons Attribution 4.0.
+  - Files were fetched with gplately's PlateModelManager, which mirrors the
+    EarthByte package. All layers used here (rotation, static polygons,
+    topologies, continental polygons, coastlines, COBs) are those tagged
+    'Muller2019' by the PlateModelManager and match the EarthByte v2.0
+    Updated release by structure and naming.
+  - The Muller 2019 model is a deforming-plate model. Individual plate
+    polygons carry rigid rotations but the model also solves for strain
+    inside deforming regions - the JSON we emit only reflects rigid
+    polygon positions, not the intra-plate strain field.
+  - Coverage ends at 250 Ma. For 300-251 Ma the build script switches to
+    earthbyte-matthews2016 (410-0 Ma); see data/manifests/earthbyte-matthews2016.yaml.
+  - The site cannot resolve the Dolomites (~100 km) as an independent block:
+    the reference point 46.5N, 11.8E is assigned to plate id 307
+    ("Southern Alps", part of Adria) and rides passively with it.
+processing:
+  - step: "Download combined rotations and topology/geometry layers via gplately.PlateModelManager"
+    script: data/scripts/plates/download.py
+    output: data/raw/earthbyte-muller2019/pm_manager/muller2019/
+  - step: "Reconstruct continents, coastlines and resolve topologies to per-age GeoJSON (contract 1.2, 1.3)"
+    script: data/scripts/plates/build.py
+    output: app/public/data/globe/plates/{0..250}.json

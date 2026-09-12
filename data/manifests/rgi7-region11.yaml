@@ -1,0 +1,45 @@
+id: rgi7-region11
+title: Randolph Glacier Inventory 7.0 - Region 11 Central Europe (glacier outlines)
+provider: RGI Consortium
+version: "7.0"
+citation: >
+  RGI Consortium (2023). Randolph Glacier Inventory - A Dataset of Global
+  Glacier Outlines: Version 7.0. Boulder, CO: NSIDC.
+  https://doi.org/10.5067/F6JMOVY5NAVZ
+doi: 10.5067/F6JMOVY5NAVZ
+landing_page: https://www.glims.org/rgi_user_guide/welcome.html
+download_url: https://cluster.klima.uni-bremen.de/~fmaussion/misc/rgi7_data/l4_rgi7b0_tar/RGI2000-v7.0-G-11_central_europe.tar.gz
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    RGI Consortium (2023). Randolph Glacier Inventory 7.0. Boulder, CO:
+    National Snow and Ice Data Center. doi:10.5067/F6JMOVY5NAVZ.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [-0.293, 42.621, 13.643, 47.577]
+  resolution: "individual glacier polygons; target date ~year 2000"
+temporal:
+  coverage: "target ~2000 CE (some polygons from 1998-2016)"
+  step: "n/a (single snapshot)"
+format: shapefile + attribute CSVs
+size_bytes: 5555661
+checksum:
+  algorithm: sha256
+  value: 51a0544d0e697c5102415101d55759c9d07f15947e28d1494b7ce17a3d02221f
+source_note: >
+  The NSIDC-0770 v7 release is gated behind an Earthdata Login. Fabian Maussion
+  (Univ. Bremen, RGI Consortium) hosts an unaltered open mirror that this
+  pipeline uses; the file is identical to the NSIDC copy.
+honesty_label: observed
+caveats: |
+  Multi-source compilation ("compiled" qualifier); attributes were digitised
+  from national inventories at differing base dates. All records for Region
+  11 (Central Europe) are pulled; the build script clips to the terrain bbox.
+processing:
+  - step: extract polygons in terrain bbox, reproject to WGS84 (already), round to 5 decimals
+    script: data/scripts/quaternary/build_rgi7.py
+    output: app/public/data/terrain/glaciers-rgi7.geojson

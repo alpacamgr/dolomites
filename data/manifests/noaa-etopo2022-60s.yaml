@@ -1,0 +1,73 @@
+id: noaa-etopo2022-60s
+title: ETOPO 2022 Global Relief Model - 60 arc-second, ice-surface + bedrock, netCDF
+provider: NOAA National Centers for Environmental Information
+version: "v1 (2022)"
+citation: >
+  NOAA National Centers for Environmental Information (2022). ETOPO 2022
+  15 Arc-Second Global Relief Model. NOAA National Centers for Environmental
+  Information. doi:10.25921/fd45-gt74. (This product: the 60 arc-second
+  ice-surface and bedrock derivatives distributed alongside the 15" primary release.)
+doi: 10.25921/fd45-gt74
+landing_page: https://www.ncei.noaa.gov/products/etopo-global-relief-model
+# Legacy single-file download_url kept for backward compatibility with the
+# ice-surface grid; the second file is the bedrock companion used to build
+# the ice mask. Both are listed under files:.
+download_url: https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc
+files:
+  - name: ETOPO_2022_v1_60s_N90W180_surface.nc
+    role: ice-surface
+    url: https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_surface_elev_netcdf/ETOPO_2022_v1_60s_N90W180_surface.nc
+    size_bytes: 478290125
+    checksum:
+      algorithm: sha256
+      value: 74bbc5c23e85188d93f0beba8116babf69e1a8f160e8dc9f053bf8df01b197b6
+  - name: ETOPO_2022_v1_60s_N90W180_bed.nc
+    role: bedrock
+    url: https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022/60s/60s_bed_elev_netcdf/ETOPO_2022_v1_60s_N90W180_bed.nc
+    size_bytes: 491284376
+    checksum:
+      algorithm: sha256
+      value: d92483407c6a8f87be6fc8a47e4809332357e2d40c90a49de2e91c39cce08c54
+download_date: 2026-09-06
+license:
+  name: "public domain (US Government work)"
+  url: https://www.usa.gov/government-works
+  attribution_text: >
+    Modern elevation (0 Ma): NOAA National Centers for Environmental
+    Information (2022), ETOPO 2022 Global Relief Model, doi:10.25921/fd45-gt74.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [-180, -90, 180, 90]
+  resolution: "60 arc-seconds (~2 km at equator); 21600 x 10800 grid, cell-centered (node_offset=1)"
+temporal:
+  coverage: "present (0 Ma reference surface)"
+  step: "n/a"
+format: "netCDF-4 (HDF5-based); variable 'z' is topography-bathymetry in metres relative to EGM2008 geoid. Two variants are used: (1) ice-surface (Greenland and Antarctica report the ice top), (2) bedrock (rock beneath any ice). Ice thickness = surface - bedrock; no NaN."
+# legacy fields for the ice-surface file (kept so existing consumers still parse)
+size_bytes: 478290125
+checksum:
+  algorithm: sha256
+  value: 74bbc5c23e85188d93f0beba8116babf69e1a8f160e8dc9f053bf8df01b197b6
+honesty_label: observed
+caveats: |
+  ETOPO 2022 is a compiled product built from bathymetric surveys, satellite
+  altimetry-derived bathymetry, and land DEMs. Two co-registered variants are
+  used here: the ice-surface grid (Greenland and Antarctica report the top of
+  the ice) and the bedrock grid (the rock surface beneath any ice). Ice
+  thickness derived by subtracting the two is only as precise as the coarser
+  of the two component surveys and is not intended for glaciological work; at
+  60" resolution it is used only to mask cells for a pale ice tint in the
+  0 Ma texture. Bathymetry in unsurveyed abyssal areas is derived from
+  satellite gravity and is less precise than shallow surveyed regions. For
+  the globe textures we downsample from 21600x10800 to 4096x2048 and 2048x1024
+  using Lanczos filtering; the result carries only as much detail as those
+  coarser grids can hold. Sea level 0 uses EGM2008.
+processing:
+  - step: "Download the 60s ice-surface and bedrock netCDFs from NOAA THREDDS"
+    script: data/scripts/textures/download.py
+    output: data/raw/noaa-etopo2022-60s/ETOPO_2022_v1_60s_N90W180_{surface,bed}.nc
+  - step: "Flip to north-up, downsample with Lanczos to 4096x2048 and 2048x1024, apply shared hypsometric palette, override cells where (surface - bedrock) > 50 m with the pale blue-white ice tint, multiply-blend Horn hillshade (az 315, alt 45), compute tangent-space normal map (4k) from the ice-surface grid"
+    script: data/scripts/textures/render.py
+    output: app/public/data/globe/textures/{2k,4k}/0.webp, app/public/data/globe/textures/4k/0-normal.webp, data/processed/textures/ice_mask.png

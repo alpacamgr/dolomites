@@ -1,0 +1,55 @@
+id: seguinot2018-alps-1km
+title: Alpine ice-sheet glacial-cycle simulation, continuous variables, 1 km EPICA / palaeo-precipitation run
+provider: J. Seguinot, S. Ivy-Ochs, G. Jouvet, M. Huss, M. Funk, F. Preusser
+version: "2018 (Zenodo v1)"
+citation: >
+  Seguinot, J., Ivy-Ochs, S., Jouvet, G., Huss, M., Funk, M., & Preusser, F. (2018).
+  Alpine ice sheet glacial cycle simulations continuous variables (Version 1) [Data set].
+  Zenodo. https://doi.org/10.5281/zenodo.1423176
+doi: 10.5281/zenodo.1423176
+landing_page: https://zenodo.org/records/1423176
+download_url: https://zenodo.org/api/records/1423176/files/alpcyc.1km.epic.pp.ex.1ka.nc/content
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    Seguinot J., Ivy-Ochs S., Jouvet G., Huss M., Funk M., Preusser F. (2018).
+    Modelling last glacial cycle ice dynamics in the Alps. The Cryosphere 12,
+    3265-3285. Data: Zenodo 1423176.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: >
+    +units=m +proj=utm +no_defs +zone=32 +a=6378137 +rf=298.257223563
+    +towgs84=0.000,0.000,0.000 +to_meter=1
+  bbox: [150000, 4820000, 1050000, 5420000]      # UTM 32N (metres)
+  resolution: "1 km"
+temporal:
+  coverage: "-119 to 0 kyr BP (first written snapshot at model year -118999 -> 119 ka)"
+  step: "1 kyr (spatial snapshots)"
+format: "NetCDF-4 (variables: thk, topg, uvelsurf, vvelsurf, uvelbase, vvelbase, tempicethk_basal, temppabase)"
+size_bytes: 410955896
+checksum:
+  algorithm: md5
+  value: 2280c6c6f01a972a8cfa3ac75e080bf5
+run_selection:
+  filename: alpcyc.1km.epic.pp.ex.1ka.nc
+  resolution: 1 km
+  temperature_forcing: EPICA Dome C (Jouzel et al. 2007)
+  precipitation_mode: palaeo-precipitation reduction (pp)
+  rationale: >
+    Reference run in Seguinot et al. 2018; the temperature record used to
+    force the model matches the CENOGRID / PhanDA climate curves the site
+    already ships, so time-series overlaid on the ice frames read from a
+    single climate axis.
+honesty_label: modeled
+caveats: |
+  Output of PISM (Parallel Ice Sheet Model), not observation. Resolution 1 km
+  captures trunk-glacier geometry well but under-represents thin plateau ice.
+  Time axis is cftime NoLeap years, converted to integer ka using ka = round(-year/1000);
+  the initial (120 ka) state is not written, so labelled ages are 119..0 ka.
+processing:
+  - step: reproject to Web Mercator 2048 x 1488, colorize by thickness, write 16-bit thickness PNGs
+    script: data/scripts/quaternary/build_ice_frames.py
+    output: app/public/data/terrain/ice/{ka}.png, app/public/data/terrain/ice/thickness/{ka}.png

@@ -1,0 +1,9 @@
+{
+  "dataset_id": "sample-procedural-plates",
+  "label": "illustrative",
+  "source_ref": "internal",
+  "attribution": "Plate outlines: SAMPLE procedural placeholder (illustrative, not data)",
+  "license": "internal",
+  "generated": "2026-09-05",
+  "script": "scratchpad/gen-sample.mjs"
+}

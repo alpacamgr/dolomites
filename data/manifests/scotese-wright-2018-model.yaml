@@ -1,0 +1,110 @@
+id: scotese-wright-2018-model
+title: "Scotese and Wright 2018 / PALEOMAP plate model (rotations, continental polygons, topologies)"
+provider: "C. R. Scotese (PALEOMAP Project); packaged for GPlates by EarthByte / GPlates PlateModelManager"
+version: >-
+  PlateModelManager entry 'scotese_and_wright2018' (Version field
+  10.5281/zenodo.5460860, i.e. PaleoDEMs v2). Rotation file header:
+  'PALEOMAP Plate Model m15g60_v2d3 ... for use with Plate Polygons
+  ContOCeanPolyv10u_v2d3 ... by CR Scotese 02/01/2016'.
+citation: >-
+  Scotese, C. R. and Wright, N. M. (2018). PALEOMAP Paleodigital Elevation
+  Models (PaleoDEMS) for the Phanerozoic. Zenodo. doi:10.5281/zenodo.5460860.
+  Plate model: Scotese, C. R., PALEOMAP Plate Model m15g60_v2d3 (rotation
+  file Scotese_Wright_PlateModel.rot, 2016-02-01).
+doi: "10.5281/zenodo.5460860"
+landing_page: https://www.earthbyte.org/paleodem-resource-scotese-and-wright-2018/
+download_url: https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/
+provenance:
+  pmm_config_url: https://repo.gplates.org/webdav/pmm/config/models_v2.json
+  pmm_model_name: scotese_and_wright2018
+  pmm_layer_urls:
+    Rotations: https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/Rotations.zip
+    StaticPolygons: https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/StaticPolygons.zip
+    Topologies: https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/Topologies.zip
+    ContinentalPolygons: https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/ContinentalPolygons.zip
+    COBs: https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/COBs.zip
+  pmm_url_field: https://doi.org/10.5281/zenodo.5348491   # concept DOI, resolves to zenodo.org/record/5348491
+  pmm_version_field: "10.5281/zenodo.5460860"
+  pmm_info_txt: >-
+    https://repo.gplates.org/webdav/pmm/scotese_and_wright2018/info.txt names
+    the upstream archive
+    https://earthbyte.org/webdav/ftp/incoming/mchin/plate-models/ScoteseAndWright2018/Scotese_Wright_plate_model_2018.zip
+  earthbyte_page_says: >-
+    The EarthByte PaleoDEM resource page says the related GPlates rotation
+    and geometry files can be downloaded as
+    https://www.earthbyte.org/webdav/ftp/earthbyte/Scotese_PaleoAtlas_v3.zip
+    (no license stated on that page).
+  verified: "2026-09-12 (all URLs above fetched)"
+download_date: 2026-09-06
+license:
+  name: "CC BY 4.0"
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >-
+    Plate reconstruction: PALEOMAP plate model (C. R. Scotese), as used for
+    Scotese and Wright (2018), PALEOMAP Paleodigital Elevation Models
+    (PaleoDEMS) for the Phanerozoic, Zenodo, doi:10.5281/zenodo.5460860,
+    CC BY 4.0.
+  derivatives_allowed: true
+  share_alike: false
+  verification: >-
+    Zenodo records 5348491 and 5460860 both state "Creative Commons
+    Attribution 4.0 International" (fetched 2026-09-12). That record's files
+    include Scotese_PaleoAtlas_v3.zip, which the EarthByte page names as the
+    source of the GPlates rotation and geometry files. The PlateModelManager
+    zips carry no license file of their own, and byte identity between
+    the PlateModelManager files and the files inside Scotese_PaleoAtlas_v3.zip
+    was NOT checked.
+spatial:
+  crs: EPSG:4326
+  bbox: [-180, -90, 180, 90]
+  resolution: "continental-scale plate polygons; plate boundary lines"
+temporal:
+  coverage: "540-0 Ma per the PlateModelManager entry; used for 300-0 Ma"
+  step: "any age (rotation model); built at 1 Myr"
+format: "GPML, .rot (GPlates rotation file)"
+size_bytes: 6655313            # unique files; the 2 596 672-byte polygon file is stored three times
+checksum:
+  algorithm: sha256
+  value: "see data/raw/scotese-wright-2018-model/checksums.txt"
+  files:
+    Rotations/Scotese_Wright_PlateModel.rot: d56846bb3c6260805d088171066bc18e9d54e831892b660fd31315260e288022
+    ContinentalPolygons/Scotese_Wright_ContinentalPolygons.gpml: 51cc9383fea1b8a3eb55480c7d2de53bd9528cd8c42a934afb909662b6c58f5b
+    StaticPolygons/Scotese_Wright_ContinentalPolygons.gpml: 51cc9383fea1b8a3eb55480c7d2de53bd9528cd8c42a934afb909662b6c58f5b
+    COBs/Scotese_Wright_ContinentalPolygons.gpml: 51cc9383fea1b8a3eb55480c7d2de53bd9528cd8c42a934afb909662b6c58f5b
+    Topologies/Scotese_Wright_PlateBoundaries.gpml: c509c3e89ee71acce9b342218fe1997ab837b30cdeb73ccaf25fcd06ec0126ca
+honesty_label: modeled
+caveats: |
+  - Chosen for the globe by docs/decisions/0005-globe-reference-frame.md: it is
+    the PALEOMAP reference frame in which the PaleoDEM textures
+    (scotese-paleodem-2018-v2) were built, so vectors and raster agree by
+    construction. Checked by overlay at 20, 100 and 240 Ma
+    (data/processed/plates/preview/overlay_{age}.png).
+  - StaticPolygons, ContinentalPolygons and COBs are the same file (identical
+    sha256). There is no Coastlines layer and no real continent-ocean boundary
+    layer, so the globe JSON carries no coastline features.
+  - The topologies carry no subduction polarity property; all subduction
+    boundaries are emitted with polarity 'unknown'. Boundaries are coarse
+    compared with Muller et al. 2019, especially around Adria and the Alps.
+  - Topologies only cover 0-100 Ma: every topology feature (closed plate
+    boundaries and boundary lines) begins at or after 100 Ma, so the globe
+    JSON for 101-300 Ma has no boundary features.
+  - Paleolatitude is model-dependent. Dolomites point at 240 Ma: this model
+    7.3 N, Muller 2019 1.4 N, Muller 2022 8.6 N, Merdith 2021 11.8 N
+    (ADR 0005); paleomagnetic data about 16-18 N (Muttoni et al. 1997,
+    pending first-hand verification).
+  - The Dolomites point (46.5 N, 11.8 E) falls on plate 307 (rotation file
+    label 'ITL-AFR') and rides passively with it.
+  - The Zenodo record was published as a PaleoDEM dataset; no separate DOI
+    exists for the plate model files as packaged by PlateModelManager.
+  - A partial earlier copy (Rotations and StaticPolygons only) exists in
+    data/raw/earthbyte-scotese_and_wright2018/ and is not used by the pipeline.
+processing:
+  - step: "Download rotations and all layers via gplately.PlateModelManager (scotese_and_wright2018); write sha256 index"
+    script: data/scripts/plates/download.py
+    output: data/raw/scotese-wright-2018-model/scotese_and_wright2018/
+  - step: "Reconstruct continental polygons, resolve topologies, partition and rotate the Dolomites point for 0-300 Ma (contract 1.2, 1.3)"
+    script: data/scripts/plates/build.py
+    output: app/public/data/globe/plates/{0..300}.json, index.json, meta.json; app/public/data/globe/dolomites-path.json
+  - step: "Mollweide previews and texture overlays for frame verification"
+    script: data/scripts/plates/preview.py
+    output: data/processed/plates/preview/

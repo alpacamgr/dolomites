@@ -1,0 +1,36 @@
+---
+import { LOCALES, type Locale, loadUi } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+  /** the path to link to on the other locale; the anchor is preserved via a small inline script */
+  suffix?: string;
+}
+
+const { locale, suffix = '/' } = Astro.props;
+const strings = loadUi(locale);
+---
+<nav class="lang-switch" aria-label={strings['nav.chapters']}>
+  {LOCALES.map((l) => (
+    <a
+      href={`/${l}${suffix === '/' ? '/' : suffix}`}
+      aria-current={l === locale ? 'true' : undefined}
+      hreflang={l}
+      data-lang-switch={l}
+    >
+      {strings[`lang.${l}`]}
+    </a>
+  ))}
+</nav>
+<script>
+  // Preserve the current chapter anchor when switching language.
+  document.querySelectorAll<HTMLAnchorElement>('a[data-lang-switch]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const hash = window.location.hash;
+      if (hash) {
+        e.preventDefault();
+        window.location.href = a.getAttribute('href')! + hash;
+      }
+    });
+  });
+</script>

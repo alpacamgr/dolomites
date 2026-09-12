@@ -1,0 +1,47 @@
+id: diss-3.3.1
+title: DISS 3.3.1 - Database of Individual Seismogenic Sources (Italy)
+provider: DISS Working Group, INGV
+version: "3.3.1"
+citation: >
+  DISS Working Group (2021). Database of Individual Seismogenic Sources (DISS),
+  version 3.3.1: A compilation of potential sources for earthquakes larger than
+  M 5.5 in Italy and surrounding areas. Istituto Nazionale di Geofisica e
+  Vulcanologia. https://doi.org/10.13127/diss3.3.1
+doi: 10.13127/diss3.3.1
+landing_page: https://diss.ingv.it/download-diss-3-3-1
+download_url: https://services.seismofaults.eu/DISS331/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=DISS331:{layer}&outputFormat=application/json
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    DISS Working Group (2021). Database of Individual Seismogenic Sources
+    (DISS), version 3.3.1, INGV. doi:10.13127/diss3.3.1.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: "Italy and surrounding areas"
+  resolution: "individual mapped structures"
+temporal:
+  coverage: "Neogene-Quaternary structures active in the current stress regime"
+  step: n/a
+format: GeoJSON (WFS export)
+size_bytes: 414622                # combined iss + csstop + dss
+checksum:
+  algorithm: sha256 (per layer)
+  values:
+    iss331.geojson:    36141e7abdecd1fe44996d56b926c44af360dfa7da53d5aec23ada36b2e84385
+    csstop331.geojson: 31e8b4304eb3300dae00b7749ebefa907ffadc0b59fa5e7000b936a08fc11dfa
+    dss331.geojson:    6400a53b250290a85c2cc15da472b24820d4d74dfd3b2341cb46c3521a4db851
+honesty_label: interpreted
+caveats: |
+  Sources are the interpretation of INGV's seismogenic-source working group;
+  see the DISS 3.3.1 accompanying notes (linked from the download page). ISS
+  polygons are surface projections of individual seismogenic sources, CSS top
+  lines are the surface traces of composite sources' top edges, DSS polygons
+  are debated sources.
+processing:
+  - step: fetch iss331, csstop331, dss331 via WFS; clip to terrain bbox; round to 5 decimals
+    script: data/scripts/quaternary/build_faults.py
+    output: app/public/data/terrain/faults.geojson

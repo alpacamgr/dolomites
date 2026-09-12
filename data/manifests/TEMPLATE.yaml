@@ -1,0 +1,35 @@
+# Copy to <dataset-id>.yaml. Every field is required unless marked optional.
+id: provider-product-version
+title: Human-readable dataset name
+provider: Organisation or authors
+version: ""                      # dataset version, release, or year
+citation: ""                     # full citation as the provider requests it
+doi: ""                          # optional
+landing_page: https://
+download_url: https://
+download_date: YYYY-MM-DD
+license:
+  name: ""                       # exact, e.g. "CC BY 4.0", "CC0 1.0", "IODL 2.0", "proprietary"
+  url: ""
+  attribution_text: ""           # the string we must show
+  derivatives_allowed: true      # can we make tiles / redraw from it?
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [minLon, minLat, maxLon, maxLat]
+  resolution: ""                 # e.g. "30 m", "1 km", "1 degree"
+temporal:
+  coverage: ""                   # e.g. "present", "0-120 ka", "0-1000 Ma"
+  step: ""                       # e.g. "100 yr", "5 Myr"
+format: ""                       # GeoTIFF, NetCDF, GPML, shapefile, ...
+size_bytes: 0
+checksum:
+  algorithm: sha256
+  value: ""
+honesty_label: observed          # observed | modeled | interpreted | illustrative
+caveats: |
+  What the provider says about limitations, and anything we noticed.
+processing:
+  - step: ""                     # e.g. "reproject to EPSG:3857", "resample to 10 m"
+    script: data/scripts/....py
+    output: data/processed/<id>/...

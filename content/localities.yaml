@@ -1,0 +1,158 @@
+# Curated localities for the site.
+# Coordinates are decimal degrees (WGS84), verified against the URL in `source_url`
+# on the date in `verified`. Never edit a coordinate without re-fetching the URL.
+# `wikidata` gives the QID when the coordinates come from Wikidata property P625.
+# `source_ref` is the bibliography key that supports `what_to_see`.
+
+localities:
+  - id: bagolino-gssp
+    name: "Bagolino (Ladinian GSSP)"
+    lat: 45.819306
+    lon: 10.470972
+    kind: gssp
+    source_ref: ics-gssp
+    source_url: "https://stratigraphy.org/gssps/ladinian"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "The Global Boundary Stratotype Section and Point for the base of the Ladinian stage (Middle Triassic), in the bed of the Caffaro river near the Romanterra bridge south of Bagolino."
+      de: "Die Global Boundary Stratotype Section and Point für die Basis der Ladin-Stufe (Mitteltrias), im Bett des Caffaro-Flusses nahe der Romanterra-Brücke südlich von Bagolino."
+      it: "Il Global Boundary Stratotype Section and Point per la base del Ladinico (Triassico Medio), nel letto del fiume Caffaro presso il ponte Romanterra a sud di Bagolino."
+
+  - id: prati-di-stuores-gssp
+    name: "Prati di Stuores / Stuores Wiesen (Carnian GSSP)"
+    lat: 46.526944
+    lon: 11.930278
+    kind: gssp
+    source_ref: ics-gssp
+    source_url: "https://stratigraphy.org/gssps/carnian"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "The Global Boundary Stratotype Section and Point for the base of the Carnian stage (Upper Triassic), on the north flank of the Cordevole valley about 4.7 km south of San Cassiano."
+      de: "Die Global Boundary Stratotype Section and Point für die Basis der Karn-Stufe (Obertrias), an der Nordflanke des Cordevole-Tals rund 4,7 km südlich von San Cassiano."
+      it: "Il Global Boundary Stratotype Section and Point per la base del Carnico (Triassico Superiore), sul fianco nord della Val Cordevole a circa 4,7 km a sud di San Cassiano."
+
+  - id: latemar
+    name: "Latemar"
+    lat: 46.380833
+    lon: 11.575000
+    kind: platform
+    source_ref: iugs-latemar
+    source_url: "https://iugs-geoheritage.org/geoheritage_sites/latemar-triassic-carbonate-platform/"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "An isolated carbonate platform of late Anisian (Middle Triassic) limestone, described in the IUGS geoheritage listing as fully preserved; its seaward slopes, with a primary inclination of about 30°, are still preserved."
+      de: "Eine isolierte Karbonatplattform aus Kalken des späten Anis (Mitteltrias), im IUGS-Geoerbe-Verzeichnis als vollständig erhalten beschrieben; ihre seewärtigen Hänge mit einer ursprünglichen Neigung von etwa 30° sind bis heute erhalten."
+      it: "Piattaforma carbonatica isolata di calcari dell'Anisico superiore (Triassico Medio), descritta nella scheda di geopatrimonio IUGS come interamente conservata; i suoi pendii verso il mare aperto, con un'inclinazione originaria di circa 30°, sono ancora conservati."
+
+  - id: sciliar
+    name: "Schlern / Sciliar"
+    lat: 46.515000
+    lon: 11.575556
+    kind: platform
+    source_ref: marangon-2021
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q264772.json"
+    wikidata: "Q264772"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "Mountain group where the relationships between the Anisian-Ladinian (Middle Triassic) carbonate platforms and the late Ladinian volcanic rocks can be observed in detail, in the area between the Schlern/Sciliar and the Seiser Alm/Alpe di Siusi."
+      de: "Berggruppe, in der sich zwischen Schlern und Seiser Alm die Beziehungen zwischen den anisisch-ladinischen Karbonatplattformen (Mitteltrias) und den spätladinischen Vulkaniten im Detail beobachten lassen."
+      it: "Gruppo montuoso dove, tra lo Sciliar e l'Alpe di Siusi, si osservano in dettaglio i rapporti tra le piattaforme carbonatiche anisico-ladiniche (Triassico Medio) e le rocce vulcaniche del Ladinico superiore."
+
+  - id: sella
+    name: "Sella group"
+    # Wikidata Q1552144 carries two P625 values; the first (46.5, 11.833333) is used.
+    lat: 46.500000
+    lon: 11.833333
+    kind: platform
+    source_ref: preto-2021
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q1552144.json"
+    wikidata: "Q1552144"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "An isolated Triassic microbial carbonate platform of early Carnian (Late Triassic) age, used as a field example of platform architecture because of its limited size and excellent exposure."
+      de: "Eine isolierte mikrobielle Karbonatplattform des frühen Karn (Obertrias), wegen ihrer begrenzten Größe und hervorragenden Aufschlüsse ein Geländebeispiel für den Bau solcher Plattformen."
+      it: "Piattaforma carbonatica microbica isolata del Carnico inferiore (Triassico Superiore), usata come esempio sul terreno dell'architettura delle piattaforme per le dimensioni contenute e l'ottima esposizione."
+
+  - id: marmolada
+    name: "Marmolada"
+    lat: 46.424444
+    lon: 11.850000
+    kind: peak
+    source_ref: securo-2025
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q203241.json"
+    wikidata: "Q203241"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "Mountain whose glacier accounts for 66% of the ice volume lost by the glaciers of the Dolomites from the 1980s to 2023."
+      de: "Berg, auf dessen Gletscher 66 % des Eisvolumens entfallen, das die Gletscher der Dolomiten von den 1980er-Jahren bis 2023 verloren haben."
+      it: "Montagna il cui ghiacciaio rappresenta il 66 % del volume di ghiaccio perso dai ghiacciai delle Dolomiti dagli anni Ottanta al 2023."
+
+  - id: tesero
+    name: "Tesero"
+    lat: 46.289338
+    lon: 11.511340
+    kind: section
+    source_ref: thompson-2019
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q327161.json"
+    wikidata: "Q327161"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "The Tesero section, along the road from the village to the floor of the Avisio valley, where the Bellerophon Formation is overlain by the Tesero Member of the Werfen Formation; this member spans the Permian-Triassic boundary, and its basal centimetres record the peak of the end-Permian mass extinction."
+      de: "Das Profil Tesero an der Straße vom Dorf hinunter in den Talboden des Avisio, wo die Bellerophon-Formation vom Tesero-Member der Werfen-Formation überlagert wird; dieses Member umfasst die Perm-Trias-Grenze, und seine untersten Zentimeter zeichnen den Höhepunkt des Massenaussterbens am Ende des Perm auf."
+      it: "La sezione di Tesero, lungo la strada che dal paese scende al fondovalle dell'Avisio, dove la Formazione a Bellerophon è sovrastata dal Membro di Tesero della Formazione di Werfen; questo membro comprende il limite Permo-Triassico e i suoi centimetri basali registrano il picco dell'estinzione di massa di fine Permiano."
+
+  - id: bulla-pufels
+    name: "Bulla / Pufels"
+    lat: 46.564170
+    lon: 11.635180
+    kind: section
+    source_ref: thompson-2019
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q18473139.json"
+    wikidata: "Q18473139"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "The Bulla section, a key section for studies of the Permian-Triassic boundary in the Dolomites, across the contact between the Bellerophon and Werfen formations."
+      de: "Das Profil Bulla/Pufels, ein Schlüsselprofil für die Erforschung der Perm-Trias-Grenze in den Dolomiten, über den Kontakt zwischen Bellerophon- und Werfen-Formation hinweg."
+      it: "La sezione di Bulla/Pufels, sezione chiave per lo studio del limite Permo-Triassico nelle Dolomiti, attraverso il contatto tra la Formazione a Bellerophon e la Formazione di Werfen."
+
+  - id: bletterbach
+    name: "Bletterbach"
+    lat: 46.362827
+    lon: 11.411581
+    kind: section
+    source_ref: geoparc-bletterbach
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q112336078.json"
+    wikidata: "Q112336078"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "A gorge that exposes, from bottom to top, the Bolzano quartz porphyry, the Gardena Sandstone, the gypsum-bearing Bellerophon strata and the Werfen Formation; the boundary between the last two coincides with the Permian-Triassic boundary, and fossil footprints have been studied here since 1948."
+      de: "Eine Schlucht, die von unten nach oben den Bozner Quarzporphyr, den Grödner Sandstein, die gipsführenden Bellerophon-Schichten und die Werfen-Formation freilegt; die Grenze zwischen den beiden letzten fällt mit der Perm-Trias-Grenze zusammen, und seit 1948 werden hier fossile Fährten erforscht."
+      it: "Una gola che espone, dal basso verso l'alto, il porfido quarzifero di Bolzano, l'Arenaria di Val Gardena, gli strati a Bellerophon con gesso e la Formazione di Werfen; il limite tra gli ultimi due coincide con il limite Permo-Triassico, e dal 1948 vi si studiano impronte fossili."
+
+  - id: marocche-di-dro
+    name: "Marocche di Dro"
+    lat: 45.987131
+    lon: 10.937181
+    kind: landslide
+    source_ref: provincia-tn-marocche
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q96210193.json"
+    wikidata: "Q96210193"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "Large, loose, chaotically scattered rock blocks left by landslides that filled much of the floor of the lower Sarca valley near Dro; designated a biotope of provincial interest in 1989 and now classified as a provincial nature reserve."
+      de: "Große, lose und chaotisch verstreute Felsblöcke aus Bergstürzen, die einen Großteil des Talbodens im unteren Sarcatal bei Dro füllen; 1989 als Biotop von Landesinteresse ausgewiesen und heute als Landesnaturreservat eingestuft."
+      it: "Grandi blocchi di roccia sciolti e distribuiti caoticamente, lasciati da frane che hanno colmato gran parte del fondovalle della bassa Valle del Sarca presso Dro; individuati come biotopo di interesse provinciale nel 1989 e oggi classificati come riserva naturale provinciale."
+
+  - id: bolzano
+    name: "Bolzano / Bozen"
+    lat: 46.498113
+    lon: 11.354780
+    kind: city
+    source_ref: bolzano-geologia
+    source_url: "https://www.wikidata.org/wiki/Special:EntityData/Q6526.json"
+    wikidata: "Q6526"
+    verified: "2026-09-12"
+    what_to_see:
+      en: "The Autonomous Province of Bolzano publishes on its open-data portal the geological maps of South Tyrol derived from CARG surveys at 1:10,000 and published at 1:25,000."
+      de: "Die Autonome Provinz Bozen veröffentlicht auf ihrem Open-Data-Portal die geologischen Karten Südtirols, abgeleitet aus CARG-Aufnahmen im Maßstab 1:10.000 und veröffentlicht im Maßstab 1:25.000."
+      it: "La Provincia autonoma di Bolzano pubblica sul suo portale open data le carte geologiche dell'Alto Adige, derivate dai rilievi CARG alla scala 1:10.000 e pubblicate alla scala 1:25.000."

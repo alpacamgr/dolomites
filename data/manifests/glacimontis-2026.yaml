@@ -1,0 +1,43 @@
+id: glacimontis-2026
+title: GLACIMONTIS - Mountain glacier extents at the Last Glacial Maximum
+provider: A.C. Lima, H.E. Dulfer, A.L.C. Hughes, M. Margold, I. Barr, B.J.C. Laabs, S.G.A. Flantua
+version: "1 (Zenodo record 15600659, published 2026)"
+citation: >
+  Lima, A.C., Dulfer, H.E., Hughes, A.L.C., Margold, M., Barr, I., Laabs, B.J.C.,
+  Flantua, S.G.A. (2026). Mountain glacier extents at the Last Glacial Maximum.
+  Scientific Data. https://doi.org/10.1038/s41597-026-06841-z
+  Data: doi:10.5281/zenodo.15600659.
+doi: 10.5281/zenodo.15600659
+landing_page: https://zenodo.org/records/15600659
+download_url: https://zenodo.org/api/records/15600659/files/GLACIMONTIS_SHP.zip/content
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    GLACIMONTIS (Lima et al. 2026, doi:10.5281/zenodo.15600659) plus the
+    per-polygon original publications recorded in properties.source_reference.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:3857 (WebMercator / auxiliary sphere)
+  bbox: [-20037507, -8609629, 20037507, 16422682]     # world
+  resolution: "individual glacier polygons"
+temporal:
+  coverage: "MIS 3-2 (~57-14 ka BP); per-glacier deglaciation window in deglalow/deglaupp attributes"
+  step: n/a
+format: ESRI Shapefile (multiple layers)
+size_bytes: 130153904
+checksum:
+  algorithm: sha256
+  value: d69ff6828fe264cf38994a96c43d7cf751a689fc983a1fd15d75739e94c91f70
+honesty_label: interpreted
+caveats: |
+  Compilation of 209 published reconstructions across 271 ranges. Ages and
+  precision differ between source studies; polygons are per-glacier extents,
+  not a single unioned LGM ice mask. Cite both GLACIMONTIS and the
+  per-polygon source.
+processing:
+  - step: pick EmpiricallyReconstructedPaleoglaciers, reproject WebMerc -> WGS84, clip to Alpine ice window, buffer(0)+intersect+simplify(0.0005 deg)
+    script: data/scripts/quaternary/build_lgm_extent.py
+    output: app/public/data/terrain/lgm-extent.geojson

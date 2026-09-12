@@ -1,0 +1,31 @@
+# Large downloaded datasets never go in git; keep manifests and fetch scripts instead
+data/raw/**
+data/processed/**
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# App build output / deps / caches
+app/node_modules/
+app/dist/
+app/.astro/
+.astro/
+.wrangler/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Logs, partial writes, QA browser profiles
+*.log
+*.part
+*.old
+.chrome-profile/
+
+# Local tooling
+.claude/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

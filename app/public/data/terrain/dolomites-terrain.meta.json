@@ -1,0 +1,200 @@
+{
+  "dataset_id": "tinitaly-v1-1-10m",
+  "label": "observed",
+  "source_ref": "tinitaly-2023",
+  "attribution": "TINITALY 1.1 (Tarquini et al. 2023, doi:10.13127/tinitaly/1.1) - INGV - CC BY 4.0; outside Italy: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+  "license": "CC BY 4.0 (TINITALY 1.1) + ESA User License for the use of Copernicus Contributing Missions data (Copernicus DEM GLO-30 Public)",
+  "generated": "2026-09-12",
+  "script": "data/scripts/terrain/build_terrain_pmtiles.py",
+  "sources": [
+    {
+      "dataset_id": "tinitaly-v1-1-10m",
+      "label": "observed",
+      "source_ref": "tinitaly-2023",
+      "role": "primary: everywhere TINITALY has data (Italy)",
+      "attribution": "TINITALY 1.1 (Tarquini et al. 2023, doi:10.13127/tinitaly/1.1) - INGV - CC BY 4.0",
+      "license": "CC BY 4.0",
+      "resolution_m": 10,
+      "vertical_reference": "orthometric (datum not stated by provider; see datum_handling)",
+      "manifest": "data/manifests/tinitaly-v1-1-10m.yaml"
+    },
+    {
+      "dataset_id": "copernicus-dem-glo30",
+      "label": "observed",
+      "source_ref": "copernicus-dem",
+      "role": "fill: TINITALY nodata (Austria north of ~46.9 N, Marmolada north-face strip, missing ridge cells)",
+      "attribution": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+      "license": "ESA User License for the use of Copernicus Contributing Missions data (GLO-30 Public, free)",
+      "resolution_m": 30,
+      "surface_type": "DSM (includes canopy and buildings)",
+      "vertical_reference": "EGM2008 (EPSG:3855)",
+      "manifest": "data/manifests/copernicus-dem-glo30.yaml"
+    }
+  ],
+  "archive": "dolomites-terrain.pmtiles",
+  "archive_bytes": 309847777,
+  "encoding": "mapbox",
+  "tile_format": "png",
+  "tile_size_px": 512,
+  "crs": "EPSG:3857",
+  "bounds_wgs84": [
+    10.3,
+    45.8,
+    12.7,
+    47.2
+  ],
+  "min_zoom": 6,
+  "max_zoom": 12,
+  "source_resolution_m": {
+    "tinitaly": 10,
+    "glo30": 30
+  },
+  "target_resolution_m_at_46_5N": {
+    "z10": 52.63,
+    "z11": 26.31,
+    "z12": 13.16,
+    "note": "512-px tile m/pix at latitude 46.5 N = 53892 / 2^z. z12 (13.2 m/pix) is safely coarser than the 10 m TINITALY source; z13 (6.6 m/pix) would upsample beyond the 0.7x-source honesty guideline."
+  },
+  "void_fill": {
+    "method": "TINITALY where valid, else Copernicus GLO-30 reprojected with bilinear resampling to the same tile grid; cosine cross-fade on ground distance to the TINITALY nodata edge (distance transform), weights only, no synthetic heights",
+    "seam_feather_m": 300,
+    "feather_formula": "w = 0.5 - 0.5*cos(pi*clip(d/300 m, 0, 1)); h = w*TINITALY + (1-w)*GLO30",
+    "low_zoom_note": "at z6-z8 a tile pixel (105-840 m) is wider than the feather, so the seam is effectively a hard switch there"
+  },
+  "datum_handling": {
+    "glo30": "EGM2008 (EPSG:3855), Copernicus DEM Product Handbook v5.0 sec. 1.2",
+    "tinitaly": "not stated by the provider; interpolated from topographic contours and spot heights",
+    "empirical_check": "TINITALY minus GLO-30 over 8 793 913 valid TINITALY cells (50 m sampling) in the bbox: median -3.25 m, p25 -11.15 m, p75 +0.69 m; within 0-300 m of the TINITALY edge median +0.9 to +1.7 m. An ellipsoidal source would show ~47 m.",
+    "correction_applied": "none (both orthometric)"
+  },
+  "caveats": [
+    "North of the Italian border (and in the other TINITALY voids) heights are GLO-30: a ~30 m surface model including forest canopy and buildings. At z12 (and partly z11) these tiles are bilinear interpolations of 30 m data, smooth and without 13 m detail; do not present them as 13 m data."
+  ],
+  "verification": {
+    "method": "(a) read back tiles at z=8, 10, 12 at the bbox centre, decode Terrain-RGB, compare the centre pixel with the raw TINITALY cell at that point; (b) at z=12, decode the pixel containing three Austrian points (compared with GLO-30, nearest source cell) and three Italian points (compared with TINITALY, nearest source cell)",
+    "zoom_samples": [
+      {
+        "z": 8,
+        "centre_lonlat": [
+          11.9545,
+          46.5579
+        ],
+        "diff_vs_tinitaly_m": -1.74,
+        "tile_min_max_m": [
+          161.9,
+          3408.7
+        ]
+      },
+      {
+        "z": 10,
+        "centre_lonlat": [
+          11.4261,
+          46.4376
+        ],
+        "diff_vs_tinitaly_m": -0.2,
+        "tile_min_max_m": [
+          209.0,
+          2807.2
+        ]
+      },
+      {
+        "z": 12,
+        "centre_lonlat": [
+          11.4698,
+          46.5286
+        ],
+        "diff_vs_tinitaly_m": 3.75,
+        "tile_min_max_m": [
+          309.4,
+          1454.6
+        ]
+      }
+    ],
+    "point_samples": [
+      {
+        "name": "Austria: Wipptal N of Brenner",
+        "lonlat": [
+          11.45,
+          47.05
+        ],
+        "z": 12,
+        "expected_source": "glo30",
+        "tile_height_m": 1912.6,
+        "tinitaly_m": null,
+        "glo30_m": 1915.89,
+        "diff_vs_expected_m": -3.29
+      },
+      {
+        "name": "Austria: 47.10 N 12.00 E",
+        "lonlat": [
+          12.0,
+          47.1
+        ],
+        "z": 12,
+        "expected_source": "glo30",
+        "tile_height_m": 1586.9,
+        "tinitaly_m": null,
+        "glo30_m": 1584.78,
+        "diff_vs_expected_m": 2.12
+      },
+      {
+        "name": "Austria: East Tyrol",
+        "lonlat": [
+          12.3,
+          46.9
+        ],
+        "z": 12,
+        "expected_source": "glo30",
+        "tile_height_m": 1882.9,
+        "tinitaly_m": null,
+        "glo30_m": 1885.05,
+        "diff_vs_expected_m": -2.15
+      },
+      {
+        "name": "Italy: Marmolada area",
+        "lonlat": [
+          11.85,
+          46.44
+        ],
+        "z": 12,
+        "expected_source": "tinitaly",
+        "tile_height_m": 2889.9,
+        "tinitaly_m": 2893.54,
+        "glo30_m": 2886.95,
+        "diff_vs_expected_m": -3.64
+      },
+      {
+        "name": "Italy: Cortina d'Ampezzo",
+        "lonlat": [
+          12.14,
+          46.54
+        ],
+        "z": 12,
+        "expected_source": "tinitaly",
+        "tile_height_m": 1248.4,
+        "tinitaly_m": 1247.69,
+        "glo30_m": 1248.61,
+        "diff_vs_expected_m": 0.71
+      },
+      {
+        "name": "Italy: Bolzano",
+        "lonlat": [
+          11.35,
+          46.5
+        ],
+        "z": 12,
+        "expected_source": "tinitaly",
+        "tile_height_m": 270.0,
+        "tinitaly_m": 269.96,
+        "glo30_m": 283.69,
+        "diff_vs_expected_m": 0.04
+      }
+    ],
+    "expected_error": "|diff| of a few metres = 0.1 m Terrain-RGB quantisation + bilinear resampling of a 10 m (TINITALY) or 30 m (GLO-30) grid onto 13-53 m Web Mercator pixels, compared against a single nearest source cell; larger on steep slopes",
+    "verification_json": "app/public/data/terrain/verification.json"
+  },
+  "preview": [
+    "data/processed/terrain/preview/dolomites-terrain-z9-hillshade.png",
+    "data/processed/terrain/preview/border-fill.png"
+  ]
+}

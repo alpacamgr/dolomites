@@ -1,0 +1,25 @@
+{
+  "dataset_id": {
+    "0Ma": "noaa-etopo2022-60s",
+    "5..300Ma": "scotese-paleodem-2018-v2"
+  },
+  "label": {
+    "0Ma": "observed",
+    "5..300Ma": "interpreted"
+  },
+  "source_ref": [
+    "noaa-etopo2022",
+    "scotese-2018"
+  ],
+  "attribution": {
+    "0Ma": "NOAA National Centers for Environmental Information (2022), ETOPO 2022 Global Relief Model (60 arc-second, ice-surface and bedrock), doi:10.25921/fd45-gt74. Public domain (US Government work).",
+    "5..300Ma": "Scotese, C. R. and Wright, N. M. (2018), PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic, 0.1 deg, Zenodo, doi:10.5281/zenodo.5460860. CC BY 4.0."
+  },
+  "license": {
+    "noaa-etopo2022-60s": "public domain (US Government work)",
+    "scotese-paleodem-2018-v2": "CC BY 4.0"
+  },
+  "generated": "2026-09-12",
+  "script": "data/scripts/textures/render.py",
+  "caveats": "PaleoDEM (5-300 Ma) is an interpretive paleogeography model at 0.1 deg (~11 km at equator); the authors describe outputs as estimates and no per-cell uncertainty is provided. Some pre-Cretaceous slices show polygon-shaped patches in the paleo-ocean floor - this is the author's block-by-block reconstruction methodology, not a pipeline artifact. Do not read morphology finer than ~11 km on paleo slices or ~2 km on the modern (ETOPO) slice. The 0 Ma slice reports ice-surface (Greenland and Antarctica are the top of the ice sheet, not bedrock); Pliocene (5 Ma) and older slices from PaleoDEM show land-surface elevation and do not depict ice cover, so the polar ice caps disappear between 0 and 5 Ma - this is a genuine difference in what the two data products represent, not a rendering inconsistency. The ice mask on the 0 Ma slice is derived at render time as (ETOPO 2022 60s ice-surface) - (ETOPO 2022 60s bedrock) > 50 m, and only masked cells receive the pale blue-white ice tint. The PaleoDEM has no ice-surface / bedrock split, so no ice tint is applied to paleo slices; polar cover before 0 Ma is not depicted. The PaleoDEM's own rows nearest the poles show longitudinal banding (elevation varying by hundreds of metres along rows that converge on the pole), which appears as a faint radial fan around the pole on some paleo slices such as the 240 Ma south pole; it is left as in the source."
+}

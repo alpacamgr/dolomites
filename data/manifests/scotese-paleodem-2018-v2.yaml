@@ -1,0 +1,52 @@
+id: scotese-paleodem-2018-v2
+title: PALEOMAP Paleodigital Elevation Models (PaleoDEMs) for the Phanerozoic
+provider: Scotese, C. R.; Wright, N. M.
+version: v2 (published 2018-08-01)
+citation: >
+  Scotese, C. R. and Wright, N. M. (2018). PALEOMAP Paleodigital Elevation
+  Models (PaleoDEMS) for the Phanerozoic. Zenodo. doi:10.5281/zenodo.5460860
+doi: 10.5281/zenodo.5460860
+landing_page: https://zenodo.org/records/5460860
+download_url: https://zenodo.org/api/records/5460860/files/Scotese_Wright_2018_Maps_1-88_6minX6min_PaleoDEMS_nc.zip/content
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    Paleogeography: PALEOMAP PaleoDEMs, Scotese & Wright (2018),
+    doi:10.5281/zenodo.5460860, CC BY 4.0.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [-180, -90, 180, 90]
+  resolution: "0.1 deg (~6 arc-min, ~11 km at equator); 3601 x 1801 grid, cell-centered on the poles/meridian"
+temporal:
+  coverage: "0-540 Ma"
+  step: "5 Myr for 0-90 Ma; 5 Myr for 90-540 Ma with slight non-uniformity in ages 105-115"
+format: "netCDF-4 (HDF5-based); variable 'z' is elevation in metres, negative below sea level; no NaN; -9000 m used for deep ocean; lat 90..-90, lon -180..180"
+size_bytes: 207273848
+checksum:
+  algorithm: sha256
+  value: ab360184d8260a815ef5ed6b8b4e0abdbf99ef5ee8aa87dfd070af323ceb42da
+honesty_label: interpreted
+caveats: |
+  The authors describe PaleoDEM outputs as "estimates" of land-surface elevation
+  and ocean depth built from paleogeographic maps and seafloor age; no formal
+  per-cell uncertainty is provided. At 0.1 deg the smallest resolved feature is
+  about 11 km at the equator, so individual Alpine peaks, reef platforms, and
+  small basins are not resolved. In some pre-Cretaceous slices the paleo-ocean
+  floor shows polygon-shaped patches which reflect the block-by-block
+  reconstruction methodology (patchwork of digitised paleo-ocean-floor
+  polygons), not noise from our pipeline. We render the data as delivered and
+  label the layer "interpreted".
+processing:
+  - step: "Verify MD5 checksum against Zenodo record"
+    script: data/scripts/textures/download.py
+    output: data/raw/scotese-paleodem-2018-v2/Scotese_Wright_2018_Maps_1-88_6minX6min_PaleoDEMS_nc.zip
+  - step: "Unzip the 88 per-age netCDF files (5 Myr steps, 0-540 Ma)"
+    script: data/scripts/textures/download.py
+    output: data/raw/scotese-paleodem-2018-v2/nc/
+  - step: "For each of {5, 10, ..., 300} Ma: flip to north-up, drop duplicated meridian column, resample with bicubic to 4096x2048 and 2048x1024, apply shared hypsometric palette, multiply-blend Horn hillshade (az 315, alt 45), compute tangent-space normal map (4k)"
+    script: data/scripts/textures/render.py
+    output: app/public/data/globe/textures/{2k,4k}/{age}.webp, app/public/data/globe/textures/4k/{age}-normal.webp

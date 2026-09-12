@@ -1,0 +1,70 @@
+id: collision-uplift
+title:
+  en: "The push from the south"
+  de: "Der Druck aus dem Süden"
+  it: "La spinta da sud"
+age_start_ma: 0.0
+age_end_ma: 0.0
+subject_age_start_ma: 35.0
+subject_age_end_ma: 0.0
+ics_stage: Rupelian
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The Dolomites are the internal, lightly deformed part of a young thrust belt. Great faults frame them: the Periadriatic-Insubric line to the north, the Giudicarie fault system to the west, the Valsugana thrust system to the south. Miocene shortening carried the Triassic rocks skywards without crumpling them; the range is still rising today at about a millimetre a year."
+  de: "Die Dolomiten sind der innere, nur schwach verformte Teil eines jungen Faltengebirges. Große Störungen rahmen sie ein: die Periadriatische Insubrische Linie im Norden, das Giudicarie-System im Westen, die Valsugana-Überschiebungen im Süden. Miozäne Einengung hob die triassischen Gesteine in den Himmel, ohne sie zu zerknittern; das Gebirge steigt bis heute mit rund einem Millimeter pro Jahr."
+  it: "Le Dolomiti sono la parte interna e poco deformata di una catena a pieghe e faglie giovane. Grandi lineamenti le incorniciano: la linea Periadriatico-Insubrica a nord, il sistema di faglie delle Giudicarie a ovest, il sistema dei sovrascorrimenti della Valsugana a sud. L'accorciamento miocenico ha portato in alto le rocce triassiche senza spiegazzarle; la catena continua a sollevarsi ancora oggi di circa un millimetro all'anno."
+map_state:
+  layers:
+    - id: "dolomites-terrain"
+      label: observed
+      source_ref: "tarquini-2023"
+    - id: "diss-3-3-1"
+      label: interpreted
+      source_ref: "diss-3-3-1"
+    - id: "geology-suedtirol"
+      label: observed
+      source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"]
+facts:
+  - text:
+      en: "The Dolomites are the internal domain of a south-vergent thin- to thick-skinned Alpine thrust belt, bounded to the north by the Periadriatic-Insubric line, to the west by the Giudicarie fault system, and to the south by the Valsugana thrust system."
+      de: "Die Dolomiten bilden den inneren Bereich eines südvergenten flach- bis tiefwurzelnden alpinen Deckenbaus; im Norden begrenzt durch die Periadriatische Insubrische Linie, im Westen durch das Giudicarie-System, im Süden durch die Valsugana-Überschiebungen."
+      it: "Le Dolomiti costituiscono il dominio interno di una catena di sovrascorrimenti alpini sud-vergente, da poco a molto radicata, delimitata a nord dalla linea Periadriatico-Insubrica, a ovest dal sistema di faglie delle Giudicarie e a sud dai sovrascorrimenti della Valsugana."
+    source_ref: "bosellini-2003"
+    confidence: established
+  - text:
+      en: "Apatite fission-track and (U-Th)/He data narrow the main Valsugana-phase shortening and cooling in the Dolomites to roughly 17 to 9 Ma."
+      de: "Apatit-Spaltspuren und (U-Th)/He-Daten engen die Hauptphase der Valsugana-Einengung und -Abkühlung in den Dolomiten auf etwa 17 bis 9 Ma ein."
+      it: "I dati di tracce di fissione su apatite e (U-Th)/He restringono la fase principale di raccorciamento e raffreddamento della Valsugana nelle Dolomiti a circa 17 - 9 Ma."
+    value: "about 17 to 9 Ma"
+    source_ref: "zattin-2006"
+    confidence: established
+    verification: pending
+  - text:
+      en: "In the Dolomites-facing sector of the Southern Eastern Alps, the ALPS2017 GNSS solution reports present-day vertical uplift of about 1.0 to 1.5 mm per year."
+      de: "Im dolomitenzugewandten Sektor der Südlichen Ostalpen berichtet die GNSS-Lösung ALPS2017 heutige vertikale Hebungen von rund 1,0 bis 1,5 mm pro Jahr."
+      it: "Nel settore delle Alpi Sud-Orientali che affaccia sulle Dolomiti la soluzione GNSS ALPS2017 stima un sollevamento verticale attuale di circa 1,0 - 1,5 mm all'anno."
+    value: "1.0 to 1.5 mm/yr"
+    source_ref: "sanchez-2018"
+    confidence: established
+  - text:
+      en: "Compared with the Central and Western Alps, the Dolomites are only lightly metamorphosed: the Triassic sedimentary architecture is preserved essentially intact, which is why the platform-and-basin geometries are still visible in the modern peaks."
+      de: "Verglichen mit den Zentral- und Westalpen sind die Dolomiten nur schwach metamorph: die triassische Sedimentarchitektur ist im Kern erhalten geblieben, weshalb die Plattform-Becken-Geometrien in den heutigen Gipfeln noch sichtbar sind."
+      it: "Rispetto alle Alpi Centrali e Occidentali le Dolomiti sono solo leggermente metamorfosate: l'architettura sedimentaria triassica è conservata pressoché intatta, e per questo le geometrie piattaforma-bacino sono ancora leggibili nei rilievi odierni."
+    source_ref: "bosellini-2003"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: terrain
+  time:
+    unit: ma
+    start: 0
+    end: 0
+  camera:
+    terrain: { lon: 11.45, lat: 46.2, zoom: 8.4, pitch: 30, bearing: 0 }
+  layers:
+    - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
+    - { id: "diss-3-3-1", label: interpreted, source_ref: "diss-3-3-1", style: "fault-lines" }
+    - { id: "geology-suedtirol", label: observed, source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"] }

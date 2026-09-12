@@ -1,0 +1,57 @@
+id: intro
+title:
+  en: "The Dolomites, right now"
+  de: "Die Dolomiten, jetzt"
+  it: "Le Dolomiti, adesso"
+age_start_ma: 0.0
+age_end_ma: 0.0
+ics_stage: Meghalayan
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The stage the whole story returns to: the modern terrain as it is measured today, and the four honesty labels the site uses to keep data and decoration apart."
+  de: "Der Ort, zu dem die ganze Geschichte zurückkehrt: das heutige Gelände, wie es gemessen wurde, und die vier Ehrlichkeits-Etiketten der Seite."
+  it: "Il palcoscenico a cui tutta la storia torna: il terreno odierno, così come è misurato, e le quattro etichette di onestà con cui il sito distingue dato e ornamento."
+map_state:
+  layers:
+    - id: "dolomites-terrain"
+      label: observed
+      source_ref: "tarquini-2023"
+    - id: "geology-suedtirol"
+      label: observed
+      source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"]
+facts:
+  - text:
+      en: "The terrain view uses TINITALY, the 10 m digital elevation model of Italy published by INGV."
+      de: "Die Geländedarstellung nutzt TINITALY, das 10-Meter-Höhenmodell Italiens des INGV."
+      it: "La vista del terreno usa TINITALY, il modello digitale del terreno d'Italia a 10 m pubblicato dall'INGV."
+    value: "10 m"
+    source_ref: "tarquini-2023"
+    confidence: established
+  - text:
+      en: "For areas outside Italy the site falls back to Copernicus DEM GLO-30, a 30 m global model."
+      de: "Außerhalb Italiens wird auf das globale Copernicus-DEM GLO-30 mit 30 m ausgewichen."
+      it: "Fuori dall'Italia il sito ripiega sul Copernicus DEM GLO-30, modello globale a 30 m."
+    value: "30 m"
+    source_ref: "copernicus-dem"
+    confidence: established
+  - text:
+      en: "Within South Tyrol, the geological units shown on the terrain come from the province's open geology dataset (CC0) wherever its map sheets are published."
+      de: "Innerhalb Südtirols stammen die Geologie-Einheiten aus dem freien Geologie-Datensatz der Provinz (CC0), soweit dessen Kartenblätter veröffentlicht sind."
+      it: "In Alto Adige le unità geologiche mostrate provengono dal dataset geologico aperto della Provincia di Bolzano (CC0), dove i suoi fogli sono pubblicati."
+    source_ref: "bolzano-geologia"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: terrain
+  time:
+    unit: ma
+    start: 0
+    end: 0
+  camera:
+    terrain: { lon: 11.72, lat: 46.42, zoom: 9.7, pitch: 64, bearing: 20 }
+  layers:
+    - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
+    - { id: "geology-suedtirol", label: observed, source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"] }

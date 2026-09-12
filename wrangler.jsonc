@@ -1,0 +1,9 @@
+// Cloudflare Workers static assets (ADR 0006). No Worker script: the Astro build in app/dist is served as-is,
+// including app/dist/_headers. The name must match the Worker name in the Cloudflare dashboard.
+{
+  "name": "dolomites",
+  "compatibility_date": "2026-09-12",
+  "assets": {
+    "directory": "./app/dist"
+  }
+}

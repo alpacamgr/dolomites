@@ -1,0 +1,80 @@
+id: ice-ages
+title:
+  en: "Under the ice"
+  de: "Unter dem Eis"
+  it: "Sotto il ghiaccio"
+age_start_ma: 0.120
+age_end_ma: 0.0
+subject_age_start_ma: 0.12
+subject_age_end_ma: 0.0
+ics_stage: Pleistocene  # epoch, not a stage
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The last glacial cycle covered the Alps in ice. A published ice-sheet model, run at 1 km, replays 120 thousand years of thickening and thinning over the real terrain. Only the highest Dolomite peaks stood above the ice as nunataks. When the ice left, the valleys were unlocked and huge rockslides collapsed into them, some in prehistoric times, one within recorded human memory."
+  de: "Der letzte Vereisungszyklus legte die Alpen in Eis. Ein publiziertes Eisschildmodell mit 1 km Auflösung spielt über dem realen Gelände 120.000 Jahre Anwachsen und Zerfallen ab. Nur die höchsten Dolomitengipfel ragten als Nunataks aus dem Eis. Als das Eis wich, waren die Täler entriegelt; große Bergstürze fielen in sie hinein, einige in vorgeschichtlicher Zeit, einer im menschlichen Gedächtnis."
+  it: "L'ultimo ciclo glaciale ha coperto le Alpi di ghiaccio. Un modello di calotta pubblicato, girato a 1 km, ripercorre 120 mila anni di crescita e ritiro sul terreno reale. Solo le vette più alte delle Dolomiti emergevano come nunatak. Quando il ghiaccio se ne andò, le valli si liberarono e grandi frane vi caddero dentro, alcune in tempi preistorici, una entro la memoria storica."
+map_state:
+  layers:
+    - id: "dolomites-terrain"
+      label: observed
+      source_ref: "tarquini-2023"
+    - id: "seguinot2018-alps-1km"
+      label: modeled
+      source_ref: "seguinot-2018"
+    - id: "glacimontis-lgm"
+      label: interpreted
+      source_ref: "flantua-2026"
+facts:
+  - text:
+      en: "The Seguinot et al. 2018 PISM simulation of the Alpine ice sheet spans the full last glacial cycle, 120 to 0 thousand years ago, at 1 km horizontal resolution."
+      de: "Die PISM-Simulation des Alpen-Eisschildes von Seguinot et al. 2018 deckt den gesamten letzten Vereisungszyklus ab, 120 bis 0 tausend Jahre, mit 1 km horizontaler Auflösung."
+      it: "La simulazione PISM della calotta alpina di Seguinot et al. 2018 copre l'intero ultimo ciclo glaciale, 120 - 0 mila anni fa, alla risoluzione orizzontale di 1 km."
+    value: "1 km, 120 to 0 ka"
+    source_ref: "seguinot-2018"
+    confidence: established
+  - text:
+      en: "The continuous-variable Zenodo release stores ice thickness, velocity and surface elevation as 1000-year spatial snapshots that the site interpolates for the scroll animation."
+      de: "Die zeitkontinuierliche Zenodo-Veröffentlichung enthält Eisdicke, Geschwindigkeit und Oberflächenhöhe als räumliche Momentaufnahmen im 1000-Jahres-Takt, die die Seite für die Scrollanimation interpoliert."
+      it: "Il rilascio a variabili continue su Zenodo fornisce spessore, velocità e quota superficiale del ghiaccio in istantanee spaziali ogni mille anni, che il sito interpola per l'animazione durante lo scroll."
+    source_ref: "seguinot-2018"
+    confidence: established
+  - text:
+      en: "In the ice-sheet model shown here, the ice above Bolzano reaches its greatest thickness, about 2150 m, around 24 thousand years ago. This is model output for a 1 km grid cell, not a measurement."
+      de: "Im hier gezeigten Eisschildmodell erreicht das Eis über Bozen seine größte Mächtigkeit, rund 2150 m, vor etwa 24.000 Jahren. Das ist ein Modellergebnis für eine 1-km-Gitterzelle, keine Messung."
+      it: "Nel modello di calotta glaciale mostrato qui, il ghiaccio sopra Bolzano raggiunge lo spessore massimo, circa 2150 m, intorno a 24 mila anni fa. È un risultato del modello per una cella di 1 km, non una misura."
+    value: "about 2150 m, around 24 ka (model)"
+    source_ref: "seguinot-2018"
+    label: modeled
+    confidence: established
+  - text:
+      en: "Cosmogenic exposure ages in Alta Badia record deglaciation of the high Dolomite valleys starting around 17 thousand years ago, with later re-advances at 15.8 to 15.4 and 14.4 to 13.3 thousand years."
+      de: "Kosmogene Expositionsalter in Alta Badia zeigen den Beginn der Enteisung der hohen Dolomitentäler um etwa 17.000 Jahre, mit späteren Vorstößen von 15.800 bis 15.400 und 14.400 bis 13.300 Jahren."
+      it: "Le età di esposizione cosmogeniche in Alta Badia registrano l'inizio della deglaciazione delle alte valli dolomitiche intorno a 17 mila anni, con avanzate successive a 15.800 - 15.400 e 14.400 - 13.300 anni."
+    value: "starts about 17 ka"
+    source_ref: "rossato-2025"
+    confidence: established
+    verification: pending
+  - text:
+      en: "The Marocche di Dro rock avalanches in the Sarca valley are among the largest Holocene mass movements in the Alps: cosmogenic 36Cl dating places the Marocca Principale event at 5300 plus or minus 860 years before present, and the Kas collapse at 1080 plus or minus 160 years."
+      de: "Die Bergstürze der Marocche di Dro im Sarcatal zählen zu den größten holozänen Massenbewegungen der Alpen: kosmogene 36Cl-Datierungen setzen das Ereignis Marocca Principale auf 5300 ± 860 Jahre vor heute und den Kas-Sturz auf 1080 ± 160 Jahre."
+      it: "Le frane delle Marocche di Dro nella Val di Sarca sono tra i maggiori movimenti gravitativi olocenici delle Alpi: la datazione cosmogenica al 36Cl assegna all'evento della Marocca Principale 5300 ± 860 anni fa, e al collasso di Kas 1080 ± 160 anni fa."
+    value: "5300 +/- 860 yr BP; 1080 +/- 160 yr BP"
+    source_ref: "ivyochs-2017"
+    confidence: established
+    verification: pending
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: terrain
+  time:
+    unit: ka
+    start: 120
+    end: 0
+  camera:
+    terrain: { lon: 11.45, lat: 46.45, zoom: 8.9, pitch: 55, bearing: 20 }
+  layers:
+    - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
+    - { id: "seguinot2018-alps-1km", label: modeled, source_ref: "seguinot-2018" }
+    - { id: "glacimontis-lgm", label: interpreted, source_ref: "flantua-2026" }

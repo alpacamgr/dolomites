@@ -1,0 +1,45 @@
+id: cenogrid-westerhold-2020
+title: CENOGRID - Cenozoic global reference benthic carbon and oxygen isotope dataset
+provider: Westerhold, T. and coauthors (see citation)
+version: "1 (PANGAEA 917660 - reference splice; parent collection 917503)"
+citation: >
+  Westerhold, T., Marwan, N., Drury, A.J., Liebrand, D., Agnini, C., Anagnostou, E.,
+  Barnet, J.S.K., Bohaty, S.M., De Vleeschouwer, D., Florindo, F., Frederichs, T.,
+  Hodell, D.A., Holbourn, A.E., Kroon, D., Lauretano, V., Littler, K., Lourens, L.J.,
+  Lyle, M.W., Palike, H., Rohl, U., Tian, J., Wilkens, R.H., Wilson, P.A., Zachos, J.C.
+  (2020). An astronomically dated record of Earth's climate and its predictability
+  over the last 66 million years. Science 369, 1383-1387.
+  https://doi.org/10.1126/science.aba6853
+doi: 10.1594/PANGAEA.917660
+landing_page: https://doi.pangaea.de/10.1594/PANGAEA.917503
+download_url: https://doi.pangaea.de/10.1594/PANGAEA.917660?format=textfile
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    Westerhold, T. et al. (2020). PANGAEA 917660 (reference splice) in the
+    parent collection 917503, CC BY 4.0.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: n/a
+  bbox: "14 ODP/IODP sites, global oceans"
+  resolution: n/a
+temporal:
+  coverage: "0 - 67 Ma"
+  step: "~2 kyr average for 0-34 Ma, ~4.4 kyr for 34-67 Ma"
+format: PANGAEA tab-separated text (with header block)
+size_bytes: 6956978
+checksum:
+  algorithm: sha256
+  value: 92f5d590bbe9f594929dc2988a0cec81d9e024e67feac26967e97d78f4b24715
+honesty_label: observed             # dated (astronomical age model)
+caveats: |
+  Benthic foram delta 18O composite splice of 14 records; the "CorrAdjusted"
+  column uses per-site inter-site offsets applied by the authors. Decimated
+  here to 10 kyr bins (arithmetic mean) for compact scroll-linked plotting.
+processing:
+  - step: parse PANGAEA text file, average CorrAdjusted d18O per 10 kyr bin on the tuned Ma axis
+    script: data/scripts/quaternary/build_curves.py
+    output: app/public/data/curves/cenogrid-d18o.json

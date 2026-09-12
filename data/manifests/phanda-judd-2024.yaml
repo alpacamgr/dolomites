@@ -1,0 +1,42 @@
+id: phanda-judd-2024
+title: PhanDA - Phanerozoic data assimilation of GMST and CO2 (Judd et al. 2024)
+provider: E.J. Judd, J.E. Tierney, D.J. Lunt, I.P. Montanez, B.T. Huber, S.L. Wing, P.J. Valdes
+version: "as-of GitHub main branch on 2026-09-06"
+citation: >
+  Judd, E.J., Tierney, J.E., Lunt, D.J., Montanez, I.P., Huber, B.T., Wing, S.L.,
+  Valdes, P.J. (2024). A 485-million-year history of Earth's surface temperature.
+  Science 385. https://doi.org/10.1126/science.adk3705
+doi: 10.1126/science.adk3705
+landing_page: https://github.com/EJJudd/PhanDA
+download_url: https://raw.githubusercontent.com/EJJudd/PhanDA/main/5_Outputs/PhanDA_GMSTandCO2_percentiles.csv
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    Judd E.J. et al. (2024). A 485-million-year history of Earth's surface
+    temperature. Science 385. PhanDA outputs: github.com/EJJudd/PhanDA
+    (CC BY 4.0).
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: n/a
+  bbox: n/a
+  resolution: n/a
+temporal:
+  coverage: "0 - 485 Ma"
+  step: "one row per stage (~5 Myr, 85 rows)"
+format: CSV
+size_bytes: 18513
+checksum:
+  algorithm: sha256
+  value: 22cad7964bac3b679ad83bf8a9c83eb66e995898a01eb9e93142087b2d4f6e1f
+honesty_label: modeled
+caveats: |
+  Bayesian data-assimilation posterior; the p05/p16/p50/p84/p95 percentiles are
+  of the ensemble. Age is stage midpoint; boundary ages come from the source
+  timescale used by PhanDA, not from ICS 2026/06.
+processing:
+  - step: parse CSV, split GMST and CO2 into separate series JSONs
+    script: data/scripts/quaternary/build_curves.py
+    output: app/public/data/curves/phanda-gmst.json, app/public/data/curves/phanda-co2.json

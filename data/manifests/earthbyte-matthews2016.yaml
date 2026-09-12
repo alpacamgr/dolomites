@@ -1,0 +1,53 @@
+id: earthbyte-matthews2016
+title: "Matthews et al. 2016 - Global continuous late-Paleozoic to present-day plate model (410-0 Ma)"
+provider: EarthByte, University of Sydney
+version: "Zenodo record 10526156 (mirror of the 2016 release)"
+citation: "Matthews, K. J., Maloney, K. T., Zahirovic, S., Williams, S. E., Seton, M., and Muller, R. D. (2016). Global plate boundary evolution and kinematics since the late Paleozoic. Global and Planetary Change 146, 226-250. doi:10.1016/j.gloplacha.2016.10.002."
+doi: "10.5281/zenodo.10526156"
+landing_page: https://www.earthbyte.org/global-plate-boundary-evolution-and-kinematics-since-the-late-paleozoic/
+download_url: https://zenodo.org/records/10526156
+download_date: 2026-09-06
+license:
+  name: "CC BY 4.0"
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >-
+    Plate reconstructions from Matthews et al. (2016), 'Global plate boundary
+    evolution and kinematics since the late Paleozoic', Global and Planetary
+    Change 146, doi:10.1016/j.gloplacha.2016.10.002, CC BY 4.0.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [-180, -90, 180, 90]
+  resolution: "continental-scale plate polygons; boundary lines"
+temporal:
+  coverage: "410-0 Ma"
+  step: "1 Myr resolvable via rotation model"
+format: "GPML, ESRI Shapefile, .rot (GPlates rotation file)"
+size_bytes: 52644397
+checksum:
+  algorithm: sha256
+  value: "see data/raw/earthbyte-matthews2016/checksums.txt"
+honesty_label: modeled
+superseded_for: globe
+superseded_note: >-
+  Replaced for the globe view (textures, outlines, boundaries, Dolomites
+  marker) by scotese-wright-2018-model per docs/decisions/0005-globe-reference-frame.md
+  (2026-09-06). Kept for the Alpine kinematics narrative and future regional
+  views; no longer read by data/scripts/plates/build.py.
+caveats: |
+  - Used only for the 300-251 Ma tail that lies outside the coverage of
+    earthbyte-muller2019. Muller 2019 remains the primary global model for
+    250-0 Ma.
+  - Matthews 2016 uses the Torsvik/Van der Voo/Domeier absolute reference
+    frame; Muller 2019 uses the Muller 2019 optimised frame. Switching model
+    at 250 Ma may produce a visible discontinuity in the animation - this
+    is documented in the meta.json under `caveats` and never smoothed away.
+  - Coastline polygons in this package are low resolution (Global_coastlines_2015_v1_low_res).
+processing:
+  - step: "Download rotations and topology/geometry layers via gplately.PlateModelManager"
+    script: data/scripts/plates/download.py
+    output: data/raw/earthbyte-matthews2016/pm_manager/matthews2016/
+  - step: "Reconstruct continents/coastlines and resolve topologies for ages 251-300 Ma"
+    script: data/scripts/plates/build.py
+    output: app/public/data/globe/plates/{251..300}.json

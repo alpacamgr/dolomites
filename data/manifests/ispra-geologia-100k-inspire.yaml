@@ -1,0 +1,80 @@
+id: ispra-geologia-100k-inspire
+title: Carta Geologica d'Italia in scala 1:100.000 - Dataset (harmonised INSPIRE GE, GML part "nord")
+provider: ISPRA - Dipartimento Servizio Geologico d'Italia
+version: "GML Carta_geologica_100k_INSPIRE-GE_nord (zip entry dated 2021-11-04); RNDT record ispra_rm:Geologia100K_DT (creation 2020-11-16, metadata 2023-05-30)"
+citation: >-
+  ISPRA - Dipartimento Servizio Geologico d'Italia. Carta Geologica d'Italia in scala 1:100.000 - Dataset,
+  harmonised to the INSPIRE and GeoSciML data models. Download service
+  https://sgi3.isprambiente.it/download/GE.atom.TOP.en.xml. CC BY 4.0.
+doi: ""
+landing_page: https://geodati.gov.it/resource/id/ispra_rm:Geologia100K_DT
+download_url: https://sgi3.isprambiente.it/download/gml_zip/Carta_geologica_100k_INSPIRE-GE_nord.zip
+download_date: 2026-09-12
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: "ISPRA - Servizio Geologico d'Italia, Carta Geologica d'Italia 1:100.000 (dataset INSPIRE) - CC BY 4.0 (modified)"
+  derivatives_allowed: true
+  share_alike: false
+  evidence: |
+    - RNDT record https://geodati.gov.it/resource/id/ispra_rm:Geologia100K_DT (fetched 2026-09-12): "Dato concesso con
+      licenza CC-BY-4.0 - https://creativecommons.org/licenses/by/4.0/deed.it"; "Nessuna Limitazione al Pubblico Accesso".
+    - INSPIRE Atom top feed https://sgi3.isprambiente.it/download/GE.atom.TOP.en.xml (fetched 2026-09-12): rights "Licence CC-BY 4.0".
+    - ISPRA news post 2025-09-04 (https://portalesgi.isprambiente.it/en/?p=8488/) on the 1:100,000 raster release: CC-BY 4.0,
+      attribution to ISPRA required. The Atom dataset feed (saved as data/raw/ispra-geologia-100k-inspire/GE.atom.en.xml)
+      gives no separate attribution string, so the one above names ISPRA and the product.
+spatial:
+  crs: EPSG:4258   # posList axis order is latitude, longitude; used as EPSG:4326 without transformation (sub-metre difference)
+  bbox: [9.953, 45.668, 12.953, 47.094]  # extent of the 45 118 polygons intersecting the terrain bbox, computed from the GML
+  resolution: "1:100,000 (277 sheets surveyed 1880-1980, digitised late 1990s, revised 2005-2009)"
+temporal:
+  coverage: "present (map compilation; surveys 1880-1980)"
+  step: "static"
+format: "INSPIRE GE ge-core 4.0 GML 3.2 in a zip (GeologicUnit + GeologicEvent + MappedFeature polygons, mappingFrame 'top of bedrock')"
+size_bytes: 116242765
+checksum:
+  algorithm: sha256
+  value: "91400fc51e2161858c5d7a105d4a2b33fe4fe778b3c68dcc566d30a9544decb2"  # Carta_geologica_100k_INSPIRE-GE_nord.zip
+honesty_label: observed
+caveats: |
+  - Priority 5 in the merged Dolomites geology: fills only what South Tyrol, Trentino, Veneto and swisstopo leave empty (the
+    South Tyrol areas outside the published CARG sheets, e.g. Bolzano, Bletterbach, Brixen, Bruneck; the Lombardy edge; the
+    Friuli corner). Scale 1:100,000 from historical sheets (surveys 1880-1980): 4x coarser than the South Tyrol map and 10x
+    coarser than the Trentino map, old nomenclature (e.g. "morene würmiane"). The meta gives its scale and a scale_note; its
+    polygons must not be read as detailed mapping at z11-13. It was not used to replace the Veneto map in Belluno.
+  - The "nord" GML holds 3 730 GeologicUnit and 135 115 MappedFeature polygons; 45 118 polygons of 1 072 units intersect the
+    terrain bbox.
+  - Ages: each GeologicUnit has one GeologicEvent with olderNamedAge / youngerNamedAge as ICS chart URIs; names are split
+    from CamelCase; 'Present' -> Holocene, 'Unknown' -> null, 'tortonian' -> Tortonian, 'MiddlePleistocene' -> Chibanian.
+  - The event is not always the formation: for 244 of the 1 072 units eventProcess is metamorphicProcess (e.g. "ortogneiss
+    granitici": Cenozoic; "fillade quarzifera di bressanone": Pennsylvanian). Those ages are the metamorphism and are never
+    used for colour; faulting and unknown events likewise.
+  - The join of unit name, legend description and event has systematic errors (e.g. "oliviniti" described as "Filladi
+    quarzifere, spesso granatifere"; "dolomia dello sciliar" described as "Norico. - Dolomia principale" with age Ladinian).
+    data/scripts/terrain/review_ispra_100k_units.py checks every unit in the bbox (name vs description lithology and wording,
+    an age stated at the start of the description, and ISPRA's age vs the dated South Tyrol/Trentino/Veneto units under its
+    polygons) and records one decision per unit in geology_age_mapping.json (sources.ispra-geologia-100k-inspire.units).
+    Review of 2026-09-12 (second run, with description joins): 672 units keep ISPRA's age; 232 contradictory units are
+    uncoloured; 18 contradictory units take the South Tyrol / Trentino legend age (legend_join): 16 by their own formation
+    name (e.g. "arenarie di val gardena" -> Lopingian instead of ISPRA's Guadalupian) and 2 with a generic name whose
+    description names exactly one formation (join_from description: GU_623 "arenarie quarzose ... (Arenarie di Val
+    Gardena)" -> Lopingian, which covers the Bletterbach gorge; GU_201 "scisti argillosi rossi" described as Werfen ->
+    Lopingian-Olenekian); 10 with a name/description mismatch between two Quaternary deposit types keep their Quaternary age;
+    137 are uncoloured as metamorphic/faulting/unknown events (the other metamorphic units are among the contradictions);
+    2 glacier/water units and 1 'Unknown' age stay null. The detailed-map check reads the previous build's ages, so the
+    Veneto joins changed its verdict for 11 units (9 of them not in the tiles). The unit_name property is still ISPRA's name.
+    A reviewer with geological training should check the units that fill the gaps (listed in the meta, ages.ispra_review).
+  - The Atom feed's bbox attributes for the three zips look mislabelled ("nord" is advertised as "35.5 8.1 41.3 18.5");
+    the downloaded "nord" file does cover northern Italy.
+processing:
+  - step: "Download the zip (manual, 2026-09-12), SHA-256. No fetch script."
+    output: data/raw/ispra-geologia-100k-inspire/Carta_geologica_100k_INSPIRE-GE_nord.zip
+  - step: "Stream-parse the GML (GeologicUnit attributes; MappedFeature polygons, lat/lon swapped) for polygons meeting the terrain bbox; cached"
+    script: data/scripts/terrain/geology_gapfill_readers.py
+    output: data/processed/terrain/geology-gapfill-cache/ispra-100k.pkl
+  - step: "Per-unit age review (metamorphic events, contradictions, detailed-map cross-check, legend joins) written to the mapping table"
+    script: data/scripts/terrain/review_ispra_100k_units.py
+    output: data/scripts/terrain/geology_age_mapping.json
+  - step: "Apply the review, merge into the gap-free coverage below the four higher-priority sources, generalise per zoom, encode MVT"
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: data/processed/terrain/geology-dolomites.pmtiles -> app/public/data/terrain/geology/

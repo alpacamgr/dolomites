@@ -1,0 +1,144 @@
+{
+  "zoom_samples": [
+    {
+      "z": 8,
+      "x": 136,
+      "y": 90,
+      "centre_lonlat": [
+        11.95449829101562,
+        46.557916007595786
+      ],
+      "tile_height_center_m": 1630.9000000000015,
+      "tinitaly_at_center_m": 1632.635009765625,
+      "glo30_at_center_m": 1635.408203125,
+      "diff_vs_tinitaly_m": -1.7350097656235448,
+      "diff_vs_glo30_m": -4.508203124998545,
+      "tile_min_m": 161.90000000000146,
+      "tile_max_m": 3408.7000000000007
+    },
+    {
+      "z": 10,
+      "x": 544,
+      "y": 362,
+      "centre_lonlat": [
+        11.426124572753903,
+        46.43762029675446
+      ],
+      "tile_height_center_m": 1271.1000000000004,
+      "tinitaly_at_center_m": 1271.2989501953125,
+      "glo30_at_center_m": 1292.1070556640625,
+      "diff_vs_tinitaly_m": -0.1989501953121362,
+      "diff_vs_glo30_m": -21.007055664062136,
+      "tile_min_m": 209.0,
+      "tile_max_m": 2807.2000000000007
+    },
+    {
+      "z": 12,
+      "x": 2178,
+      "y": 1448,
+      "centre_lonlat": [
+        11.469812393188468,
+        46.528575644415156
+      ],
+      "tile_height_center_m": 905.5,
+      "tinitaly_at_center_m": 901.7548828125,
+      "glo30_at_center_m": 903.6041259765625,
+      "diff_vs_tinitaly_m": 3.7451171875,
+      "diff_vs_glo30_m": 1.8958740234375,
+      "tile_min_m": 309.40000000000146,
+      "tile_max_m": 1454.6000000000004
+    }
+  ],
+  "lonlat_samples": [
+    {
+      "name": "Austria: Wipptal N of Brenner",
+      "lon": 11.45,
+      "lat": 47.05,
+      "z": 12,
+      "x": 2178,
+      "y": 1439,
+      "px": 141,
+      "py": 428,
+      "expected_source": "glo30",
+      "tile_height_m": 1912.6000000000004,
+      "tinitaly_at_point_m": null,
+      "glo30_at_point_m": 1915.8948974609375,
+      "diff_vs_expected_m": -3.294897460937136
+    },
+    {
+      "name": "Austria: 47.10 N 12.00 E",
+      "lon": 12.0,
+      "lat": 47.1,
+      "z": 12,
+      "x": 2184,
+      "y": 1439,
+      "px": 273,
+      "py": 0,
+      "expected_source": "glo30",
+      "tile_height_m": 1586.9000000000015,
+      "tinitaly_at_point_m": null,
+      "glo30_at_point_m": 1584.7821044921875,
+      "diff_vs_expected_m": 2.117895507813955
+    },
+    {
+      "name": "Austria: East Tyrol",
+      "lon": 12.3,
+      "lat": 46.9,
+      "z": 12,
+      "x": 2187,
+      "y": 1442,
+      "px": 484,
+      "py": 172,
+      "expected_source": "glo30",
+      "tile_height_m": 1882.9000000000015,
+      "tinitaly_at_point_m": null,
+      "glo30_at_point_m": 1885.0482177734375,
+      "diff_vs_expected_m": -2.148217773436045
+    },
+    {
+      "name": "Italy: Marmolada area",
+      "lon": 11.85,
+      "lat": 46.44,
+      "z": 12,
+      "x": 2182,
+      "y": 1449,
+      "px": 423,
+      "py": 493,
+      "expected_source": "tinitaly",
+      "tile_height_m": 2889.9000000000015,
+      "tinitaly_at_point_m": 2893.537109375,
+      "glo30_at_point_m": 2886.947021484375,
+      "diff_vs_expected_m": -3.637109374998545
+    },
+    {
+      "name": "Italy: Cortina d'Ampezzo",
+      "lon": 12.14,
+      "lat": 46.54,
+      "z": 12,
+      "x": 2186,
+      "y": 1448,
+      "px": 64,
+      "py": 159,
+      "expected_source": "tinitaly",
+      "tile_height_m": 1248.4000000000015,
+      "tinitaly_at_point_m": 1247.6929931640625,
+      "glo30_at_point_m": 1248.6119384765625,
+      "diff_vs_expected_m": 0.7070068359389552
+    },
+    {
+      "name": "Italy: Bolzano",
+      "lon": 11.35,
+      "lat": 46.5,
+      "z": 12,
+      "x": 2177,
+      "y": 1448,
+      "px": 70,
+      "py": 498,
+      "expected_source": "tinitaly",
+      "tile_height_m": 270.0,
+      "tinitaly_at_point_m": 269.964599609375,
+      "glo30_at_point_m": 283.68536376953125,
+      "diff_vs_expected_m": 0.035400390625
+    }
+  ]
+}

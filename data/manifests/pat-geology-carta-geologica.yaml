@@ -1,0 +1,95 @@
+id: pat-geology-carta-geologica
+title: Carta Geologica della Provincia autonoma di Trento - layers Substrato, Sintemi, Depositi Quaternari, Depositi di Frana
+provider: Provincia autonoma di Trento, Servizio Geologico
+version: "Geocatalogo shapefiles (features dataagg 2019-12-13; zips Last-Modified 2022-10-14/17); unit legend 'Descrizione delle Unita', Versione Ottobre 2019"
+citation: >-
+  Provincia autonoma di Trento, Servizio Geologico. Carta Geologica della Provincia autonoma di Trento
+  (Banca Dati Geologica, 1:10.000): Carta Geologica Substrato (p_TN:5d2495a7-6747-42e4-b898-9d10231f4042),
+  Carta Geologica Sintemi (p_TN:01a91b16-04e9-4ff7-8be3-f7af49dc8c37), Carta Geologica Depositi Quaternari
+  (p_TN:3f2b086a-33f7-43bc-afe7-ef101383e42e), Carta Geologica Depositi di Frana
+  (p_TN:2989436c-8c94-4a3c-a116-4e62a07e963c). Geocatalogo PAT. Legenda della Carta Geologica - Descrizione
+  delle Unita, Versione Ottobre 2019.
+doi: ""
+landing_page: https://www.provincia.tn.it/News/Approfondimenti/Carta-Geologica-della-Provincia-Autonoma-di-Trento
+download_url: https://siatservices.provincia.tn.it/idt/vector/p_TN_5d2495a7-6747-42e4-b898-9d10231f4042.zip
+download_urls:
+  substrato.zip: https://siatservices.provincia.tn.it/idt/vector/p_TN_5d2495a7-6747-42e4-b898-9d10231f4042.zip
+  sintemi.zip: https://siatservices.provincia.tn.it/idt/vector/p_TN_01a91b16-04e9-4ff7-8be3-f7af49dc8c37.zip
+  depositi_quaternari.zip: https://siatservices.provincia.tn.it/idt/vector/p_TN_3f2b086a-33f7-43bc-afe7-ef101383e42e.zip
+  depositi_frana.zip: https://siatservices.provincia.tn.it/idt/vector/p_TN_2989436c-8c94-4a3c-a116-4e62a07e963c.zip
+  docs/Descrizione_delle_Unita_-_Carta_geologica_del_Trentino.pdf: https://www.provincia.tn.it/content/download/4931/50119/file/Descrizione+delle+Unit%C3%A0+-+Carta+geologica+del+Trentino.pdf
+  docs/Legenda_Carta_Geologica_del_Trentino.pdf: https://www.provincia.tn.it/content/download/5604/54416/file/Legenda+Carta+Geologica+del+Trentino.pdf
+  docs/Carta_geologica_del_Trentino_-_aggiornamento_dicembre_2019.pdf: https://www.provincia.tn.it/content/download/4916/50028/file/Carta+geologica+del+Trentino+-+aggiornamento+dicembre+2019.pdf
+download_date: 2026-09-12
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: "Dati elaborati dal Servizio geologico della Provincia autonoma di Trento"
+  derivatives_allowed: true
+  share_alike: false
+  evidence: |
+    - Each Geocatalogo record (fetched 2026-09-12, saved as data/raw/pat-geology-carta-geologica/<layer>.metadata.xml)
+      states in gmd:useLimitation: "Creative Commons Attribuzione 4.0 Internazionale (CC BY 4.0) -
+      https://creativecommons.org/licenses/by/4.0/deed.it", and gmd:otherConstraints "nessuna limitazione".
+    - The landing page (fetched 2026-09-12) says the maps are released under a Creative Commons "Attribution"
+      (CC BY) licence, links the CC BY 3.0 IT legal code, and asks users to cite "Dati elaborati dal Servizio
+      geologico della Provincia autonoma di Trento". The version differs from the dataset records (4.0); both
+      permit redistribution of adapted material with attribution. We follow the dataset records (CC BY 4.0),
+      show the requested credit, and mark the tiles as modified.
+spatial:
+  crs: EPSG:25832
+  bbox: [10.41, 45.60, 11.97, 46.60]
+  resolution: "1:10,000 survey scale"
+temporal:
+  coverage: "present (map compilation from CARG and provincial surveys since the early 1990s; database update 2019-12-13)"
+  step: "static"
+format: "ESRI Shapefile (zipped, one per layer, with QML/SLD styles and an HTML table description); PDF unit legend"
+size_bytes: 273128189
+checksum:
+  algorithm: sha256
+  value: "997fa8f3dce73473deba19cf08ecb4b9e98b6cb0476381d32268290e8204dc69"  # substrato.zip; all files below
+  files:
+    substrato.zip: {bytes: 106540786, sha256: 997fa8f3dce73473deba19cf08ecb4b9e98b6cb0476381d32268290e8204dc69}
+    sintemi.zip: {bytes: 82544035, sha256: c30c304406472dd831c4a600f120e997efc7c958b2ea5af0b75276720b55f3c8}
+    depositi_quaternari.zip: {bytes: 77695578, sha256: 154386c64cacec5fe04456b547ef75742e93229eaa50afad21d810d5fd3d12ae}
+    depositi_frana.zip: {bytes: 4433740, sha256: 8df3f68059281c01312b5c0621d69325216833e9e5ad6fdf99937993d2213415}
+    docs/Descrizione_delle_Unita_-_Carta_geologica_del_Trentino.pdf: {bytes: 178377, sha256: c94d6976a1b679225883036def234142834074aef1d9fadb0c5a8fadf19b25ac}
+    docs/Legenda_Carta_Geologica_del_Trentino.pdf: {bytes: 342659, sha256: e08a111dab47fa418f789ddaef7c1936370cc767df23bc235a8e394da1a1a95a}
+    docs/Carta_geologica_del_Trentino_-_aggiornamento_dicembre_2019.pdf: {bytes: 1393014, sha256: ccb9ed42bb96d201bc53a3ee6c11e87b25194eedfa3ddd4584bbdbd5a79d360a}
+honesty_label: observed
+caveats: |
+  - Coverage is the Province of Trento only (Latemar, Predazzo, Tesero, Val di Fassa, Pale di San Martino west side,
+    Marmolada south-west flank up to the provincial border).
+  - Substrato (121 443 polygons, bedrock) and Sintemi (104 556, Quaternary cover) tile the surface without overlap
+    (checked in a 15 x 15 km window around Latemar: intersection 0 m2). Sintemi is Depositi Quaternari plus Depositi
+    di Frana with synthem names (same polygon count, symmetric difference 0 m2), so only Substrato and Sintemi are
+    tiled; Depositi Quaternari/Frana supply the deposit type ('denom', one per tipo_qu code) used as lithology.
+  - The shapefiles carry no ages. Ages come from the Servizio Geologico's unit legend PDF ("Eta:" statement per
+    map symbol), extracted by data/scripts/terrain/extract_pat_unit_ages.py and joined on sigla_cart + nome.
+    Members without their own statement take the statement of their formation (18 units); 65 units, among them
+    the Predazzo and Monzoni plutons, the Monte Fernazza facies and the Formazione di Regnana, have no age
+    statement in the unit descriptions. Since 2026-09-12 three groups of them are dated from cited legends
+    (geology_age_mapping.json, sources.pat-geology-carta-geologica.unit_joins): the Predazzo and Monzoni pluton bodies
+    take 'Triassic' from the map legend's own group heading "Corpi plutonici triassici di Predazzo e Monzoni" (age_basis
+    source); the Monte Fernazza facies IMFb-IMFg take the formation's Ladinian (South Tyrol CARG IMF, PAT facies IMFa;
+    legend_join); the Porfiroidi del Comelico take the Ordovician (envelope of the Veneto class age and ISPRA sheet 046;
+    legend_join). The other units stay null. The age strings use substages (Pelsonico, Illirico, Fassanico ...)
+    and qualifiers the ICS chart does not have; they are resolved to full chart intervals (outer envelopes),
+    rules and judgement calls in data/scripts/terrain/geology_age_mapping.json (sources.pat-geology-carta-geologica).
+  - Map symbols 'fl', 'fm' and 'ft' are used for different dyke sets in the legend; they are only resolved where
+    the unit name matches exactly one of them.
+  - 'area non rilevabile/non classificabile' (99), glaciers, anthropogenic deposits and permanent snow have no
+    legend age and stay null.
+  - The DBF files have no .cpg; they decode as Latin-1 (a grave 0xE0 etc.). A few names contain a literal '?'
+    (0x3F) where the legend PDF has an apostrophe or dash ("SUBSINTEMA DI MALGA CAMPO D?ORSO",
+    "Breccia tuff ? tuff"); that is the source's text and is kept.
+processing:
+  - step: "Download the four layer zips and three legend PDFs from the Geocatalogo / provincia.tn.it, with metadata records and SHA-256"
+    script: data/scripts/terrain/fetch_geology_tn.py
+    output: data/raw/pat-geology-carta-geologica/
+  - step: "Extract the age statement of each unit from 'Descrizione delle Unita' (pdftotext) and join it to the shapefile map symbols"
+    script: data/scripts/terrain/extract_pat_unit_ages.py
+    output: data/scripts/terrain/geology_age_mapping.json (sources.pat-geology-carta-geologica.unit_ages)
+  - step: "Reproject EPSG:25832 -> EPSG:4326, map age strings to ICS 2026-06 intervals, clip against South Tyrol polygons, simplify per zoom, encode MVT into the merged archive"
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: app/public/data/terrain/geology-dolomites.pmtiles

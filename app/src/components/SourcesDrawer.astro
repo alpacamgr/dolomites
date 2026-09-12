@@ -1,0 +1,91 @@
+---
+import type { LoadedChapter } from '@/lib/content/chapters';
+import type { Locale } from '@/lib/i18n';
+import { loadUi } from '@/lib/i18n';
+import { bibEntry, shortCite } from '@/lib/content/bibliography';
+import { loadNarrative } from '@/lib/content/narrative';
+
+interface Props {
+  chapters: LoadedChapter[];
+  locale: Locale;
+}
+
+const { chapters, locale } = Astro.props;
+const strings = loadUi(locale);
+const t = (k: string, fb?: string) => strings[k] ?? fb ?? k;
+
+// Aggregate every source_ref used anywhere in the story, preserving order.
+const refs: string[] = [];
+const seen = new Set<string>();
+function push(k: string | string[] | undefined | null) {
+  if (Array.isArray(k)) {
+    for (const x of k) push(x);
+    return;
+  }
+  if (!k || seen.has(k)) return;
+  seen.add(k);
+  refs.push(k);
+}
+for (const ch of chapters) {
+  for (const l of ch.scene.layers) push(l.source_ref);
+  for (const l of ch.map_state?.layers ?? []) push(l.source_ref);
+  for (const f of ch.facts ?? []) push(f.source_ref);
+  for (const loc of ch.localities ?? []) push(loc.source_ref);
+  for (const c of loadNarrative(ch.id, locale)?.citations ?? []) push(c);
+}
+
+const rows = refs.map((k) => ({ key: k, entry: bibEntry(k), label: shortCite(k) }));
+const pending = chapters.flatMap((ch) =>
+  (ch.facts ?? [])
+    .filter((f) => f.verification === 'pending')
+    .map((f) => ({ chapter: ch, fact: f })),
+);
+
+/** Escape the reference text, then render its *Journal* emphasis. */
+function referenceHtml(s: string): string {
+  const esc = s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
+  return esc.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+}
+---
+<aside class="sources-drawer" id="sources" aria-labelledby="sources-title">
+  <div class="sources-inner">
+    <h2 id="sources-title">{t('nav.sources')}</h2>
+    {rows.length === 0 ? (
+      <p>{t('sources.empty')}</p>
+    ) : (
+      <ol class="sources-list">
+        {rows.map((r) => (
+          <li id={`src-${r.key}`}>
+            <span class="src-label">{r.label}</span>
+            {r.entry ? (
+              <>
+                <span class="src-ref" set:html={referenceHtml(r.entry.reference)} />
+                {r.entry.url && (
+                  <a class="src-url" href={r.entry.url} rel="noopener">{r.entry.url.replace(/^https?:\/\//, '')}</a>
+                )}
+              </>
+            ) : (
+              <span class="unresolved">{t('sources.unresolved')}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    )}
+
+    {pending.length > 0 && (
+      <>
+        <h3>{t('facts.verificationPending')}</h3>
+        <ul class="pending-list">
+          {pending.map((p) => (
+            <li>
+              <span class="pending-badge">{t('facts.verificationPending')}</span>
+              <span>{p.fact.text[locale] ?? p.fact.text.en}</span>
+              <a class="fact-cite" href={`#src-${p.fact.source_ref}`}>{shortCite(p.fact.source_ref)}</a>
+              <a class="pending-chapter" href={`#chapter-${p.chapter.id}`}>{p.chapter.title[locale] ?? p.chapter.title.en}</a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+  </div>
+</aside>

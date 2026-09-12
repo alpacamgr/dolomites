@@ -1,0 +1,43 @@
+{
+  "tilejson": "3.0.0",
+  "name": "Dolomites geology (merged open vector maps)",
+  "tiles": [
+    "terrain/geology/{z}/{x}/{y}.pbf"
+  ],
+  "minzoom": 8,
+  "maxzoom": 13,
+  "bounds": [
+    10.3,
+    45.8,
+    12.7,
+    47.2
+  ],
+  "center": [
+    11.5,
+    46.5,
+    10
+  ],
+  "attribution": "Provincia autonoma di Bolzano - Alto Adige, Cartografia provinciale - P_BZ Carta geologica CARG - CC0 1.0 | Dati elaborati dal Servizio geologico della Provincia autonoma di Trento - Carta Geologica della PAT - CC BY 4.0 (modified) | Regione del Veneto - Database delle litologie scala 1:250.000 - IODL 2.0 (https://www.dati.gov.it/content/italian-open-data-license-v20) (modified) | Federal Office of Topography swisstopo - GeoCover (modified) | ISPRA - Servizio Geologico d'Italia, Carta Geologica d'Italia 1:100.000 (dataset INSPIRE) - CC BY 4.0 (modified) | © GeoSphere Austria - INSPIRE Geologische Einheiten 1:500.000 Österreich - CC BY 4.0 (modified)",
+  "source_archive": "data/processed/terrain/geology-dolomites.pmtiles",
+  "script": "data/scripts/terrain/export_tiles.py",
+  "vector_layers": [
+    {
+      "id": "units",
+      "description": "Geological units",
+      "minzoom": 8,
+      "maxzoom": 13,
+      "fields": {
+        "unit_name": "String",
+        "unit_code": "String",
+        "age_min_ma": "Number",
+        "age_max_ma": "Number",
+        "age_label": "String",
+        "age_basis": "String",
+        "lithology": "String",
+        "color": "String",
+        "source": "String"
+      }
+    }
+  ],
+  "format": "pbf"
+}

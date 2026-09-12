@@ -1,0 +1,57 @@
+id: ics-2026
+title: ICS International Chronostratigraphic Chart v2026-06 (official chart data, chart.ttl)
+provider: International Commission on Stratigraphy (i-c-stratigraphy/chart on GitHub)
+version: "2026-06 (owl:versionInfo in chart.ttl); data release tag v2026-06.5, commit 44d1043ecf295cce1be03b3fc5fa95ca65fe770b, 2026-06-29"
+citation: >
+  Cohen, K.M., Harper, D.A.T., Gibbard, P.L. & Car, N. (2025) The ICS
+  International Chronostratigraphic Chart this decade. Episodes 48: 105-115.
+  https://doi.org/10.18814/epiiugs/2025/025001. Chart version 2026-06, data
+  from https://github.com/i-c-stratigraphy/chart (release v2026-06.5).
+doi: 10.18814/epiiugs/2025/025001
+landing_page: https://github.com/i-c-stratigraphy/chart
+download_url: https://raw.githubusercontent.com/i-c-stratigraphy/chart/v2026-06.5/chart.ttl
+download_date: 2026-09-12
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    International Commission on Stratigraphy, International Chronostratigraphic
+    Chart v2026-06 (github.com/i-c-stratigraphy/chart), CC BY 4.0.
+  derivatives_allowed: true
+  share_alike: false
+spatial: {crs: n/a, bbox: n/a, resolution: n/a}
+temporal:
+  coverage: "0 - 300 Ma in ics-chart.json (Upper Pennsylvanian to Holocene); chart.ttl holds the whole chart"
+  step: "one row per named ICS interval"
+format: Turtle RDF (SKOS)
+size_bytes: 654321
+checksum:
+  algorithm: sha256
+  value: "0158959e8fdae2a8bdbb14ca3e424d2370362cd8dfc8af86e7be73c74368b355"  # data/raw/ics-2026/chart-official/chart.ttl
+honesty_label: interpreted     # boundary ages are consensus committee values
+caveats: |
+  - What was checked (2026-09-12): github.com/i-c-stratigraphy/chart holds the
+    RDF the ICS uses to generate the online chart. chart.ttl carries numeric
+    boundary ages (time:hasBeginning / time:hasEnd -> inMYA, some with
+    schema:marginOfError), official colours (schema:color), parents
+    (skos:broader) and per-interval change notes ("2026-06: hasBeginning
+    246.7 -> 247.0" for the Anisian). https://stratigraphy.org/timescale/
+    returned HTTP 404. The Macrostrat intervals used before (ICS 2013,
+    updated 2018/07) are no longer used.
+  - Pinned to the release tag v2026-06.5. main (commit 81618a8, 2026-07-27)
+    only moved the file to the data.stratigraphy.org namespace; ranks, ages,
+    colours and parents of all 177 intervals are identical to the tag.
+  - Cross-check against research/geology/dolomites-geological-history.md
+    (ICS news post on v2026/06): base Ladinian 241.464, base Anisian 247.0,
+    base Olenekian 250.8 Ma all match chart.ttl.
+  - Series (Lower/Middle/Upper ...) have no prefLabel in chart.ttl and are
+    named from their IRI. The chart gives base Aquitanian 23.03 Ma but top
+    Chattian 23.04 Ma; kept as published. The Sub-Period rank (Pennsylvanian)
+    is not in contract 4 and is left out of ics-chart.json.
+processing:
+  - step: parse chart.ttl, keep eons/eras/periods/epochs/ages whose younger bound is under 300 Ma, copy ages, colours and parents unchanged, write via temp file + rename
+    script: data/scripts/quaternary/build_ics_chart.py
+    output: app/public/data/ics-chart.json
+  - step: derive geology unit ages and colours from the same chart.ttl through data/scripts/terrain/geology_age_mapping.json
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: app/public/data/terrain/geology-suedtirol.pmtiles

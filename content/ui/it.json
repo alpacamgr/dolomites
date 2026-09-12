@@ -1,0 +1,155 @@
+{
+  "site_title": "Dolomiti, tempo profondo",
+  "site_tagline": "Trecento milioni di anni delle Dolomiti, raccontati con i dati.",
+  "language": {
+    "en": "Inglese",
+    "de": "Tedesco",
+    "it": "Italiano"
+  },
+  "chapter": "Capitolo",
+  "of": "di",
+  "unit_ma": "milioni di anni fa",
+  "unit_ka": "mila anni fa",
+  "unit_today": "oggi",
+  "time": "Tempo",
+  "paleolatitude": "Paleolatitudine",
+  "paleolat_model_note": "Valore del modello (PALEOMAP). I dati paleomagnetici possono differire.",
+  "legend": "Legenda",
+  "sources": "Fonti",
+  "data": "Dati",
+  "loading": "Caricamento",
+  "map_data": "Dati cartografici",
+  "attribution": "Attribuzione",
+  "scroll_prompt": "Scorri per viaggiare nel tempo",
+  "skip_to_chapter": "Vai al capitolo",
+  "show_sources": "Mostra le fonti",
+  "close": "Chiudi",
+  "labels": {
+    "observed": {
+      "title": "Osservato",
+      "explanation": "Misurato oggi in diretta - una superficie LiDAR, un'unità rocciosa cartografata, un perimetro glaciale."
+    },
+    "modeled": {
+      "title": "Modellato",
+      "explanation": "Uscita di un modello numerico pubblicato, mostrato con versione e risoluzione."
+    },
+    "interpreted": {
+      "title": "Interpretato",
+      "explanation": "Ricostruzione di una ricercatrice a partire da dati di campo, pubblicata in un lavoro o su una carta."
+    },
+    "illustrative": {
+      "title": "Illustrativo",
+      "explanation": "Disegno o schema senza pretese di accuratezza spaziale."
+    }
+  },
+  "layers": {
+    "dolomites-terrain": "Altimetria (TINITALY 10 m, Copernicus 30 m)",
+    "geology-suedtirol": "Carte geologiche (6 fonti aperte)",
+    "ispra-carg-50k": "Carta geologica d'Italia (ISPRA CARG)",
+    "scotese-paleodem-2018-v2": "Paleogeografia (PaleoDEM)",
+    "scotese-wright-2018-model": "Modello delle placche (PALEOMAP)",
+    "seguinot2018-alps-1km": "Spessore del ghiaccio (modello)",
+    "rgi7-region11": "Ghiacciai oggi (RGI 7.0)",
+    "reinthaler-paul-2025-lia": "Estensione nella Piccola età glaciale",
+    "glacimontis-lgm": "Estensione all'Ultimo massimo glaciale",
+    "diss-3-3-1": "Faglie (DISS)",
+    "localities": "Località"
+  },
+  "ics_names": {
+    "Carboniferous": "Carbonifero",
+    "Permian": "Permiano",
+    "Cisuralian": "Cisuraliano",
+    "Guadalupian": "Guadalupiano",
+    "Lopingian": "Lopingiano",
+    "Triassic": "Triassico",
+    "Lower Triassic": "Triassico inferiore",
+    "Middle Triassic": "Triassico medio",
+    "Upper Triassic": "Triassico superiore",
+    "Jurassic": "Giurassico",
+    "Lower Jurassic": "Giurassico inferiore",
+    "Middle Jurassic": "Giurassico medio",
+    "Upper Jurassic": "Giurassico superiore",
+    "Cretaceous": "Cretacico",
+    "Lower Cretaceous": "Cretacico inferiore",
+    "Upper Cretaceous": "Cretacico superiore",
+    "Paleogene": "Paleogene",
+    "Paleocene": "Paleocene",
+    "Eocene": "Eocene",
+    "Oligocene": "Oligocene",
+    "Neogene": "Neogene",
+    "Miocene": "Miocene",
+    "Pliocene": "Pliocene",
+    "Quaternary": "Quaternario",
+    "Pleistocene": "Pleistocene",
+    "Holocene": "Olocene",
+    "Cenozoic": "Cenozoico",
+    "Anisian": "Anisico",
+    "Rupelian": "Rupeliano",
+    "Meghalayan": "Meghalayano",
+    "Paleozoic": "Paleozoico",
+    "Mesozoic": "Mesozoico",
+    "Phanerozoic": "Fanerozoico"
+  },
+  "ics_names_sources": {
+    "chart": "https://stratigraphy.org/ICSchart/ChronostratChart2022-02Italian.pdf",
+    "note": "Scala Cronostratigrafica Internazionale v2022/02, traduzione a cura della Commissione Italiana di Stratigrafia. Names copied as printed; series of Triassico, Giurassico and Cretacico are printed as Inferiore/Medio/Superiore inside the system column and are written here in the chart caption form (e.g. Paleogene superiore). Upper Pennsylvanian is left in English."
+  },
+  "alt_globe": "Globo interattivo con le posizioni delle placche e la paleogeografia all'età scelta.",
+  "alt_terrain": "Vista tridimensionale del terreno delle Dolomiti al tempo scelto, con le unità geologiche colorate e i livelli dati sovrapposti.",
+  "credits_title": "Dati e crediti",
+  "rail": {
+    "chapter_n": "Capitolo {n} di {total}",
+    "timeline": "Capitoli sulla linea del tempo",
+    "map_globe": "Ricostruzione della Terra intera in quest'epoca",
+    "map_terrain": "Terreno attuale",
+    "view_globe": "Globo: ricostruzione",
+    "view_terrain": "Mappa: terreno attuale",
+    "inset": "Ultimi {ka} ka, ingranditi",
+    "map_layer": {
+      "seguinot2018-alps-1km": "ghiaccio modellato in quest'epoca",
+      "geology-suedtirol": "rocce colorate per età cartografata",
+      "geology-dolomites": "rocce colorate per età cartografata",
+      "rgi7-region11": "ghiacciai attuali",
+      "diss-3-3-1": "faglie"
+    },
+    "prev": "Capitolo precedente",
+    "next": "Capitolo successivo"
+  },
+  "geology_key": {
+    "title": "Età delle rocce secondo la carta",
+    "emphasis": "Rocce cartografate come {name}",
+    "period_not_given": "{name}, periodo non indicato",
+    "pre": "Pre-{name} (oltre {ma} Ma)",
+    "other": "Altre unità datate",
+    "undated": "Cartografate, età non indicata",
+    "gap": "Qui nessuna carta geologica aperta",
+    "edge": "Limite delle carte geologiche aperte",
+    "shades": "Sfumature: suddivisioni ICS più fini.",
+    "hint": "Passa su una riga per evidenziarla sulla mappa.",
+    "none": "Nessuna unità cartografata in vista",
+    "coarse_one": "Carta meno dettagliata in vista: {list}.",
+    "coarse_many": "Carte meno dettagliate in vista: {list}.",
+    "period_not_given_many": "Periodo non indicato: {names}"
+  },
+  "geology_popup": {
+    "unnamed": "Unità senza nome",
+    "age_not_given": "Età non indicata nella carta di origine",
+    "ics_bounds": "limiti della tavola ICS",
+    "gap_title": "Nessuna carta geologica aperta",
+    "gap_text": "Nessuna carta geologica vettoriale aperta copre quest'area. È una lacuna nei dati aperti, non un'assenza di roccia.",
+    "basis": {
+      "source": "Età indicata dalla carta per questa unità",
+      "legend_join": "Età dalla legenda di un'altra carta",
+      "class_rule": "Età dal tipo di deposito"
+    },
+    "source": {
+      "bz-geology-carg": "Carta geologica dell'Alto Adige (CARG)",
+      "pat-geology-carta-geologica": "Carta geologica del Trentino (PAT)",
+      "veneto-litologia-250k": "Carta litologica del Veneto",
+      "swisstopo-geocover": "Dati geologici vettoriali GeoCover (swisstopo)",
+      "ispra-geologia-100k-inspire": "Carta geologica d'Italia (ISPRA)",
+      "geosphere-geologicunits-500k": "Unità geologiche dell'Austria (GeoSphere Austria)"
+    }
+  },
+  "layer_cite_many": "{n} fonti"
+}

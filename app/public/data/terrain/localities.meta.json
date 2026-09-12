@@ -1,0 +1,10 @@
+{
+  "dataset_id": "project-localities",
+  "label": "observed",
+  "source_ref": "localities",
+  "attribution": "Locality coordinates: Wikidata, ICS GSSP pages and official sources, see content/localities.yaml",
+  "license": "Coordinates are facts; per-entry sources in content/localities.yaml",
+  "generated": "2026-09-12",
+  "script": "data/scripts/content/build_localities.py",
+  "count": 11
+}

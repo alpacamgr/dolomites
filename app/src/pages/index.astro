@@ -1,0 +1,40 @@
+---
+import { LOCALES } from '@/lib/i18n';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Dolomites through deep time</title>
+    <meta name="description" content="A scroll-driven, data-honest journey through the geological history of the Dolomites, in German, Italian and English." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={l} href={`/${l}/`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="/en/" />
+    <script is:inline>
+      (function () {
+        var locales = ['de', 'it', 'en'];
+        var pick = 'en';
+        var langs = [navigator.language].concat(navigator.languages || []);
+        for (var i = 0; i < langs.length; i++) {
+          var s = (langs[i] || '').toLowerCase().slice(0, 2);
+          if (locales.indexOf(s) !== -1) { pick = s; break; }
+        }
+        window.location.replace('/' + pick + '/');
+      })();
+    </script>
+  </head>
+  <body>
+    <main style="font-family: system-ui, sans-serif; padding: 2rem; max-width: 40rem;">
+      <h1>The Dolomites through deep time</h1>
+      <p>If you are not redirected automatically, choose a language:</p>
+      <ul>
+        <li><a href="/en/">English</a></li>
+        <li><a href="/de/">Deutsch</a></li>
+        <li><a href="/it/">Italiano</a></li>
+      </ul>
+    </main>
+  </body>
+</html>

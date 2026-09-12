@@ -1,0 +1,23 @@
+{
+  "dataset_id": "scotese-wright-2018-model",
+  "label": "modeled",
+  "source_ref": "scotese-2018",
+  "attribution": "Plate reconstruction: PALEOMAP plate model (C. R. Scotese), as used for Scotese and Wright (2018), PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic, Zenodo, doi:10.5281/zenodo.5460860, CC BY 4.0. Model files via the GPlates PlateModelManager (scotese_and_wright2018).",
+  "citation": [
+    "Scotese, C. R. and Wright, N. M. (2018). PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. Zenodo. doi:10.5281/zenodo.5460860.",
+    "Scotese, C. R. PALEOMAP Plate Model m15g60_v2d3 (rotation file Scotese_Wright_PlateModel.rot, header dated 2016-02-01), distributed as 'scotese_and_wright2018' by the GPlates PlateModelManager (https://repo.gplates.org/webdav/pmm/config/models_v2.json)."
+  ],
+  "license": "CC BY 4.0",
+  "generated": "2026-09-12",
+  "script": "data/scripts/plates/build.py",
+  "caveats": [
+    "Single model for 0-300 Ma: Scotese and Wright 2018 / PALEOMAP. There is no model switch and no jump in the time series.",
+    "The reference frame is the PALEOMAP frame, identical to the frame of the PaleoDEM textures (scotese-paleodem-2018-v2), so outlines and raster agree by construction. Checked visually against the 2k textures at 20, 100 and 240 Ma.",
+    "Paleolatitude is model-dependent. For the Dolomites reference point at 240 Ma this model gives 7.3 N; Muller et al. 2019 gives 1.4 N, Muller et al. 2022 8.6 N and Merdith et al. 2021 11.8 N (ADR 0005). Paleomagnetic measurements on Dolomites rocks give about 16-18 N (Muttoni et al. 1997, pending first-hand verification).",
+    "The Dolomites reference point (46.5 N, 11.8 E) is assigned to plate id 307 by partitioning against the model's static polygons at 0 Ma (rotation file label 'ITL-AFR') and rides passively with that plate. No global model resolves the Dolomites as an independent block.",
+    "No coastline features: the model has no Coastlines layer and its COBs and StaticPolygons layers are the same file as ContinentalPolygons. The continent outlines follow the painted land and shelf edges of the PaleoDEM texture.",
+    "Boundaries are the shared sub-segments of the model's topologies resolved at each age. 'type' comes from the GPML feature type: SubductionZone -> subduction, MidOceanRidge -> ridge, Transform and FractureZone -> transform, everything else (ContinentalRift, Suture, InferredPaleoBoundary, unclassified) -> other. The model carries no subduction polarity, so polarity is always 'unknown'. The model's topologies only cover 0-100 Ma (no topology feature exists before 100 Ma), so ages 101-300 Ma have no boundary features. Boundaries are much less detailed than Muller et al. 2019, especially in the Alpine sector.",
+    "Landmass is one MultiPolygon per age: the union of all reconstructed continental polygons (shapely unary_union after the antimeridian split), closed by 0.5 deg (buffer out and back in, which fills gaps between blocks narrower than about 1 deg), interior holes under 0.5 deg^2 filled, simplified at 0.1 deg and snapped to a 0.001 deg grid so it stays valid after rounding; parts under 2 deg^2 are dropped unless they touch lon +-180. The model's blocks do not tile, so wider gaps between them remain as interior loops or notches (for example inside Pangea at 240 Ma and in Tibet at 20 Ma), sometimes where the PaleoDEM paints land. Rings contain cut edges along lon +-180 (land crossing the antimeridian) and lat +-90 (land covering a pole); these are not coastline.",
+    "Continent polygons are dissolved per plate id, simplified to 0.4 deg tolerance, and dropped below 2 deg^2; boundary lines are simplified to 0.1 deg. Antimeridian split with pygplates.DateLineWrapper; coordinates rounded to 3 decimals."
+  ]
+}

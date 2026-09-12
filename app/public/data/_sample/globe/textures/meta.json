@@ -1,0 +1,9 @@
+{
+  "dataset_id": "sample-procedural-globe",
+  "label": "illustrative",
+  "source_ref": "internal",
+  "attribution": "Paleogeography: SAMPLE procedural placeholder (illustrative, not data)",
+  "license": "internal",
+  "generated": "2026-09-05",
+  "script": "scratchpad/gen-sample.mjs"
+}

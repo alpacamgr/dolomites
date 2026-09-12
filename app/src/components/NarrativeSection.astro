@@ -1,0 +1,87 @@
+---
+import type { LoadedChapter } from '@/lib/content/chapters';
+import type { Locale } from '@/lib/i18n';
+import { loadNarrative } from '@/lib/content/narrative';
+import { loadUi } from '@/lib/i18n';
+import { shortCite, plainReference } from '@/lib/content/bibliography';
+
+interface Props {
+  chapter: LoadedChapter;
+  locale: Locale;
+  index: number;
+}
+
+const { chapter, locale, index } = Astro.props;
+const strings = loadUi(locale);
+const t = (k: string, fb?: string) => strings[k] ?? fb ?? k;
+
+const title = chapter.title[locale] ?? chapter.title.en ?? chapter.id;
+const summary = chapter.summary?.[locale] ?? chapter.summary?.en ?? '';
+const narrative = loadNarrative(chapter.id, locale);
+
+const nf = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 });
+function fmtMa(ma: number): string {
+  if (ma === 0) return t('time.now');
+  if (ma < 1) return `${nf.format(ma * 1000)} ka`;
+  return `${nf.format(ma)} Ma`;
+}
+
+/** The interval the chapter is about: the subject interval when the scene shows another time. */
+function ageRangeString(): string {
+  const s = chapter.subject_age_start_ma ?? chapter.age_start_ma;
+  const e = chapter.subject_age_end_ma ?? chapter.age_end_ma;
+  if (typeof s === 'number' && typeof e === 'number') return s === e ? fmtMa(s) : `${fmtMa(s)} – ${fmtMa(e)}`;
+  if (typeof chapter.age_start_ka === 'number' && typeof chapter.age_end_ka === 'number') {
+    return `${nf.format(chapter.age_start_ka)} – ${nf.format(chapter.age_end_ka)} ka`;
+  }
+  return '';
+}
+---
+<section
+  class="chapter"
+  data-chapter={chapter.id}
+  data-index={index}
+  data-view={chapter.scene.view}
+  id={`chapter-${chapter.id}`}
+>
+  <div class="measure">
+    <div class="meta">
+      <span>{String(index + 1).padStart(2, '0')}</span>
+      {ageRangeString() && <span>{ageRangeString()}</span>}
+      {chapter.ics_stage && (
+        <span>{chapter.ics_stage.split('-').map((n) => t(`ics_names.${n.trim()}`, n.trim())).join(' – ')}</span>
+      )}
+    </div>
+    <h2>{title}</h2>
+    {chapter.fixture && (
+      <p class="fixture-warning">{t('chapter.fixtureWarning')}</p>
+    )}
+    {summary && <p class="summary">{summary}</p>}
+
+    {narrative && (
+      <div class="narrative-body" set:html={narrative.html} />
+    )}
+
+    {chapter.facts && chapter.facts.length > 0 && (
+      <ul class="facts">
+        {chapter.facts.map((f) => (
+          <li class:list={[f.confidence === 'debated' && 'debated', f.verification === 'pending' && 'pending']}>
+            <span class="fact-text">{f.text[locale] ?? f.text.en}</span>
+            <span class="fact-source">
+              {f.value !== undefined && <span class="fact-value">{f.value}</span>}
+              <a
+                class="fact-cite"
+                href={`#src-${f.source_ref}`}
+                data-cite={f.source_ref}
+                title={plainReference(f.source_ref) ?? undefined}
+              >{shortCite(f.source_ref)}</a>
+              {f.verification === 'pending' && (
+                <span class="pending-badge">{t('facts.verificationPending')}</span>
+              )}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>

@@ -1,0 +1,75 @@
+id: triassic-reefs
+title:
+  en: "Platforms turned to mountains"
+  de: "Plattformen, die zu Bergen wurden"
+  it: "Piattaforme diventate montagne"
+age_start_ma: 0.0
+age_end_ma: 0.0
+subject_age_start_ma: 247.0
+subject_age_end_ma: 237.0
+ics_stage: Anisian
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The Middle Triassic reefs are not painted here: they are the mountains themselves. Sciliar/Schlern, Latemar, Sella and Marmolada are the dolomitised remains of high-relief carbonate platforms that grew between deep basins, later lightly deformed and lifted almost intact into the sky. Colouring the modern terrain by rock unit draws the reefs on the peaks that carry their names."
+  de: "Die mitteltriassischen Riffe werden hier nicht gemalt: sie sind die Berge selbst. Schlern/Sciliar, Latemar, Sella und Marmolada sind die dolomitisierten Reste von Karbonatplattformen mit hohem Relief zwischen tiefen Becken, später nur leicht verformt und fast unversehrt in die Höhe getragen. Die Einfärbung des heutigen Geländes nach Gesteinseinheit zeichnet die Riffe genau auf die Gipfel, die ihre Namen tragen."
+  it: "Le scogliere del Triassico Medio non vengono dipinte qui: sono i monti stessi. Sciliar/Schlern, Latemar, Sella e Marmolada sono i resti dolomitizzati di piattaforme carbonatiche ad alto rilievo cresciute tra bacini profondi, poi solo leggermente deformate e sollevate quasi intatte. Colorare il terreno odierno per unità litologica disegna le scogliere sulle vette che ne portano il nome."
+map_state:
+  layers:
+    - id: "dolomites-terrain"
+      label: observed
+      source_ref: "tarquini-2023"
+    - id: "geology-suedtirol"
+      label: observed
+      source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"]
+facts:
+  - text:
+      en: "The Anisian to Ladinian carbonate platforms of the Dolomites - Schlern/Sciliar, Latemar, Sella, Marmolada, Rosengarten/Catinaccio, Civetta and others - grew as steep-sided reefs surrounded by hemipelagic and volcaniclastic basins."
+      de: "Die anisischen bis ladinischen Karbonatplattformen der Dolomiten - Schlern/Sciliar, Latemar, Sella, Marmolada, Rosengarten/Catinaccio, Civetta und andere - wuchsen als steilrandige Riffe inmitten hemipelagischer und vulkaniklastischer Becken."
+      it: "Le piattaforme carbonatiche anisiche-ladiniche delle Dolomiti - Sciliar/Schlern, Latemar, Sella, Marmolada, Catinaccio/Rosengarten, Civetta e altre - crebbero come scogliere dai fianchi ripidi tra bacini emipelagici e vulcanoclastici."
+    source_ref: "bosellini-2003"
+    confidence: established
+  - text:
+      en: "The Latemar is a classic isolated Middle Triassic carbonate platform, listed by the IUGS International Commission on Geoheritage as a global geoheritage site."
+      de: "Der Latemar ist eine klassische isolierte Karbonatplattform der Mitteltrias und von der IUGS International Commission on Geoheritage als globale Geoerbestätte geführt."
+      it: "Il Latemar è una classica piattaforma carbonatica isolata del Triassico Medio, iscritta dalla IUGS International Commission on Geoheritage tra i siti globali di geopatrimonio."
+    source_ref: "iugs-latemar"
+    confidence: established
+  - text:
+      en: "The Sciliar/Schlern platform reached about 800 m of preserved thickness, which is a proxy for the maximum platform-to-basin relief in the western Dolomites."
+      de: "Die Plattform des Schlern/Sciliar erreichte rund 800 m erhaltene Mächtigkeit, ein Näherungswert für das maximale Plattform-Becken-Relief in den westlichen Dolomiten."
+      it: "La piattaforma dello Sciliar/Schlern ha una potenza conservata di circa 800 m, valore usato come stima del massimo dislivello piattaforma-bacino nelle Dolomiti occidentali."
+    value: "about 800 m"
+    source_ref: "marangon-2021"
+    confidence: established
+    verification: pending
+  - text:
+      en: "How long the Latemar took to build is disputed: cyclostratigraphic counts of Milankovitch precession cycles give at least about 9 million years, while U-Pb ages on interbedded tuffs are compatible with only about 1 to 2 million years. This is the long-running 'Latemar controversy'."
+      de: "Wie lange der Aufbau des Latemar dauerte, ist umstritten: zyklostratigraphische Zählungen von Milankovitch-Präzessionszyklen ergeben mindestens rund 9 Millionen Jahre, während U-Pb-Alter an zwischengeschalteten Tuffen nur etwa 1 bis 2 Millionen Jahre zulassen. Das ist die alte 'Latemar-Kontroverse'."
+      it: "Quanto durò la crescita del Latemar è oggetto di dibattito: le conte ciclostratigrafiche dei cicli di precessione di Milankovitch danno almeno circa 9 milioni di anni, mentre le età U-Pb sui tufi intercalati sono compatibili con soli 1 - 2 milioni di anni. È la lunga 'controversia del Latemar'."
+    source_ref: "iugs-latemar"
+    confidence: debated
+    verification: pending
+  - text:
+      en: "High-precision zircon U-Pb geochronology shows that the main interval of Middle Triassic magmatism in the Southern Alps lasted at least 5.07 ± 0.06 million years. It started with silicic eruptions between 242.653 ± 0.036 and 238.646 ± 0.037 Ma, followed by an eruptive interval of less than 1 million years of voluminous basaltic lava flows; coeval mafic to intermediate intrusions dated at 238.190 ± 0.055 to 238.075 ± 0.087 Ma may represent feeder and subvolcanic complexes related to the basalt flows. The youngest products are silicic tuffs from latest Ladinian to early Carnian sequences, dated at 237.680 ± 0.047 and 237.579 ± 0.042 Ma."
+      de: "Hochpräzise Zirkon-U-Pb-Geochronologie zeigt, dass das Hauptintervall des mitteltriassischen Magmatismus in den Südalpen mindestens 5,07 ± 0,06 Millionen Jahre dauerte. Er begann mit silikatischen Eruptionen zwischen 242,653 ± 0,036 und 238,646 ± 0,037 Ma, gefolgt von einem Eruptionsintervall von weniger als 1 Million Jahren mit voluminösen basaltischen Lavaströmen; gleichzeitige mafische bis intermediäre Intrusionen, datiert auf 238,190 ± 0,055 bis 238,075 ± 0,087 Ma, könnten Förder- und subvulkanische Komplexe dieser Basaltströme darstellen. Die jüngsten Produkte sind silikatische Tuffe aus Abfolgen des spätesten Ladin bis frühen Karn, datiert auf 237,680 ± 0,047 und 237,579 ± 0,042 Ma."
+      it: "La geocronologia U-Pb su zircone ad alta precisione mostra che l'intervallo principale del magmatismo del Triassico Medio nelle Alpi Meridionali durò almeno 5,07 ± 0,06 milioni di anni. Iniziò con eruzioni silicee tra 242,653 ± 0,036 e 238,646 ± 0,037 Ma, seguite da un intervallo eruttivo di meno di 1 milione di anni con voluminose colate di lava basaltica; intrusioni coeve da mafiche a intermedie, datate tra 238,190 ± 0,055 e 238,075 ± 0,087 Ma, potrebbero rappresentare complessi di alimentazione e subvulcanici legati alle colate basaltiche. I prodotti più giovani sono tufi silicei di successioni dal Ladinico terminale al Carnico inferiore, datati 237,680 ± 0,047 e 237,579 ± 0,042 Ma."
+    value: "at least 5.07 +/- 0.06 myr"
+    source_ref: "storck-2019"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: terrain
+  time:
+    unit: ma
+    start: 0
+    end: 0
+  camera:
+    terrain: { lon: 11.66, lat: 46.5, zoom: 10.4, pitch: 64, bearing: 20 }
+  # emphasise units whose mapped age range lies within the Middle Triassic (docs/04 section 5)
+  emphasis: { age_start_ma: 247.0, age_end_ma: 237.0 }
+  layers:
+    - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
+    - { id: "geology-suedtirol", label: observed, source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"] }

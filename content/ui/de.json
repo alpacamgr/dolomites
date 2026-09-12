@@ -1,0 +1,155 @@
+{
+  "site_title": "Dolomiten, tiefe Zeit",
+  "site_tagline": "Dreihundert Millionen Jahre Dolomiten, aus Daten erzählt.",
+  "language": {
+    "en": "Englisch",
+    "de": "Deutsch",
+    "it": "Italienisch"
+  },
+  "chapter": "Kapitel",
+  "of": "von",
+  "unit_ma": "Millionen Jahre",
+  "unit_ka": "Tausend Jahre",
+  "unit_today": "heute",
+  "time": "Zeit",
+  "paleolatitude": "Paläobreite",
+  "paleolat_model_note": "Modellwert (PALEOMAP). Paläomagnetische Daten können abweichen.",
+  "legend": "Legende",
+  "sources": "Quellen",
+  "data": "Daten",
+  "loading": "Wird geladen",
+  "map_data": "Kartendaten",
+  "attribution": "Nachweis",
+  "scroll_prompt": "Scrollen, um durch die Zeit zu reisen",
+  "skip_to_chapter": "Zum Kapitel springen",
+  "show_sources": "Quellen anzeigen",
+  "close": "Schließen",
+  "labels": {
+    "observed": {
+      "title": "Beobachtet",
+      "explanation": "Heute direkt gemessen - eine LiDAR-Oberfläche, eine kartierte Gesteinseinheit, ein Gletscherumriss."
+    },
+    "modeled": {
+      "title": "Modelliert",
+      "explanation": "Ausgabe eines veröffentlichten numerischen Modells, mit Version und Auflösung genannt."
+    },
+    "interpreted": {
+      "title": "Interpretiert",
+      "explanation": "Rekonstruktion einer Forscherin aus Geländebefunden, veröffentlicht in einer Arbeit oder Karte."
+    },
+    "illustrative": {
+      "title": "Illustration",
+      "explanation": "Zeichnung oder Schema ohne Anspruch auf räumliche Genauigkeit."
+    }
+  },
+  "layers": {
+    "dolomites-terrain": "Höhenmodell (TINITALY 10 m, Copernicus 30 m)",
+    "geology-suedtirol": "Geologische Karten (6 offene Quellen)",
+    "ispra-carg-50k": "Geologische Karte Italiens (ISPRA CARG)",
+    "scotese-paleodem-2018-v2": "Paläogeographie (PaleoDEM)",
+    "scotese-wright-2018-model": "Plattenmodell (PALEOMAP)",
+    "seguinot2018-alps-1km": "Eisdicke (Modell)",
+    "rgi7-region11": "Gletscher heute (RGI 7.0)",
+    "reinthaler-paul-2025-lia": "Ausdehnung in der Kleinen Eiszeit",
+    "glacimontis-lgm": "Ausdehnung im Letzteiszeitlichen Maximum",
+    "diss-3-3-1": "Störungen (DISS)",
+    "localities": "Orte"
+  },
+  "ics_names": {
+    "Carboniferous": "Karbon",
+    "Permian": "Perm",
+    "Cisuralian": "Cisuralium",
+    "Guadalupian": "Guadalupium",
+    "Lopingian": "Lopingium",
+    "Triassic": "Trias",
+    "Lower Triassic": "Untertrias",
+    "Middle Triassic": "Mitteltrias",
+    "Upper Triassic": "Obertrias",
+    "Jurassic": "Jura",
+    "Lower Jurassic": "Unterjura",
+    "Middle Jurassic": "Mitteljura",
+    "Upper Jurassic": "Oberjura",
+    "Cretaceous": "Kreide",
+    "Lower Cretaceous": "Unterkreide",
+    "Upper Cretaceous": "Oberkreide",
+    "Paleogene": "Paläogen",
+    "Paleocene": "Paläozän",
+    "Eocene": "Eozän",
+    "Oligocene": "Oligozän",
+    "Neogene": "Neogen",
+    "Miocene": "Miozän",
+    "Pliocene": "Pliozän",
+    "Quaternary": "Quartär",
+    "Pleistocene": "Pleistozän",
+    "Holocene": "Holozän",
+    "Cenozoic": "Känozoikum",
+    "Anisian": "Anisium",
+    "Rupelian": "Rupelium",
+    "Meghalayan": "Meghalayum",
+    "Paleozoic": "Paläozoikum",
+    "Mesozoic": "Mesozoikum",
+    "Phanerozoic": "Phanerozoikum"
+  },
+  "ics_names_sources": {
+    "chart": "https://stratigraphy.org/ICSchart/ChronostratChart2022-02German.pdf",
+    "note": "Internationale Chronostratigraphische Tabelle v2022/02, Version in Deutsch: Deutsche Stratigraphische Kommission (DSK, M. Menning), Oesterreichische Kommission fuer Stratigraphie (ACS, W.E. Piller). All names copied as printed. Upper Pennsylvanian is printed only as Ober within Pennsylvanium and is left in English."
+  },
+  "alt_globe": "Interaktiver Globus mit Plattenlagen und Paläogeographie im gewählten Alter.",
+  "alt_terrain": "Dreidimensionale Geländedarstellung der Dolomiten zur gewählten Zeit, mit farbig markierten Gesteinseinheiten und Datenüberlagerungen.",
+  "credits_title": "Daten & Nachweise",
+  "rail": {
+    "chapter_n": "Kapitel {n} von {total}",
+    "timeline": "Kapitel auf der Zeitleiste",
+    "map_globe": "Rekonstruktion der ganzen Erde zu dieser Zeit",
+    "map_terrain": "Heutiges Gelände",
+    "view_globe": "Globus: Rekonstruktion",
+    "view_terrain": "Karte: heutiges Gelände",
+    "inset": "Die letzten {ka} ka, vergrößert",
+    "map_layer": {
+      "seguinot2018-alps-1km": "modelliertes Eis zu dieser Zeit",
+      "geology-suedtirol": "Gesteine nach kartiertem Alter gefärbt",
+      "geology-dolomites": "Gesteine nach kartiertem Alter gefärbt",
+      "rgi7-region11": "Gletscher heute",
+      "diss-3-3-1": "Störungen"
+    },
+    "prev": "Vorheriges Kapitel",
+    "next": "Nächstes Kapitel"
+  },
+  "geology_key": {
+    "title": "Gesteinsalter laut Karte",
+    "emphasis": "Als {name} kartierte Gesteine",
+    "period_not_given": "{name}, Periode nicht angegeben",
+    "pre": "Prä-{name} (älter als {ma} Ma)",
+    "other": "Weitere datierte Einheiten",
+    "undated": "Kartiert, ohne Altersangabe",
+    "gap": "Hier keine offene geologische Karte",
+    "edge": "Rand der offenen geologischen Karten",
+    "shades": "Abstufungen: feinere ICS-Einheiten.",
+    "hint": "Zeile berühren: auf der Karte hervorheben.",
+    "none": "Keine kartierten Einheiten im Bild",
+    "coarse_one": "Gröbere Karte im Bild: {list}.",
+    "coarse_many": "Gröbere Karten im Bild: {list}.",
+    "period_not_given_many": "Periode nicht angegeben: {names}"
+  },
+  "geology_popup": {
+    "unnamed": "Unbenannte Einheit",
+    "age_not_given": "Alter in der Quellkarte nicht angegeben",
+    "ics_bounds": "Grenzen der ICS-Tabelle",
+    "gap_title": "Keine offene geologische Karte",
+    "gap_text": "Für dieses Gebiet gibt es keine offene geologische Vektorkarte. Das ist eine Lücke in den offenen Daten, kein Fehlen von Gestein.",
+    "basis": {
+      "source": "Alter laut Angabe der Karte zu dieser Einheit",
+      "legend_join": "Alter aus der Legende einer anderen Karte",
+      "class_rule": "Alter aus dem Ablagerungstyp"
+    },
+    "source": {
+      "bz-geology-carg": "Geologische Karte Südtirol (CARG)",
+      "pat-geology-carta-geologica": "Geologische Karte Trentino (PAT)",
+      "veneto-litologia-250k": "Lithologische Karte Venetien",
+      "swisstopo-geocover": "Geologische Vektordaten GeoCover (swisstopo)",
+      "ispra-geologia-100k-inspire": "Geologische Karte Italiens (ISPRA)",
+      "geosphere-geologicunits-500k": "Geologische Einheiten Österreichs (GeoSphere Austria)"
+    }
+  },
+  "layer_cite_many": "{n} Quellen"
+}

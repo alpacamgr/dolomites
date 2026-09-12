@@ -1,0 +1,73 @@
+---
+// Dev page for the terrain engine (not linked from the site).
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Terrain engine - dev</title>
+    <style is:global>
+      html, body { margin: 0; height: 100%; background: #f6f3ee; font: 13px/1.35 system-ui, sans-serif; color: #2b2419; }
+      #map { position: fixed; inset: 0; }
+      .panel {
+        position: fixed; z-index: 10; background: rgba(251, 249, 245, 0.94); border-radius: 8px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15); padding: 10px 12px;
+      }
+      #panel { top: 12px; left: 12px; width: 272px; max-height: calc(100% - 24px); overflow: auto; }
+      #panel h1 { margin: 0 0 6px; font-size: 14px; }
+      #panel h2 { margin: 12px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #857a6a; }
+      .row { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+      .row .hint { margin-left: auto; font-size: 10px; color: #857a6a; text-transform: uppercase; }
+      .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 4px; }
+      button { font: inherit; padding: 4px 6px; border: 1px solid #cfc5b4; border-radius: 4px; background: #fff; cursor: pointer; }
+      button:hover { background: #f1ebe0; }
+      input[type=range] { width: 100%; }
+      #perf { margin-top: 6px; font-size: 11px; color: #5b5245; min-height: 1.3em; }
+      #hud { bottom: 12px; left: 12px; font-variant-numeric: tabular-nums; }
+      #loading[data-state=loading] { color: #a06a1c; }
+      #loading[data-state=idle] { color: #3f7a3f; }
+      #attributions { bottom: 12px; right: 12px; max-width: min(46vw, 560px); font-size: 10.5px; color: #5b5245; }
+      #attributions div + div { margin-top: 3px; }
+      #fallback-banner { top: 12px; right: 12px; background: #7a3b12; color: #fff3e0; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <aside id="panel" class="panel">
+      <h1>Terrain engine</h1>
+      <h2>Layers</h2>
+      <div id="layers"></div>
+      <h2>Time</h2>
+      <input id="time" type="range" />
+      <div class="row"><span id="time-value"></span></div>
+      <div class="buttons">
+        <button id="play" type="button">Play to 0 ka</button>
+        <button id="scrub" type="button">Scrub test 120-0</button>
+      </div>
+      <h2>Camera</h2>
+      <div class="buttons" id="presets"></div>
+      <div class="buttons"><button id="flight" type="button">Flight test</button></div>
+      <label class="row"><input id="lock" type="checkbox" /> lock interaction</label>
+      <h2>Exaggeration</h2>
+      <input id="exaggeration" type="range" min="1" max="2.5" step="0.05" value="1" />
+      <div class="row"><span id="exaggeration-value">1.00x</span><span class="hint">default 1.0</span></div>
+      <div id="perf"></div>
+    </aside>
+    <div id="hud" class="panel">fps <span id="fps">-</span> &middot; <span id="loading" data-state="loading">loading</span></div>
+    <div id="attributions" class="panel"></div>
+    <div id="fallback-banner" class="panel" hidden>
+      Stand-in elevation (AWS Terrain Tiles): the project DEM archive is not available.
+    </div>
+    <script>
+      import { createTerrainEngine } from '@/lib/terrain/index';
+      import { wireControls } from '@/lib/terrain/dev/controls';
+
+      const engine = createTerrainEngine();
+      (window as unknown as { terrainEngine: unknown }).terrainEngine = engine;
+      await engine.mount(document.getElementById('map')!);
+      wireControls(engine);
+      window.addEventListener('resize', () => engine.resize());
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+id: world-permian
+title:
+  en: "Pangea and the Bolzano volcanoes"
+  de: "Pangaea und die Bozner Vulkane"
+  it: "La Pangea e i vulcani di Bolzano"
+age_start_ma: 300.0
+age_end_ma: 252.0
+ics_stage: Permian
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The Permian world was one continent. What will become the Dolomites sits inside Pangea, close to the equator, above the eroded roots of the Variscan mountains. In the Early Permian a huge silicic volcanic complex, the Athesian Group, erupts across the future Bolzano/Bozen area."
+  de: "In der permischen Welt gab es einen einzigen Kontinent. Die spätere Dolomitenregion liegt tief in Pangaea, nahe dem Äquator, über den abgetragenen Wurzeln des variszischen Gebirges. Im frühen Perm bricht über dem heutigen Bozen ein riesiger silikatischer Vulkankomplex aus, die Athesische Gruppe."
+  it: "Il mondo permiano è un solo continente. Ciò che diventeranno le Dolomiti si trova dentro la Pangea, vicino all'equatore, sopra le radici erose delle catene varisciche. All'inizio del Permiano un grande complesso vulcanico silicico, il Gruppo Atesino, erutta sull'area della futura Bolzano/Bozen."
+map_state:
+  layers:
+    - id: "scotese-wright-2018-model"
+      label: modeled
+      source_ref: "scotese-2018"
+    - id: "scotese-paleodem-2018-v2"
+      label: interpreted
+      source_ref: "scotese-2018"
+facts:
+  - text:
+      en: "The globe's continents, coastlines and Dolomites marker come from the PALEOMAP plate model of Scotese & Wright 2018 for the whole range from 300 Ma to today, the same reconstruction on which the PaleoDEM is built, so outlines and relief share one reference frame. The model draws plate boundaries only for the last 100 million years, so none appear in this chapter."
+      de: "Kontinente, Küstenlinien und die Markierung der Dolomiten auf dem Globus stammen für die ganze Spanne von 300 Ma bis heute aus dem PALEOMAP-Plattenmodell von Scotese & Wright 2018, derselben Rekonstruktion, auf der das PaleoDEM beruht; Umrisse und Relief teilen damit ein Bezugssystem. Plattengrenzen zeichnet das Modell nur für die letzten 100 Millionen Jahre, in diesem Kapitel also keine."
+      it: "Continenti, linee di costa e l'indicatore delle Dolomiti sul globo provengono, per l'intero arco da 300 Ma a oggi, dal modello a placche PALEOMAP di Scotese & Wright 2018, la stessa ricostruzione su cui si basa il PaleoDEM; contorni e rilievo condividono così lo stesso sistema di riferimento. Il modello traccia i margini di placca solo per gli ultimi 100 milioni di anni, quindi in questo capitolo non ne compaiono."
+    source_ref: "scotese-2018"
+    confidence: established
+  - text:
+      en: "Paleomagnetic data show that the Southern Alps, including the Dolomites, a relatively unrotated remnant of the Adria margin, have moved in close conjunction with Africa since at least Permian times."
+      de: "Paläomagnetische Daten zeigen, dass sich die Südalpen mit den Dolomiten, ein relativ unrotierter Rest des Adria-Randes, mindestens seit dem Perm in enger Verbindung mit Afrika bewegt haben."
+      it: "I dati paleomagnetici mostrano che le Alpi Meridionali, Dolomiti comprese, resto relativamente non ruotato del margine di Adria, si sono mosse in stretta connessione con l'Africa almeno dal Permiano."
+    source_ref: "muttoni-2001"
+    confidence: established
+  - text:
+      en: "The Athesian Volcanic Group of the Southern Alps ranges from basaltic andesites to rhyolites; single-zircon U-Pb ages indicate that its volcanism lasted about 10 million years, between about 285 and 274 Ma."
+      de: "Die Athesische Vulkangruppe der Südalpen reicht von basaltischen Andesiten bis zu Rhyolithen; U-Pb-Alter an Einzelzirkonen zeigen, dass ihr Vulkanismus rund 10 Millionen Jahre dauerte, zwischen etwa 285 und 274 Ma."
+      it: "Il Gruppo Vulcanico Atesino delle Alpi Meridionali comprende rocce dalle andesiti basaltiche alle rioliti; le età U-Pb su singoli zirconi indicano che il suo vulcanismo durò circa 10 milioni di anni, tra circa 285 e 274 Ma."
+    value: "about 285 to 274 Ma"
+    source_ref: "marocchi-2008"
+    confidence: established
+  - text:
+      en: "The Ora Ignimbrite, about 275 Ma, is a supereruption-sized rhyolite of about 1300 km3 and the final eruptive product of the Athesian Volcanic Group, which the same study calls the largest Permian volcanic district in Europe and dates to 289 to 274 Ma."
+      de: "Der Auer-Ignimbrit (Ora), rund 275 Ma alt, ist ein Rhyolith in Supereruptions-Größe von etwa 1300 km3 und das letzte Eruptionsprodukt der Athesischen Vulkangruppe, die dieselbe Studie als größten permischen Vulkandistrikt Europas bezeichnet und auf 289 bis 274 Ma datiert."
+      it: "L'Ignimbrite di Ora, circa 275 Ma, è una riolite di dimensioni da super-eruzione, circa 1300 km3, e l'ultimo prodotto eruttivo del Gruppo Vulcanico Atesino, che lo stesso studio definisce il maggiore distretto vulcanico permiano d'Europa e data a 289 - 274 Ma."
+    value: "about 1300 km3"
+    source_ref: "chiaro-2024"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: globe
+  time:
+    unit: ma
+    start: 300
+    end: 252
+  camera:
+    globe: { lat: 5, lon: 10, distance: 2.7 }
+  layers:
+    - { id: "scotese-wright-2018-model", label: modeled, source_ref: "scotese-2018", style: "continents+boundaries" }
+    - { id: "scotese-paleodem-2018-v2", label: interpreted, source_ref: "scotese-2018" }

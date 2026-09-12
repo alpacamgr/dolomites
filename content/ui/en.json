@@ -1,0 +1,116 @@
+{
+  "site_title": "Dolomites, deep time",
+  "site_tagline": "Three hundred million years of the Dolomites, told from data.",
+  "language": {
+    "en": "English",
+    "de": "German",
+    "it": "Italian"
+  },
+  "chapter": "Chapter",
+  "of": "of",
+  "unit_ma": "million years ago",
+  "unit_ka": "thousand years ago",
+  "unit_today": "today",
+  "time": "Time",
+  "paleolatitude": "Paleolatitude",
+  "paleolat_model_note": "Model value (PALEOMAP). Paleomagnetic data may differ.",
+  "legend": "Legend",
+  "sources": "Sources",
+  "data": "Data",
+  "loading": "Loading",
+  "map_data": "Map data",
+  "attribution": "Attribution",
+  "scroll_prompt": "Scroll to travel through time",
+  "skip_to_chapter": "Skip to chapter",
+  "show_sources": "Show sources",
+  "close": "Close",
+  "labels": {
+    "observed": {
+      "title": "Observed",
+      "explanation": "Directly measured today - a lidar surface, a mapped rock unit, a glacier outline."
+    },
+    "modeled": {
+      "title": "Modeled",
+      "explanation": "The output of a published numerical model, shown with its version and resolution."
+    },
+    "interpreted": {
+      "title": "Interpreted",
+      "explanation": "A researcher's reconstruction drawn from field evidence and published in a paper or map."
+    },
+    "illustrative": {
+      "title": "Illustrative",
+      "explanation": "Artwork or schematic that carries no claim to spatial accuracy."
+    }
+  },
+  "layers": {
+    "dolomites-terrain": "Elevation (TINITALY 10 m, Copernicus 30 m)",
+    "geology-suedtirol": "Geological maps (6 open sources)",
+    "ispra-carg-50k": "Geological map of Italy (ISPRA CARG)",
+    "scotese-paleodem-2018-v2": "Paleogeography (PaleoDEM)",
+    "scotese-wright-2018-model": "Plate model (PALEOMAP)",
+    "seguinot2018-alps-1km": "Ice thickness (model)",
+    "rgi7-region11": "Glaciers today (RGI 7.0)",
+    "reinthaler-paul-2025-lia": "Little Ice Age extent",
+    "glacimontis-lgm": "Last Glacial Maximum extent",
+    "diss-3-3-1": "Faults (DISS)",
+    "localities": "Localities"
+  },
+  "alt_globe": "Interactive globe showing plate positions and paleogeography at the selected age.",
+  "alt_terrain": "Three-dimensional terrain view of the Dolomites at the selected time, with coloured geological units and data overlays.",
+  "credits_title": "Data & credits",
+  "rail": {
+    "chapter_n": "Chapter {n} of {total}",
+    "timeline": "Chapters on the timeline",
+    "map_globe": "Reconstruction of the whole Earth at this time",
+    "map_terrain": "Today's terrain",
+    "view_globe": "Globe: reconstruction",
+    "view_terrain": "Map: today's terrain",
+    "inset": "Last {ka} ka, magnified",
+    "map_layer": {
+      "seguinot2018-alps-1km": "modelled ice at this time",
+      "geology-suedtirol": "rocks coloured by mapped age",
+      "geology-dolomites": "rocks coloured by mapped age",
+      "rgi7-region11": "glaciers today",
+      "diss-3-3-1": "faults"
+    },
+    "prev": "Previous chapter",
+    "next": "Next chapter"
+  },
+  "geology_key": {
+    "title": "Rock age, as mapped",
+    "emphasis": "Rocks mapped as {name}",
+    "period_not_given": "{name}, period not given",
+    "pre": "Pre-{name} (older than {ma} Ma)",
+    "other": "Other dated units",
+    "undated": "Mapped, age not given",
+    "gap": "No open geological map here",
+    "edge": "Edge of the open geological maps",
+    "shades": "Shades: finer ICS divisions.",
+    "hint": "Point at a row to highlight it on the map.",
+    "none": "No mapped units in view",
+    "coarse_one": "Coarser map in view: {list}.",
+    "coarse_many": "Coarser maps in view: {list}.",
+    "period_not_given_many": "Period not given: {names}"
+  },
+  "geology_popup": {
+    "unnamed": "Unnamed unit",
+    "age_not_given": "Age not given in the source map",
+    "ics_bounds": "ICS chart bounds",
+    "gap_title": "No open geological map",
+    "gap_text": "No open vector geological map covers this area. This is a gap in the open data, not an absence of rock.",
+    "basis": {
+      "source": "Age as stated for this unit in the map",
+      "legend_join": "Age from another map's legend",
+      "class_rule": "Age from the deposit type"
+    },
+    "source": {
+      "bz-geology-carg": "South Tyrol geological map (CARG)",
+      "pat-geology-carta-geologica": "Trentino geological map (PAT)",
+      "veneto-litologia-250k": "Veneto lithology map",
+      "swisstopo-geocover": "GeoCover geological vector data (swisstopo)",
+      "ispra-geologia-100k-inspire": "Geological Map of Italy (ISPRA)",
+      "geosphere-geologicunits-500k": "Geological units of Austria (GeoSphere Austria)"
+    }
+  },
+  "layer_cite_many": "{n} sources"
+}

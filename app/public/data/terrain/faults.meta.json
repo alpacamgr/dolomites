@@ -1,0 +1,22 @@
+{
+  "dataset_id": "diss-3.3.1",
+  "label": "interpreted",
+  "source_ref": "diss-3.3.1",
+  "attribution": "DISS Working Group (2021). Database of Individual Seismogenic Sources (DISS), version 3.3.1: A compilation of potential sources for earthquakes larger than M 5.5 in Italy and surrounding areas. INGV. doi:10.13127/diss3.3.1",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "generated": "2026-09-06",
+  "script": "data/scripts/quaternary/build_faults.py",
+  "clip_bbox": [
+    10.3,
+    45.8,
+    12.7,
+    47.2
+  ],
+  "source_layers": [
+    "iss331",
+    "csstop331",
+    "dss331"
+  ],
+  "notes": "DISS 3.3.1 subset in the Dolomites terrain window. Class (properties.type): \"individual\" = ISS surface projection polygon; \"composite_top\" = CSS top-edge line; \"debated\" = DSS polygon. Fetched from the DISS 3.3.1 WFS at services.seismofaults.eu on 2026-09-06."
+}

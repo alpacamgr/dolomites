@@ -1,0 +1,69 @@
+id: today
+title:
+  en: "What is still moving"
+  de: "Was sich noch bewegt"
+  it: "Cosa è ancora in movimento"
+age_start_ma: 0.0
+age_end_ma: 0.0
+ics_stage: Meghalayan
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The story does not end. Since the Little Ice Age the Alpine glaciers have lost more than half of their area and almost two thirds of their volume; the small glaciers of the Dolomites are melting faster still. The ground itself continues to rise. This chapter draws the closing frame and asks what the next scroll of the story will look like."
+  de: "Die Geschichte endet nicht. Seit der Kleinen Eiszeit haben die alpinen Gletscher mehr als die Hälfte ihrer Fläche und fast zwei Drittel ihres Volumens verloren; die kleinen Gletscher der Dolomiten schrumpfen noch schneller. Der Boden selbst hebt sich weiter. Dieses Kapitel setzt den Schlussrahmen und fragt, wie das nächste Kapitel aussehen wird."
+  it: "La storia non finisce. Dalla Piccola Età Glaciale i ghiacciai alpini hanno perso oltre metà della loro superficie e quasi due terzi del volume; i piccoli ghiacciai delle Dolomiti si stanno sciogliendo ancora più in fretta. Il terreno continua a sollevarsi. Questo capitolo chiude il quadro e chiede come sarà la prossima pagina."
+map_state:
+  layers:
+    - id: "dolomites-terrain"
+      label: observed
+      source_ref: "tarquini-2023"
+    - id: "rgi7-region11"
+      label: observed
+      source_ref: "rgi-7"
+    - id: "reinthaler-paul-2025-lia"
+      label: interpreted
+      source_ref: "reinthaler-paul-2025"
+facts:
+  - text:
+      en: "Across the whole European Alps, glaciers have shrunk from about 4244 square kilometres at the Little Ice Age peak (around 1850) to about 1806 square kilometres in 2015, a loss of 57 per cent."
+      de: "In den gesamten Europäischen Alpen sind die Gletscher von rund 4244 Quadratkilometern im Höhepunkt der Kleinen Eiszeit (um 1850) auf etwa 1806 Quadratkilometer 2015 zurückgegangen, ein Verlust von 57 Prozent."
+      it: "Nell'insieme delle Alpi europee i ghiacciai sono passati da circa 4244 chilometri quadrati al culmine della Piccola Età Glaciale (intorno al 1850) a circa 1806 chilometri quadrati nel 2015, con una perdita del 57 per cento."
+    value: "4244 to 1806 km2, -57%"
+    source_ref: "reinthaler-paul-2025"
+    confidence: established
+  - text:
+      en: "Alpine glacier volume over the same interval fell from about 280 plus or minus 43 to about 100 plus or minus 17 cubic kilometres, a loss of 64 per cent, with a mean surface lowering of 43.7 metres; at least 1938 glaciers have melted completely."
+      de: "Das Gletschervolumen der Alpen sank im selben Zeitraum von rund 280 ± 43 auf etwa 100 ± 17 Kubikkilometer, ein Verlust von 64 Prozent, bei einer mittleren Oberflächenabsenkung von 43,7 Metern; mindestens 1938 Gletscher sind vollständig verschwunden."
+      it: "Nello stesso intervallo il volume dei ghiacciai alpini è sceso da circa 280 ± 43 a circa 100 ± 17 chilometri cubi, con una perdita del 64 per cento e un abbassamento medio della superficie di 43,7 metri; almeno 1938 ghiacciai si sono estinti."
+    value: "280 to 100 km3, -64%; -43.7 m; 1938 vanished"
+    source_ref: "reinthaler-paul-2025"
+    confidence: established
+  - text:
+      en: "The glaciers of the Dolomites alone shrank from 4.11 to 1.81 square kilometres, a loss of 56 per cent, with about a third of that loss taking place between 2010 and 2023; the mean mass balance is minus 0.64 plus or minus 0.06 metres water equivalent per year."
+      de: "Allein die Gletscher der Dolomiten sind von 4,11 auf 1,81 Quadratkilometer geschrumpft, ein Verlust von 56 Prozent, wovon etwa ein Drittel zwischen 2010 und 2023 stattfand; die mittlere Massenbilanz beträgt minus 0,64 ± 0,06 Meter Wasseräquivalent pro Jahr."
+      it: "I ghiacciai delle Dolomiti da soli sono passati da 4,11 a 1,81 chilometri quadrati, con una perdita del 56 per cento, un terzo della quale tra il 2010 e il 2023; il bilancio di massa medio è -0,64 ± 0,06 metri equivalenti d'acqua all'anno."
+    value: "4.11 to 1.81 km2, -56%; -0.64 m w.e./yr"
+    source_ref: "securo-2025"
+    confidence: established
+  - text:
+      en: "The Southern Eastern Alps are still rising: the ALPS2017 GNSS solution reports vertical uplift of about 1.0 to 1.5 mm per year in the Dolomites sector."
+      de: "Die Südlichen Ostalpen heben sich weiter: die GNSS-Lösung ALPS2017 verzeichnet im Sektor der Dolomiten vertikale Hebungen von etwa 1,0 bis 1,5 mm pro Jahr."
+      it: "Le Alpi Sud-Orientali continuano a sollevarsi: la soluzione GNSS ALPS2017 stima nel settore dolomitico un sollevamento verticale di circa 1,0 - 1,5 mm all'anno."
+    value: "1.0 to 1.5 mm/yr"
+    source_ref: "sanchez-2018"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: terrain
+  time:
+    unit: ka
+    start: 0
+    end: 0
+  camera:
+    terrain: { lon: 11.86, lat: 46.434, zoom: 12, pitch: 62, bearing: 170 }
+  layers:
+    - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
+    - { id: "rgi7-region11", label: observed, source_ref: "rgi-7" }
+    - { id: "reinthaler-paul-2025-lia", label: interpreted, source_ref: "reinthaler-paul-2025" }

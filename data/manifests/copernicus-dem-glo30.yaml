@@ -1,0 +1,72 @@
+id: copernicus-dem-glo30
+title: Copernicus DEM GLO-30 Public (global 30 m Digital Surface Model)
+provider: European Space Agency / European Union (Copernicus); AWS Open Data distribution managed by Sinergise
+version: "Copernicus DEM 2021 release (version stated on the AWS registry for the copernicus-dem-30m bucket)"
+citation: >-
+  Copernicus Digital Elevation Model (DEM) was accessed on 2026-09-06 from
+  https://registry.opendata.aws/copernicus-dem. (Citation text as given on the
+  AWS registry; ESA dataset DOI from the Copernicus Data Space COP-DEM page.)
+doi: 10.5270/ESA-c5d3d65
+landing_page: https://registry.opendata.aws/copernicus-dem/
+download_url: https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_<lat>_00_<lon>_00_DEM/Copernicus_DSM_COG_10_<lat>_00_<lon>_00_DEM.tif
+download_date: 2026-09-06
+license:
+  # AWS registry [verified 2026-09-12]: "GLO-30 Public and GLO-90 are available on a
+  # free basis for the general public under the terms and conditions of the Licence"
+  # linked to the Copernicus Data Space COP-DEM page, which names the
+  # "ESA User License for the use of CCM data" and gives the attribution below
+  # for modified / derived products.
+  name: "ESA User License for the use of Copernicus Contributing Missions (CCM) data - GLO-30 Public, free for the general public"
+  url: https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM
+  attribution_text: >-
+    produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus
+    Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European
+    Union and ESA; all rights reserved
+  derivatives_allowed: true      # permitted with the attribution above
+  share_alike: false
+spatial:
+  crs: EPSG:4326 (horizontal WGS84) + EPSG:3855 (vertical EGM2008)
+  # 3 x 3 = 9 one-degree tiles, N45..N47 x E010..E012, cover 10-13 E / 45-48 N.
+  bbox: [10.0, 45.0, 13.0, 48.0]
+  resolution: "1 arc-second grid (3600x3600 per tile; ~21 m E-W x ~31 m N-S at 46.5 N)"
+temporal:
+  coverage: "present (WorldDEM / TanDEM-X based; copyright years 2010-2018 in the licence notice)"
+  step: "single snapshot"
+format: "Cloud-Optimised GeoTIFF, float32, RasterPixelIsPoint, 1 deg x 1 deg tiles"
+size_bytes: 377085687  # 9 tiles totalling 377.1 MB
+checksum:
+  algorithm: sha256
+  # per-tile sha256 recorded in data/raw/copernicus-dem-glo30/checksums.json (9 tiles)
+  value: "see data/raw/copernicus-dem-glo30/checksums.json"
+honesty_label: observed
+caveats: |
+  - Vertical datum [verified 2026-09-12]: "The vertical reference datum is the
+    Earth Gravitational Model 2008 (EGM2008; EPSG 3855)" - Copernicus DEM
+    Product Handbook v5.0 (2022-11-29), sec. 1.2; also stated on the Copernicus
+    Data Space COP-DEM page. GLO-30 heights are therefore orthometric, not
+    ellipsoidal.
+  - TINITALY 1.1 (the primary source) states no vertical datum in its
+    accompanying notes or download pages; it is interpolated from topographic
+    contour lines and spot heights. Empirical check (2026-09-12, 8 793 913
+    valid TINITALY cells sampled every 50 m inside the terrain bbox, GLO-30
+    bilinear at the same point): TINITALY minus GLO-30 median -3.25 m
+    (p25 -11.15, p75 +0.69). An ellipsoid/geoid mismatch would show as a
+    ~47 m offset here. Within 0-300 m of the TINITALY edge the median is
+    +0.9 to +1.7 m (p5 about -12 m, p95 +22 to +32 m). Conclusion: both
+    sources are orthometric; no geoid correction is applied. The remaining
+    metre-scale step is smoothed by the 300 m cross-fade.
+  - GLO-30 is a Digital Surface Model ("represents the surface of the Earth
+    including buildings, infrastructure and vegetation", AWS registry), while
+    TINITALY is bare ground. This is the likely cause of the negative median
+    above (forested valleys read higher in GLO-30). On the Austrian side the
+    terrain archive therefore includes canopy and buildings.
+  - RasterPixelIsPoint: GDAL shifts the geotransform by half a pixel on read
+    (tile bounds read as 10.99986..11.99986 E), so no manual shift is applied.
+  - Ocean areas have no tiles (bucket readme); not relevant inside the bbox.
+processing:
+  - step: "Download 9 GLO-30 tiles covering N45..N47 x E010..E012 from the AWS public bucket (all nine exist)"
+    script: data/scripts/terrain/fetch_copernicus_glo30.py
+    output: data/raw/copernicus-dem-glo30/*.tif (+ checksums.json, fetch.log)
+  - step: "Merge in memory, reproject per Web Mercator tile with bilinear resampling, use wherever TINITALY is nodata, cosine cross-fade over 300 m (ground) inside the TINITALY edge; no vertical shift"
+    script: data/scripts/terrain/build_terrain_pmtiles.py
+    output: app/public/data/terrain/dolomites-terrain.pmtiles

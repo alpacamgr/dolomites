@@ -1,0 +1,42 @@
+id: alps2017-uplift
+title: ALPS2017 - Present-day surface deformation of the Alpine region (Sanchez et al. 2018)
+provider: L. Sanchez, C. Voelksen, A. Sokolov, H. Arenz, F. Seitz (DGFI-TUM, BAdW)
+version: "ALPS2017 (PANGAEA 886889)"
+citation: >
+  Sanchez, L., Voelksen, C., Sokolov, A., Arenz, H., Seitz, F. (2018).
+  Present-day surface deformation of the Alpine region inferred from geodetic
+  techniques. Earth System Science Data 10, 1503-1526.
+  https://doi.org/10.5194/essd-10-1503-2018
+doi: 10.1594/PANGAEA.886889
+landing_page: https://doi.pangaea.de/10.1594/PANGAEA.886889
+download_url: https://store.pangaea.de/Publications/Sanchez-etal_2018/ALPS2017_DEF_VT.GRD
+download_date: 2026-09-06
+license:
+  name: CC BY 3.0
+  url: https://creativecommons.org/licenses/by/3.0/
+  attribution_text: >
+    Sanchez L. et al. (2018). Earth System Science Data 10, 1503-1526.
+    Data: PANGAEA 886889, CC BY 3.0.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [4, 43, 16, 49]
+  resolution: "0.3 deg lon x 0.2 deg lat (~25 km at 46 N)"
+temporal:
+  coverage: "2005 - 2016 mean rate (IGb08 epoch 2010.0)"
+  step: n/a
+format: ASCII grid (space-separated header + lon lat vz uz rows)
+size_bytes: 48988
+checksum:
+  algorithm: sha256
+  value: 1483dadbcf063873a4f59fc711fdf821fedaaa9e991b69ac9f360c12b8eca190
+honesty_label: modeled
+caveats: |
+  Vertical velocity field is a least-squares collocation of ~300 continuous
+  GNSS stations. Values are metres per year in the source; converted to
+  mm/yr for the JSON.
+processing:
+  - step: sample the grid cell nearest 46.5N, 11.8E, convert m/yr -> mm/yr
+    script: data/scripts/quaternary/build_curves.py
+    output: app/public/data/curves/alps2017-uplift.json

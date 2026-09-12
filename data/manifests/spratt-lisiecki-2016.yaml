@@ -1,0 +1,40 @@
+id: spratt-lisiecki-2016
+title: Global sea-level reconstruction 0-800 ka (Spratt and Lisiecki 2016)
+provider: NOAA Paleoclimatology (WDS), authors R.M. Spratt and L.E. Lisiecki
+version: "NOAA study 19982, download 2026-09-06"
+citation: >
+  Spratt, R.M., & Lisiecki, L.E. (2016). A Late Pleistocene sea level stack.
+  Climate of the Past 12, 1079-1092. https://doi.org/10.5194/cp-12-1079-2016
+  NOAA dataset DOI 10.25921/rd66-5820.
+doi: 10.25921/rd66-5820
+landing_page: https://www.ncei.noaa.gov/access/paleo-search/study/19982
+download_url: https://www.ncei.noaa.gov/pub/data/paleo/contributions_by_author/spratt2016/spratt2016.txt
+download_date: 2026-09-06
+license:
+  name: US Government / NOAA - open (attribution requested)
+  url: https://www.ncei.noaa.gov/access/paleo-search/study/19982
+  attribution_text: >
+    Spratt, R.M. and Lisiecki, L.E. (2016). NOAA WDS Paleoclimatology,
+    dataset DOI 10.25921/rd66-5820.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: n/a
+  bbox: "global stack"
+  resolution: n/a
+temporal:
+  coverage: "0 - 798 ka (long stack; short stack 0 - 430 ka)"
+  step: "1 kyr"
+format: NOAA plain-text paleo file (tab-separated data block)
+size_bytes: 52553
+checksum:
+  algorithm: sha256
+  value: 4e0cdedb99a80ba57cf7df0c2f76c1b6700725e278a2deee952cbec7b87c9a0c
+honesty_label: modeled
+caveats: |
+  Scaled first principal component of five (long) or seven (short) sea-level
+  records; ~80 % of the glacial-interglacial variance. 95 % CI from bootstrap.
+processing:
+  - step: parse NOAA txt, emit short/long PC1 + lo/up 95 % CI series
+    script: data/scripts/quaternary/build_curves.py
+    output: app/public/data/curves/spratt-lisiecki-sealevel.json

@@ -1,0 +1,16 @@
+{
+  "dataset_id": "reinthaler-paul-2025-lia",
+  "label": "interpreted",
+  "source_ref": "reinthaler-paul-2025",
+  "attribution": "Reinthaler J. and Paul F. (2025). The Cryosphere 19, 753-777. doi:10.5194/tc-19-753-2025. Outlines: doi:10.5281/zenodo.14336826.",
+  "license": "CC BY 4.0",
+  "generated": "2026-09-06",
+  "script": "data/scripts/quaternary/build_lia.py",
+  "clip_bbox": [
+    10.3,
+    45.8,
+    12.7,
+    47.2
+  ],
+  "notes": "LIA glacier outlines for the European Alps circa 1850, reconstructed in 14 sub-regions. Per-feature source citations are preserved in properties.source_citation and source_doi. The reference year is a nominal 1850 for the \"LIA maximum\" family of maps; actual extents were mapped from different sources at slightly different nineteenth-century dates."
+}

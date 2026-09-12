@@ -1,0 +1,36 @@
+{
+  "dataset_id": "seguinot2018-alps-1km",
+  "label": "modeled",
+  "source_ref": "seguinot-2018",
+  "attribution": "Seguinot J., Ivy-Ochs S., Jouvet G., Huss M., Funk M., Preusser F. (2018). Modelling last glacial cycle ice dynamics in the Alps. The Cryosphere 12, 3265-3285. Continuous-variables dataset: Zenodo 1423176 (CC BY 4.0), file alpcyc.1km.epic.pp.ex.1ka.nc.",
+  "license": "CC BY 4.0",
+  "generated": "2026-09-06",
+  "script": "data/scripts/quaternary/build_ice_frames.py",
+  "run": "alpcyc.1km.epic.pp",
+  "run_choice_rationale": "EPICA-Dome-C temperature forcing plus palaeo-precipitation reduction is the reference configuration used in the paper figures; 1 km is the finest published resolution. Chosen over GRIP and MD01-2444 forcings so the temperature timing matches the CENOGRID / PhanDA curves the site already ships.",
+  "source_crs": "UTM 32N (WGS84 sphere, PISM run definition)",
+  "source_resolution_m": 1000,
+  "time_step_kyr": 1,
+  "time_range_ka": [
+    119,
+    0
+  ],
+  "target_bounds": [
+    9.5,
+    45.5,
+    13.5,
+    47.5
+  ],
+  "rgba_size_px": [
+    640,
+    465
+  ],
+  "thickness_size_px": [
+    320,
+    232
+  ],
+  "target_crs": "EPSG:3857",
+  "transparency_below_m": 10,
+  "resampling_method": "bilinear for both RGBA and thickness",
+  "caveats": "Ice-sheet model output, not observation. The 1 km resolution captures trunk-glacier geometry well but under-represents thin plateau ice. Snapshots are dated by their nearest 1-kyr marker on the PISM time axis (cftime year rounded to kyr); the model was initialised at 120 ka and the first written snapshot is labelled 119 ka (see time_range_ka)."
+}

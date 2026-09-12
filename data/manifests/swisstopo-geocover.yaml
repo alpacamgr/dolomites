@@ -1,0 +1,64 @@
+id: swisstopo-geocover
+title: Geological Vector Datasets GeoCover (sheets 1179 Samnaun, 1199 Scuol, 1219 S-charl, 1239 Sta. Maria)
+provider: Federal Office of Topography swisstopo, Swiss Geological Survey
+version: "STAC items geologie-geocover_1179/1199/1219/1239 updated 2026-06-24 (GeoCover V2, 2D geological data model 4.4); geocat record revision 2022-04-01, metadata 2026-08-25"
+citation: >-
+  Federal Office of Topography swisstopo. Geological Vector Datasets GeoCover (Geologische Vektordatensätze GeoCover),
+  1:25,000. https://www.geocat.ch/geonetwork/srv/eng/catalog.search#/metadata/2467ab13-e794-4c13-8c55-59fe276398c5
+doi: ""
+landing_page: https://www.geocat.ch/geonetwork/srv/eng/catalog.search#/metadata/2467ab13-e794-4c13-8c55-59fe276398c5
+download_url: https://data.geo.admin.ch/api/stac/v1/collections/ch.swisstopo.geologie-geocover/items  # items geologie-geocover_{1179,1199,1219,1239}, asset *_2056.gpkg.zip
+download_date: 2026-09-12
+license:
+  name: "swisstopo terms of use for free geodata (OGD)"
+  url: https://www.swisstopo.admin.ch/en/free-geodata-geoservices-terms-use-ogd
+  attribution_text: "Federal Office of Topography swisstopo - GeoCover (modified)"
+  derivatives_allowed: true
+  share_alike: false
+  evidence: |
+    - Terms page (fetched 2026-09-12; the STAC collection licence link https://www.swisstopo.admin.ch/ogd-conditions leads there):
+      free geodata "may be used, distributed and made accessible", "may be enriched and processed", commercial use allowed;
+      the source must be given as "Federal Office of Topography swisstopo" (or the DE/FR/IT/RM equivalent, or "©swisstopo").
+    - geocat ISO record 2467ab13-e794-4c13-8c55-59fe276398c5 (fetched 2026-09-12): "Freie Nutzung. Quellenangabe ist Pflicht."
+    - Not a standard CC licence; its terms allow web display and derived tiles with the source named.
+spatial:
+  crs: EPSG:2056
+  bbox: [10.213, 46.531, 10.492, 47.001]  # union of Bedrock_PLG + Unconsolidated_Deposits_PLG of the 4 sheets, computed 2026-09-12
+  resolution: "1:25,000"
+temporal:
+  coverage: "present (map compilation)"
+  step: "static"
+format: "GeoPackage per sheet (German and French copies) inside zip; zip entries use backslash path separators"
+size_bytes: 35760451  # sum of the 4 zips
+checksum:
+  algorithm: sha256
+  value: "see data/raw/swisstopo-geocover/checksums.json (one hash per sheet zip)"
+honesty_label: observed
+caveats: |
+  - Priority 4 in the merged Dolomites geology: fills the Swiss part of the terrain bbox (Lower Engadine, S-charl, Val Müstair,
+    Samnaun; 10.3-10.49 E). Scale 1:25,000, the same as the South Tyrol map. 5 994 of the 8 638 polygons of the four sheets
+    intersect the bbox (3 917 Bedrock_PLG, 2 077 Unconsolidated_Deposits_PLG).
+  - Ages: CHRONO_TOP / RUNC_CHRONO_T is the younger bound and CHRONO_BASE / RUNC_CHRONO_B the older. Verified 2026-09-12 in the
+    data model (2D Datenmodell Geologie GeoCover, Überarbeitung 4.4, April 2026, https://www.swisstopo.admin.ch/dam/en/sd-web/Np-QwyB4JAjX/datamodel-de.pdf):
+    1.2.0.4 CHRONO_T "Obergrenze der Kartiereinheit (Top)", 1.2.0.5 CHRONO_B "Untergrenze der Kartiereinheit (Basis)";
+    the bedrock caption of CHRONO_BASE (1.3.0.6) repeats "Obergrenze (Top)", apparently a copy error. Checked on the data: with
+    the German-name table no row has TOP older than BASE (0 of 5 529 comparable bedrock rows, 0 of 2 887 unconsolidated rows).
+  - 44 German names map to chart intervals (geology_age_mapping.json, sources.swisstopo-geocover.terms); 'Proterozoikum' ->
+    Proterozoic (in chart.ttl, not in the app chart; used only as an older bound), 'Rhät' -> Rhaetian (traditional name,
+    swisstopo lists it as the stage), 'frühes Paläozoikum' has no chart unit and stays null (222 rows get no colour).
+  - Uncoloured by rule: open ranges Känozoikum|Proterozoikum, Känozoikum|Paläozoikum, and Phanerozoikum|Phanerozoikum or
+    Mesozoikum|Proterozoikum where the description says pre-Permian Paleozoic (null_pairs); 35 Verspala-Fm. polygons in the bbox
+    whose DESCRIPTION states "Campanien bis Maastrichtien" while the age fields say Cénomanien-Coniacien.
+  - The bedrock and unconsolidated layers tile the ground; where they overlap (0.42% of sheet 1179, 0.07% of 1199) the
+    unconsolidated deposit is drawn (judgement call; swisstopo documents no drawing order). The overlay layers (instabilities,
+    karst, glacial, artificial, exploitation) are not used.
+  - swisstopo is revising GeoCover (new version limited to Swiss territory).
+processing:
+  - step: "Download the 4 sheet zips from STAC (manual, 2026-09-12; URLs in checksums.json), SHA-256. No fetch script."
+    output: data/raw/swisstopo-geocover/
+  - step: "Extract the German GeoPackages, read Unconsolidated_Deposits_PLG then Bedrock_PLG, reproject EPSG:2056 -> EPSG:4326, keep polygons meeting the terrain bbox"
+    script: data/scripts/terrain/geology_gapfill_readers.py
+    output: data/raw/swisstopo-geocover/extracted/
+  - step: "Map CHRONO_* German names to ICS 2026-06 intervals, apply null_pairs and the description check, merge into the gap-free coverage below the three provincial maps, generalise per zoom, encode MVT"
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: data/processed/terrain/geology-dolomites.pmtiles -> app/public/data/terrain/geology/

@@ -1,0 +1,54 @@
+{
+  "$comment": "Runtime WMS overlays used by the terrain view for provinces that do not have vector PMTiles yet. Only endpoints whose GetCapabilities was actually fetched during the pipeline pass are listed. See docs/04-data-contracts.md section 2.2.",
+  "generated": "2026-09-06",
+  "overlays": [
+    {
+      "id": "ispra-carg-50k",
+      "kind": "geology",
+      "label": "interpreted",
+      "title": {
+        "en": "Geological Map of Italy 1:50,000 (ISPRA CARG)",
+        "it": "Carta Geologica d'Italia 1:50.000 (ISPRA - Progetto CARG)",
+        "de": "Geologische Karte Italiens 1:50.000 (ISPRA - CARG)"
+      },
+      "wms": {
+        "endpoint": "http://sgi2.isprambiente.it/arcgis/services/raster/geo_50k_italia/ImageServer/WMSServer",
+        "version": "1.3.0",
+        "layers": "0",
+        "styles": "",
+        "format": "image/png",
+        "transparent": true,
+        "crs": "EPSG:3857"
+      },
+      "bounds": [
+        6.612986,
+        36.578955,
+        18.699995,
+        46.807904
+      ],
+      "attribution": "ISPRA - Servizio Geologico d'Italia, Progetto CARG (1:50.000)",
+      "attribution_url": "https://www.isprambiente.gov.it/it/servizi/cartografia/carta-geologica-d-italia",
+      "license": {
+        "name": "not clearly branded; ISPRA credit required",
+        "reuse_note": "CARG landing page does not brand this raster with a named licence (e.g. CC BY); use of the WMS as a viewable overlay with explicit ISPRA credit is the safest path. Redistribution of tile bytes has not been confirmed and is not attempted."
+      },
+      "getcapabilities_fetched": "2026-09-06",
+      "coverage_note": "Bounding box declared by the WMS goes up to 46.81 N and so does not fully cover the northern rim of the Dolomites bbox (which reaches 47.2 N). Southern Dolomites are fully covered.",
+      "source_ref": "ispra-carg-50k"
+    }
+  ],
+  "not_included": [
+    {
+      "id": "pat-carta-geologica",
+      "reason": "Not needed as a WMS overlay any more: the Trentino geological map is shipped as vector data in terrain/geology-dolomites.pmtiles (source pat-geology-carta-geologica, CC BY 4.0 per the PAT Geocatalogo records, shapefiles from https://siatservices.provincia.tn.it/idt/vector/, fetched 2026-09-12). A WMS exists (https://geoservices.provincia.tn.it/agol/services/geologico/BDG00_ALL/MapServer/WMSServer, listed on https://www.provincia.tn.it/News/Approfondimenti/Carta-Geologica-della-Provincia-Autonoma-di-Trento) but its GetCapabilities was not fetched and it is not added."
+    },
+    {
+      "id": "veneto-carta-geologica",
+      "reason": "No Veneto geological map at 1:50,000 or finer was found as open vector data or WMS: the IDT2 catalogue (idt2.regione.veneto.it, searched 2026-09-12 for geologia, carta geologica, CARG, litologia, formazioni, substrato) only lists the regional lithology map 1:250,000, which is shipped as vector data in terrain/geology-dolomites.pmtiles (source veneto-litologia-250k, IODL 2.0). The ISPRA CARG vector databases for sheets 028, 029, 044, 045 and 046 are not published on CARG-Gate (checked 2026-09-12)."
+    },
+    {
+      "id": "egdi-1m",
+      "reason": "EGDI 1:1,000,000 pan-European Surface Geology WMS is available (https://geoserver.geo-zs.si/egdi-surface-geology/gsmlp/wms) but was not fetched in this pass; add after verifying license terms."
+    }
+  ]
+}

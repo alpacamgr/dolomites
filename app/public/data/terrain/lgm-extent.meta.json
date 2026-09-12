@@ -1,0 +1,17 @@
+{
+  "dataset_id": "glacimontis-2026",
+  "label": "interpreted",
+  "source_ref": "flantua-2026",
+  "attribution": "Lima A.C., Dulfer H.E., Hughes A.L.C., Margold M., Barr I., Laabs B.J.C., Flantua S.G.A. (2026). Mountain glacier extents at the Last Glacial Maximum. Sci. Data. Data: doi:10.5281/zenodo.15600659. Users must also cite the original per-polygon publications (properties.source_reference).",
+  "license": "CC BY 4.0",
+  "generated": "2026-09-06",
+  "script": "data/scripts/quaternary/build_lgm_extent.py",
+  "clip_bbox": [
+    9.5,
+    45.5,
+    13.5,
+    47.5
+  ],
+  "layer": "EmpiricallyReconstructedPaleoglaciers",
+  "notes": "Compilation of published paleoglacier reconstructions for MIS 3-2 (~57-14 ka BP). Polygons are per-glacier extents, not a single unioned LGM ice mask; ages and precision differ between source studies."
+}

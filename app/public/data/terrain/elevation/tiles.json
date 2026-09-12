@@ -1,0 +1,26 @@
+{
+  "tilejson": "3.0.0",
+  "name": "Dolomites terrain (TINITALY 10 m + Copernicus GLO-30 fill)",
+  "tiles": [
+    "terrain/elevation/{z}/{x}/{y}.webp"
+  ],
+  "minzoom": 6,
+  "maxzoom": 12,
+  "bounds": [
+    10.3,
+    45.8,
+    12.7,
+    47.2
+  ],
+  "center": [
+    11.5,
+    46.5,
+    10
+  ],
+  "attribution": "TINITALY 1.1 &copy; INGV (Tarquini et al. 2023, <a href='https://doi.org/10.13127/tinitaly/1.1'>doi:10.13127/tinitaly/1.1</a>), CC BY 4.0; outside Italy: produced using Copernicus WorldDEM-30 &copy; DLR e.V. 2010-2014 and &copy; Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+  "source_archive": "app/public/data/terrain/dolomites-terrain.pmtiles",
+  "script": "data/scripts/terrain/export_tiles.py",
+  "encoding": "mapbox",
+  "tileSize": 512,
+  "format": "webp"
+}

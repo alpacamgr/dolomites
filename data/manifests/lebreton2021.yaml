@@ -1,0 +1,49 @@
+id: lebreton2021
+title: "Le Breton et al. 2021 - Kinematics of the Piemont-Liguria basin (Alpine regional overlay)"
+provider: Le Breton, Brune, Ustaszewski, Zahirovic, Seton, Muller (published by Copernicus, Solid Earth)
+version: "As distributed inside Muller_etal_2019_CombinedRotations.rot (v2.0, 2020-02-20)"
+citation: "Le Breton, E., Brune, S., Ustaszewski, K., Zahirovic, S., Seton, M., and Muller, R. D. (2021). Kinematics and extent of the Piemont-Liguria Basin - implications for subduction processes in the Alps. Solid Earth 12, 885-913. doi:10.5194/se-12-885-2021."
+doi: "10.5194/se-12-885-2021"
+landing_page: https://se.copernicus.org/articles/12/885/2021/
+download_url: https://www.earthbyte.org/webdav/ftp/Data_Collections/Muller_etal_2019_Tectonics/Muller_etal_2019_PlateMotionModel/Muller_etal_2019_PlateMotionModel_v2.0_Tectonics_Updated.zip
+download_date: 2026-09-06
+license:
+  name: "CC BY 4.0"
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >-
+    Alpine/Adria plate motion refinements from Le Breton et al. (2021),
+    Solid Earth 12, 885-913, doi:10.5194/se-12-885-2021, CC BY 4.0,
+    integrated in the Muller et al. (2019) global rotation file.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:4326
+  bbox: [-10, 30, 30, 55]      # Western/Central Alps, Mediterranean
+  resolution: "regional Alpine plates; northern (Ivrea) and southern (Apulia) Adria"
+temporal:
+  coverage: "200-0 Ma (paper time slices: 200, 164.7, 154, 145, 130, 83, 35, 20, 0 Ma)"
+  step: "irregular"
+format: "GPlates rotation file (embedded)"
+size_bytes: 0
+checksum:
+  algorithm: sha256
+  value: "n/a - not distributed as a separate file"
+honesty_label: modeled
+caveats: |
+  The paper's Data availability statement (Solid Earth 12, 885 (2021),
+  Sect. 7) reads: "Our regional model for the Western Mediterranean-Alpine
+  area is part of the global plate model of Muller et al. (2019), and all
+  reconstructions and rotation files are available at
+  https://www.earthbyte.org/webdav/ftp/Data_Collections/Muller_etal_2019_Tectonics/".
+  Le Breton is a co-author on Muller 2019, and the Alpine rotations she
+  contributed are layered into Muller_etal_2019_CombinedRotations.rot
+  (verified by grep 'e Breton' on that file). There is no separate GPML/rot
+  package to download for Le Breton 2021.
+  Consequence: this dataset is not a distinct file in data/raw/ but a
+  named component of earthbyte-muller2019. The globe pipeline treats
+  Muller2019 as "muller2019+lebreton2021" for the 200-0 Ma window per the
+  paper's own statement, and manifests both.
+processing:
+  - step: "None as a separate step - Le Breton rotations live in Muller_etal_2019_CombinedRotations.rot"
+    script: data/scripts/plates/download.py
+    output: (integrated in Muller2019 outputs)

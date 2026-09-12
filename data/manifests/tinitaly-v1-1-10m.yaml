@@ -1,0 +1,54 @@
+id: tinitaly-v1-1-10m
+title: TINITALY v1.1 (Digital Elevation Model of Italy, 10 m)
+provider: Istituto Nazionale di Geofisica e Vulcanologia (INGV)
+version: "1.1 (January 2023)"
+citation: >-
+  Tarquini S., Isola I., Favalli M., Battistini A., Dotta G. (2023).
+  TINITALY, a digital elevation model of Italy with a 10 meters cell size
+  (Version 1.1). Istituto Nazionale di Geofisica e Vulcanologia (INGV).
+  https://doi.org/10.13127/tinitaly/1.1
+doi: 10.13127/tinitaly/1.1
+landing_page: https://tinitaly.pi.ingv.it/Download_Area1_1.html
+download_url: https://tinitaly.pi.ingv.it/data_1.1/<tile>_s10/<tile>_s10.zip
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >-
+    TINITALY 1.1 (Tarquini et al. 2023, doi:10.13127/tinitaly/1.1) - INGV -
+    CC BY 4.0
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:32632
+  bbox: [10.3, 45.8, 12.7, 47.2]
+  resolution: "10 m"
+temporal:
+  coverage: "present"
+  step: "single snapshot"
+format: "GeoTIFF, 5000x5010 px per 50 km x 50 km UTM tile"
+size_bytes: 1203537960  # 17 zips totalling ~1148 MB downloaded; per-tile bytes in raw/.../checksums.json
+checksum:
+  algorithm: sha256
+  # per-tile sha256 recorded in data/raw/tinitaly-v1-1-10m/checksums.json (17 tiles)
+  value: "see data/raw/tinitaly-v1-1-10m/checksums.json"
+honesty_label: observed
+caveats: |
+  - Nodata value is -9999 for sea and territory outside Italy (v1.1 change over
+    v1.0 which used 0). In the terrain archive those cells (the Austrian side
+    north of ~46.9 N, the Marmolada north face strip, a couple of missing
+    ridge cells) are filled from Copernicus DEM GLO-30 with a 300 m cross-fade
+    along the TINITALY edge; see data/manifests/copernicus-dem-glo30.yaml.
+  - Vertical accuracy in Alpine relief is worse than the ~2-4 m LE90 typical
+    of gentler terrain (Tarquini et al., INGV accompanying notes).
+  - Vertical datum: not stated in the v1.1 accompanying notes or on the
+    download pages [checked 2026-09-12]. Heights behave as orthometric: the
+    median TINITALY minus GLO-30 (EGM2008) difference inside the bbox is
+    -3.25 m, not the ~47 m an ellipsoidal source would show.
+processing:
+  - step: "Download 17 UTM-tiles covering the Dolomites bbox"
+    script: data/scripts/terrain/fetch_tinitaly.py
+    output: data/raw/tinitaly-v1-1-10m/*.zip (plus extracted *.tif)
+  - step: "Mosaic and reproject to EPSG:3857, fill nodata from GLO-30 with a 300 m cross-fade, encode Mapbox Terrain-RGB, write PMTiles v3"
+    script: data/scripts/terrain/build_terrain_pmtiles.py
+    output: app/public/data/terrain/dolomites-terrain.pmtiles

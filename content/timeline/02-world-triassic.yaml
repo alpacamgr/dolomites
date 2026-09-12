@@ -1,0 +1,67 @@
+id: world-triassic
+title:
+  en: "Tethys, tropics and reefs"
+  de: "Tethys, Tropen und Riffe"
+  it: "La Tetide, i tropici e le scogliere"
+age_start_ma: 252.0
+age_end_ma: 201.0
+ics_stage: Triassic
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "Pangea begins to open. A warm, shallow arm of the Tethys ocean spreads over what is now northern Italy. Adria drifts across the northern tropics. On this shelf, carbonate platforms grow into towers separated by deep basins, and a brief pulse of volcanoes cuts through them. The globe view cannot show these reefs; the next chapter, on the terrain, does."
+  de: "Pangaea beginnt sich zu öffnen. Ein warmer, flacher Arm der Tethys breitet sich über Norditalien aus. Adria zieht durch die nördlichen Tropen. Auf diesem Schelf wachsen Karbonatplattformen zu Türmen zwischen tiefen Becken, und ein kurzer Vulkanpuls durchschneidet sie. Die Globusansicht kann die Riffe nicht zeigen; das leistet das nächste Kapitel im Gelände."
+  it: "La Pangea comincia ad aprirsi. Un braccio caldo e poco profondo della Tetide si distende sull'Italia settentrionale. Adria migra attraverso i tropici settentrionali. Su questa piattaforma le scogliere carbonatiche crescono in torri separate da bacini profondi, mentre un breve impulso vulcanico le taglia. Il globo non può mostrare queste scogliere; lo fa il capitolo successivo, sul terreno."
+map_state:
+  layers:
+    - id: "scotese-wright-2018-model"
+      label: modeled
+      source_ref: "scotese-2018"
+    - id: "scotese-paleodem-2018-v2"
+      label: interpreted
+      source_ref: "scotese-2018"
+facts:
+  - text:
+      en: "The base of the Middle Triassic (base Anisian) is calibrated at 247.0 Ma in the current ICS chart, version 2026/06."
+      de: "Die Basis der Mitteltrias (Basis Anis) ist in der aktuellen ICS-Zeittafel (Version 2026/06) auf 247,0 Ma kalibriert."
+      it: "La base del Triassico Medio (base Anisico) è calibrata a 247,0 Ma nella tavola ICS in corso, versione 2026/06."
+    value: "247.0 Ma"
+    source_ref: "ics-2026"
+    confidence: established
+  - text:
+      en: "The globe's continents, coastlines and Dolomites marker come from the PALEOMAP plate model of Scotese & Wright 2018, the same reconstruction on which the PaleoDEM is built. The model draws plate boundaries only for the last 100 million years, so none appear in this chapter."
+      de: "Kontinente, Küstenlinien und die Markierung der Dolomiten auf dem Globus stammen aus dem PALEOMAP-Plattenmodell von Scotese & Wright 2018, derselben Rekonstruktion, auf der das PaleoDEM beruht. Plattengrenzen zeichnet das Modell nur für die letzten 100 Millionen Jahre, in diesem Kapitel also keine."
+      it: "Continenti, linee di costa e l'indicatore delle Dolomiti sul globo provengono dal modello a placche PALEOMAP di Scotese & Wright 2018, la stessa ricostruzione su cui si basa il PaleoDEM. Il modello traccia i margini di placca solo per gli ultimi 100 milioni di anni, quindi in questo capitolo non ne compaiono."
+    source_ref: "scotese-2018"
+    confidence: established
+  - text:
+      en: "For 240 Ma, the displayed PALEOMAP model of Scotese & Wright 2018 puts the Dolomites at about 7° N; other published global models put the same point between about 1° N (Müller et al. 2019) and about 12° N (Merdith et al. 2021). The models use different reference frames, and paleomagnetic latitudes, which place the region further north, carry their own uncertainty."
+      de: "Für 240 Ma setzt das dargestellte PALEOMAP-Modell von Scotese & Wright 2018 die Dolomiten auf etwa 7° N; andere veröffentlichte globale Modelle legen denselben Punkt zwischen etwa 1° N (Müller et al. 2019) und etwa 12° N (Merdith et al. 2021). Die Modelle beruhen auf unterschiedlichen Bezugssystemen, und paläomagnetische Breiten, die die Region weiter nördlich verorten, sind ihrerseits mit Unsicherheit behaftet."
+      it: "Per 240 Ma il modello PALEOMAP di Scotese & Wright 2018 mostrato sul globo colloca le Dolomiti a circa 7° N; altri modelli globali pubblicati pongono lo stesso punto tra circa 1° N (Müller et al. 2019) e circa 12° N (Merdith et al. 2021). I modelli adottano sistemi di riferimento diversi, e le latitudini paleomagnetiche, che collocano la regione più a nord, hanno a loro volta un margine d'incertezza."
+    value: "about 7° N (PALEOMAP); about 1° N (Müller et al. 2019) to about 12° N (Merdith et al. 2021)"
+    label: modeled
+    source_ref: "scotese-2018"
+    confidence: debated
+    method: "Computed by the project on 2026-09-06 with pygplates 1.0 from each model's published rotation files; reference point 46.5 N 11.8 E; age 240 Ma. See docs/decisions/0005-globe-reference-frame.md."
+  - text:
+      en: "Paleomagnetic data on the Dolomites (Seceda section) place the region at roughly 16 to 18 degrees north during the Middle Triassic."
+      de: "Paläomagnetische Daten aus den Dolomiten (Profil Seceda) verorten die Region in der Mitteltrias bei ungefähr 16 bis 18 Grad Nord."
+      it: "I dati paleomagnetici delle Dolomiti (sezione di Seceda) collocano la regione a circa 16 - 18 gradi Nord nel Triassico Medio."
+    value: "about 16 to 18 degrees N"
+    source_ref: "muttoni-1997"
+    confidence: established
+    verification: pending
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: globe
+  time:
+    unit: ma
+    start: 252
+    end: 201
+  camera:
+    globe: { lat: 20, lon: 25, distance: 2.6 }
+  layers:
+    - { id: "scotese-wright-2018-model", label: modeled, source_ref: "scotese-2018", style: "continents+boundaries" }
+    - { id: "scotese-paleodem-2018-v2", label: interpreted, source_ref: "scotese-2018" }

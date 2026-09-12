@@ -1,0 +1,64 @@
+id: bz-geology-carg
+title: P_BZ Carta Geologica CARG - Geological Units (Detailed)
+provider: Provincia autonoma di Bolzano - Alto Adige, Cartografia provinciale
+version: "WFS snapshot 2026-09-06"
+citation: >-
+  Provincia autonoma di Bolzano - Alto Adige, Cartografia provinciale.
+  P_BZ Carta geologica CARG - Unita geologiche (dettagliate).
+  Datasets published on data.civis.bz.it under CC0 1.0.
+doi: ""
+landing_page: https://data.civis.bz.it/de/dataset/servizi-ogc-p_bz-carta-geologica-carg
+download_url: https://geoservices1.civis.bz.it/geoserver/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=p_bz-GeologicalMap:GeologicalUnits-Detailed&outputFormat=application/json&srsName=EPSG:4326&bbox=601000,5072600,780300,5234100,EPSG:25832
+download_date: 2026-09-06
+license:
+  name: CC0 1.0 Universal
+  url: https://creativecommons.org/publicdomain/zero/1.0/
+  attribution_text: >-
+    Provincia autonoma di Bolzano - Alto Adige, Cartografia provinciale
+    (portal-wide CC0; attribution not legally required, kept as a courtesy)
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:25832
+  bbox: [10.3, 45.8, 12.7, 47.2]
+  resolution: "1:10,000 survey scale, published 1:25,000"
+temporal:
+  coverage: "present (map compilation, ongoing updates by PAB)"
+  step: "static"
+format: "GeoJSON (server-side reprojected to EPSG:4326 from EPSG:25832)"
+size_bytes: 205513402
+checksum:
+  algorithm: sha256
+  value: "9e83e2e8a3a5ffe1243b4cf20c62ec85e784a7b802bdad00a4344ed1ceaf981d"  # GeologicalUnits-Detailed.geojson
+honesty_label: observed
+caveats: |
+  - Coverage is the Province of Bolzano / South Tyrol only, not the whole
+    Dolomites: Trentino and Belluno provinces are covered separately (see
+    terrain/wms.json).
+  - Ages come as stratigraphic names in Italian and German, not numbers:
+    ETA_CODICE_MIN_IT/DE is the unit's youngest age, ETA_CODICE_MAX_IT/DE its
+    oldest. build_geology_pmtiles.py maps each distinct string to an ICS chart
+    2026-06 interval through the checked-in table
+    data/scripts/terrain/geology_age_mapping.json (German strings
+    cross-checked) and takes age_min_ma / age_max_ma from the chart. For 255
+    units (Formazione del Catinaccio CAT/CAT1/CATa, ZUU1) the source has the
+    younger name in the MAX field; the two names are ordered by chart age
+    before deriving the range and colour. These are
+    the chart's boundary ages for the named intervals, not ages published by
+    the map; strings qualified (p.p.) or (?) give an outer envelope. The two
+    strings that cannot be mapped with confidence (Carbonifero superiore,
+    Terziario (?)) stay null. Counts are in
+    app/public/data/terrain/geology-suedtirol.meta.json.
+  - The WFS layer's SLD legend colour is not exposed as a feature attribute.
+    color in the PMTiles is the ICS chart colour of the unit's youngest named
+    interval (conventional colouring by age), not the CARG legend colour.
+  - GeoServer WFS BBOX filter only honoured EPSG:25832 (the native CRS) in
+    this pass; sending an EPSG:4326 BBOX returned zero features, hence the
+    reprojected filter in the fetch URL.
+processing:
+  - step: "WFS GetFeature paginated at 5000 features/call to GeoJSON"
+    script: data/scripts/terrain/fetch_geology_bz.py
+    output: data/raw/bz-geology-carg/GeologicalUnits-Detailed.geojson
+  - step: "Map ETA_CODICE_MIN/MAX_IT age strings to ICS chart 2026-06 intervals (data/scripts/terrain/geology_age_mapping.json, German strings cross-checked), derive age_min_ma, age_max_ma, age_label and color; simplify per zoom, encode MVT, write vector PMTiles v3 via temp file + rename"
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: app/public/data/terrain/geology-suedtirol.pmtiles

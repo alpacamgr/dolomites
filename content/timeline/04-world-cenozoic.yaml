@@ -1,0 +1,56 @@
+id: world-cenozoic
+title:
+  en: "Collision and the birth of the Alps"
+  de: "Kollision und die Geburt der Alpen"
+  it: "Collisione e nascita delle Alpi"
+age_start_ma: 66.0
+age_end_ma: 0.0
+ics_stage: Cenozoic
+ics_chart_version: "ICS 2026/06"
+summary:
+  en: "The Alpine Tethys closes. Adria pushes into Europe, oceanic crust is consumed, and the Alps rise. On the plate-model view we can follow Adria's northward path; on this scale the Dolomites are only a marker on it. What Adria actually is - a promontory of Africa or an independent microplate - has been debated for a century."
+  de: "Die Alpine Tethys schließt sich. Adria drückt in Europa hinein, ozeanische Kruste wird verschluckt, und die Alpen erheben sich. Im Plattenmodell verfolgen wir den Nordkurs Adrias; die Dolomiten sind auf dieser Skala nur eine Marke darauf. Was Adria wirklich ist - ein Sporn Afrikas oder eine eigene Mikroplatte - wird seit einem Jahrhundert diskutiert."
+  it: "La Tetide Alpina si chiude. Adria si spinge dentro l'Europa, la crosta oceanica viene consumata, le Alpi si sollevano. Nel modello a placche seguiamo la traiettoria settentrionale di Adria; a questa scala le Dolomiti sono solo un segno posto su di essa. Che cosa sia Adria - un promontorio dell'Africa o una microplacca autonoma - è oggetto di dibattito da un secolo."
+map_state:
+  layers:
+    - id: "scotese-wright-2018-model"
+      label: modeled
+      source_ref: "scotese-2018"
+    - id: "scotese-paleodem-2018-v2"
+      label: interpreted
+      source_ref: "scotese-2018"
+facts:
+  - text:
+      en: "Two long-standing views of Adria coexist in the literature: an African promontory that never separated substantially from Africa, and an independent microplate divided from Africa by an intervening oceanic domain. Jolivet notes that paleomagnetic error bars alone cover several hundred kilometres and cannot settle the question."
+      de: "In der Literatur bestehen zwei langlebige Sichten auf Adria: ein afrikanischer Sporn, der sich nie wesentlich von Afrika löste, und eine eigenständige Mikroplatte, die durch ein zwischenliegendes Ozeansegment von Afrika getrennt war. Jolivet weist darauf hin, dass die paläomagnetischen Fehlerbalken allein mehrere hundert Kilometer umspannen und die Frage nicht klären können."
+      it: "In letteratura convivono due letture di Adria di lunga data: un promontorio dell'Africa mai davvero separato, e una microplacca indipendente divisa dall'Africa da un dominio oceanico interposto. Jolivet ricorda che le sole barre d'errore paleomagnetiche coprono diverse centinaia di chilometri e non risolvono la questione."
+    source_ref: "jolivet-2023"
+    confidence: debated
+  - text:
+      en: "For the Alpine kinematics the narrative relies on Müller et al. 2019, whose Alpine sector is internally consistent with the Le Breton et al. 2021 regional update; the globe itself is drawn from the PALEOMAP model of Scotese & Wright 2018."
+      de: "Für die alpine Kinematik stützt sich der Text auf Müller et al. 2019, dessen alpiner Ausschnitt mit der regionalen Fortschreibung von Le Breton et al. 2021 verträglich ist; der Globus selbst wird nach dem PALEOMAP-Modell von Scotese & Wright 2018 gezeichnet."
+      it: "Per la cinematica alpina il testo si basa su Müller et al. 2019, il cui settore alpino è coerente con l'aggiornamento regionale di Le Breton et al. 2021; il globo è invece disegnato secondo il modello PALEOMAP di Scotese & Wright 2018."
+    source_ref: "muller-2019"
+    confidence: established
+  - text:
+      en: "The Southern Eastern Alps, including the Dolomites, are still rising: the ALPS2017 GNSS solution measures vertical uplift of about 1.0 to 1.5 mm per year in this sector."
+      de: "Die Südlichen Ostalpen mit den Dolomiten heben sich weiterhin: die GNSS-Lösung ALPS2017 misst hier vertikale Hebungen von etwa 1,0 bis 1,5 mm pro Jahr."
+      it: "Le Alpi Sud-Orientali, Dolomiti comprese, continuano a sollevarsi: la soluzione GNSS ALPS2017 misura in questo settore un sollevamento verticale di circa 1,0 - 1,5 mm all'anno."
+    value: "1.0 to 1.5 mm/yr"
+    source_ref: "sanchez-2018"
+    confidence: established
+localities: []
+review:
+  reviewer: ""
+  date: ""
+scene:
+  view: globe
+  time:
+    unit: ma
+    start: 66
+    end: 0
+  camera:
+    globe: { lat: 40, lon: 12, distance: 2.3 }
+  layers:
+    - { id: "scotese-wright-2018-model", label: modeled, source_ref: "scotese-2018", style: "continents+boundaries" }
+    - { id: "scotese-paleodem-2018-v2", label: interpreted, source_ref: "scotese-2018" }

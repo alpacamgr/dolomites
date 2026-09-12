@@ -1,0 +1,57 @@
+id: geosphere-geologicunits-500k
+title: INSPIRE Geologische Einheiten 1:500.000 Österreich (Oberflächengeologie)
+provider: GeoSphere Austria
+version: "GPKG insp_ge_gu_sg500_epsg4258 (HTTP Last-Modified 2025-07-17); ISO record 30aa261e-4d45-4470-92b6-bac9c76bb344 published 2020-12-09, metadata modified 2026-09-10"
+citation: >-
+  GeoSphere Austria (2025): Geodaten - Geologische Basiskarte der "Metallogenetischen Karte von Österreich" (1:500.000).
+  Tethys RDR, GeoSphere Austria, Wien. Distributed as INSPIRE Geologische Einheiten 1:500.000 Österreich (Oberflächengeologie).
+doi: ""
+landing_page: https://geoportal.inspire.gv.at/metadatensuche/inspire/api/records/30aa261e-4d45-4470-92b6-bac9c76bb344
+download_url: https://gis.geologie.ac.at/inspire/download/insp_ge_gu_sg500_epsg4258.gpkg
+download_date: 2026-09-12
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: "© GeoSphere Austria - INSPIRE Geologische Einheiten 1:500.000 Österreich - CC BY 4.0 (modified)"
+  derivatives_allowed: true
+  share_alike: false
+  evidence: |
+    - ISO record (fetched 2026-09-12): "Keine Beschränkung im öffentlichen Zugang"; "Creative Commons Namensnennung 4.0
+      International (CC BY 4.0)"; "(c) GeoSphere Austria"; GeoSphere Austria excludes liability for correctness and completeness.
+    - ArcGIS service https://gis.geosphere.at/maps/rest/services/inspire/GE_GeologicUnit_500k/MapServer, copyrightText
+      "©GeoSphere Austria / CC BY 4.0" (fetched 2026-09-12).
+spatial:
+  crs: EPSG:4258  # used as EPSG:4326 without transformation (ETRS89 vs WGS84 differ by well under 1 m; the map is 1:500,000)
+  bbox: [9.531, 46.372, 17.161, 49.021]  # service fullExtent; 647 of 4 107 polygons intersect the terrain bbox
+  resolution: "1:500,000"
+temporal:
+  coverage: "present (map compilation; lineage map 1997)"
+  step: "static"
+format: "GeoPackage 1.2 (INSPIRE GE flattened view: geologicunitview / mappedfeature + attribute tables)"
+size_bytes: 23490560
+checksum:
+  algorithm: sha256
+  value: "8d39d3b36d997028cdb8a00b5853949df666cca48f6b1c2f3fa138a33666f46a"  # insp_ge_gu_sg500_epsg4258.gpkg
+honesty_label: observed
+caveats: |
+  - Priority 6 (last) in the merged Dolomites geology: fills the Austrian part of the terrain bbox (Ötztal, Stubai, Zillertal,
+    Hohe Tauern, East Tyrol). 1:500,000, 20x coarser than the South Tyrol map: context only; the meta gives its scale and a
+    scale_note, and its polygons must not be read as detailed mapping at z11-13.
+  - 647 polygons of 33 units intersect the bbox; each unit has one GeologicEvent. Ages: olderNamedAge / youngerNamedAge are
+    INSPIRE GeochronologicEra names, which are ICS chart names (mapped one to one, checked by the build). Basement units carry
+    wide ranges (e.g. Neoproterozoic - Devonian), which give honest but vague envelopes coloured by the younger bound.
+  - Uncoloured by rule (geology_age_mapping.json, sources.geosphere-geologicunits-500k): "Glaciers, permanent snow cover"
+    (unit 1, 73 polygons in the bbox) and "water bodies" (unit 65, 4 polygons); the 4 polygons of "metasediment with eclogite"
+    whose event is 'subduction' (the age of a metamorphic/tectonic event, not of formation). 'magmatic process' on orthogneiss
+    and amphibolite is taken as the protolith age (judgement call).
+  - Finer GeoSphere alternatives cover the Austrian part only partly: INSPIRE 1:50,000 (CC BY 4.0, GPKG 1 027 649 536 bytes,
+    37% of the Austrian gap, sheets merged without edge matching) and 1:200,000 (CC BY 4.0, 25%, East Tyrol only).
+  - No edge matching with the Italian maps along the border; the higher-priority Italian and Swiss maps win on overlaps.
+processing:
+  - step: "Download the GeoPackage (manual, 2026-09-12), SHA-256. No fetch script."
+    output: data/raw/geosphere-geologicunits-500k/insp_ge_gu_sg500_epsg4258.gpkg
+  - step: "Read geologicunitview within the terrain bbox"
+    script: data/scripts/terrain/geology_gapfill_readers.py
+  - step: "Map olderNamedAge/youngerNamedAge to ICS 2026-06 intervals, apply the event/unit rules, merge into the gap-free coverage below the five other sources, generalise per zoom, encode MVT"
+    script: data/scripts/terrain/build_geology_pmtiles.py
+    output: data/processed/terrain/geology-dolomites.pmtiles -> app/public/data/terrain/geology/

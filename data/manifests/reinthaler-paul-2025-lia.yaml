@@ -1,0 +1,43 @@
+id: reinthaler-paul-2025-lia
+title: Little Ice Age glacier outlines for the European Alps (Reinthaler & Paul 2025)
+provider: J. Reinthaler and F. Paul (Univ. Zurich)
+version: "1 (Zenodo record 14336826, published 2024-12-13)"
+citation: >
+  Reinthaler, J., & Paul, F. (2025). Reconstructed glacier area and volume
+  changes in the European Alps since the Little Ice Age. The Cryosphere 19,
+  753-777. https://doi.org/10.5194/tc-19-753-2025
+  Data: doi:10.5281/zenodo.14336826.
+doi: 10.5281/zenodo.14336826
+landing_page: https://zenodo.org/records/14336827
+download_url: https://zenodo.org/api/records/14336827/files/LIA_glacier_outlines_Alps.zip/content
+download_date: 2026-09-06
+license:
+  name: CC BY 4.0
+  url: https://creativecommons.org/licenses/by/4.0/
+  attribution_text: >
+    Reinthaler J. and Paul F. (2025). Reconstructed glacier area and volume
+    changes in the European Alps since the Little Ice Age. The Cryosphere 19,
+    753-777. Data: doi:10.5281/zenodo.14336826.
+  derivatives_allowed: true
+  share_alike: false
+spatial:
+  crs: EPSG:32632 (WGS84 / UTM 32N)
+  bbox: [258281, 4885573, 873104, 5276949]     # UTM 32N (metres)
+  resolution: "individual glacier polygons"
+temporal:
+  coverage: "Little Ice Age (nominal 1850 CE) - actual polygons digitised from various nineteenth-century sources per sub-region"
+  step: n/a
+format: ESRI Shapefile
+size_bytes: 13585203
+checksum:
+  algorithm: sha256
+  value: 1b301ab079b04cbd71ec64c6bf01cb3c1a230ce8aa8183bfdd19107045c67999
+honesty_label: interpreted
+caveats: |
+  Reconstructed from historical maps, moraines, and previous compilations; per-
+  polygon source citation preserved in properties.source_citation. The 1850 CE
+  "LIA maximum" is a family of maps with different actual base dates.
+processing:
+  - step: reproject UTM32N -> WGS84, filter to terrain bbox, round to 5 decimals
+    script: data/scripts/quaternary/build_lia.py
+    output: app/public/data/terrain/glaciers-lia.geojson

@@ -1,0 +1,41 @@
+---
+import '@/styles/global.css';
+import { LOCALES, type Locale } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description?: string;
+}
+
+const { locale, title, description } = Astro.props;
+
+const currentPath = Astro.url.pathname;
+// Compute paths for alternate locales, keeping the same trailing path minus the locale prefix.
+function stripLocale(p: string): string {
+  const parts = p.split('/').filter(Boolean);
+  if (parts.length > 0 && (LOCALES as readonly string[]).includes(parts[0])) {
+    return '/' + parts.slice(1).join('/');
+  }
+  return p;
+}
+const suffix = stripLocale(currentPath) || '/';
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="theme-color" content="#f6f3ee" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={l} href={`/${l}${suffix === '/' ? '/' : suffix}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`/en${suffix === '/' ? '/' : suffix}`} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

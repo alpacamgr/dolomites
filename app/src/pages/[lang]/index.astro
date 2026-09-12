@@ -1,0 +1,102 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import LanguageSwitcher from '@/components/LanguageSwitcher.astro';
+import NarrativeSection from '@/components/NarrativeSection.astro';
+import SourcesDrawer from '@/components/SourcesDrawer.astro';
+import Stage from '@/components/Stage.svelte';
+import { LOCALES, type Locale, loadUi } from '@/lib/i18n';
+import { loadChapters, anyFixtureInUse } from '@/lib/content/chapters';
+import { loadIcs } from '@/lib/content/ics';
+import { shortCite } from '@/lib/content/bibliography';
+import type { ClientChapter } from '@/lib/story/types';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const locale = lang;
+const strings = loadUi(locale);
+const chapters = loadChapters();
+const ics = loadIcs();
+const usingFixtures = anyFixtureInUse();
+
+// Marshal minimal per-chapter data for the client controller.
+const clientChapters: ClientChapter[] = chapters.map((ch, i) => {
+  const factRefs = (ch.facts ?? []).map((f) => f.source_ref);
+  const layerRefs = ch.scene.layers.flatMap((l) => (Array.isArray(l.source_ref) ? l.source_ref : [l.source_ref]));
+  return {
+    id: ch.id,
+    index: i,
+    title: ch.title[locale] ?? ch.title.en ?? ch.id,
+    view: ch.scene.view,
+    time: ch.scene.time,
+    camera: ch.scene.camera,
+    layers: ch.scene.layers.map((l) => ({
+      id: l.id,
+      label: l.label,
+      source_ref: l.source_ref,
+      style: l.style,
+      opacity: l.opacity,
+      cite: Array.isArray(l.source_ref) ? undefined : shortCite(l.source_ref),
+      cites: Array.isArray(l.source_ref) ? l.source_ref.map((k) => shortCite(k)) : undefined,
+    })),
+    source_refs: Array.from(new Set([...layerRefs, ...factRefs])),
+    subject:
+      typeof ch.subject_age_start_ma === 'number' && typeof ch.subject_age_end_ma === 'number'
+        ? { start_ma: ch.subject_age_start_ma, end_ma: ch.subject_age_end_ma }
+        : undefined,
+    emphasis: ch.scene.emphasis
+      ? { start_ma: ch.scene.emphasis.age_start_ma, end_ma: ch.scene.emphasis.age_end_ma }
+      : undefined,
+  };
+});
+
+// The debug flag is finally resolved on the client (in Stage.svelte) so it
+// works for the static build too; here we pass a build-time seed only.
+const debug = Astro.url.searchParams.get('debug') === '1';
+
+const title = strings['site.title'];
+const description = strings['site.tagline'];
+---
+<BaseLayout locale={locale} title={title} description={description}>
+  <div class="site">
+    <header class="masthead">
+      <div class="brand">
+        <h1>{title}</h1>
+        <span class="tagline">{description}</span>
+      </div>
+      <nav class="top-nav">
+        <a href="#sources">{strings['nav.sources']}</a>
+        <LanguageSwitcher locale={locale} suffix="/" />
+      </nav>
+    </header>
+
+    <div class="split">
+      <div class="narrative" data-narrative-root>
+        {usingFixtures && (
+          <p class="fixture-warning">{strings['chapter.fixtureWarning']}</p>
+        )}
+        {chapters.map((ch, i) => (
+          <NarrativeSection chapter={ch} locale={locale} index={i} />
+        ))}
+      </div>
+      <div class="stage-wrap">
+        <Stage
+          client:load
+          chapters={clientChapters}
+          locale={locale}
+          uiStrings={strings}
+          ics={ics}
+          debug={debug}
+        />
+      </div>
+    </div>
+
+    <SourcesDrawer chapters={chapters} locale={locale} />
+
+    <footer class="site-footer">
+      <span>{strings['site.title']}</span>
+    </footer>
+  </div>
+</BaseLayout>
