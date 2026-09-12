@@ -33,7 +33,7 @@ size_bytes: 35760451  # sum of the 4 zips
 checksum:
   algorithm: sha256
   value: "see data/raw/swisstopo-geocover/checksums.json (one hash per sheet zip)"
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - Priority 4 in the merged Dolomites geology: fills the Swiss part of the terrain bbox (Lower Engadine, S-charl, Val Müstair,
     Samnaun; 10.3-10.49 E). Scale 1:25,000, the same as the South Tyrol map. 5 994 of the 8 638 polygons of the four sheets

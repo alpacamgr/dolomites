@@ -2,21 +2,25 @@
  * Scroll-driven story controller.
  *
  *  - One narrative section per chapter carries `data-chapter="<id>"`.
- *  - The active chapter is the section whose midpoint is closest to the viewport
- *    midpoint; progress 0..1 within it maps linearly to a *target* time between
- *    scene.time.start and scene.time.end.
- *  - One rAF loop eases the displayed time toward the target with frame-rate
- *    independent exponential damping (docs/ux/2026-09-timeline-and-geology-ux.md,
- *    motion spec) and stops as soon as it settles. The loop is the only caller of
- *    engine.setTime: at most one call per frame, none while settled.
- *  - A chapter change issues engine.setState with the new chapter's target time
- *    (a view switch triggers the crossfade in the engine manager); the displayed time
- *    for the rail keeps easing from its previous value instead of snapping.
- *  - prefers-reduced-motion: no damping, time follows scroll directly.
- *  - Preloads the next chapter's state when its section is within one viewport of the fold.
- *
- * The controller exposes a small Svelte-shaped store (subscribe) so the TimeRail,
- * Legend and DebugOverlay can react without knowing about scroll internals.
+ *  - Reading band: the part of the viewport where the reader reads, below the sticky header
+ *    (desktop) or below the sticky stage when it sits above the text (mobile, 55svh). The active
+ *    chapter is the last section whose top has passed the band's reading line; progress 0..1
+ *    runs from the section's top meeting the band top to its end. goToChapter lands a section's
+ *    top at the band top (the CSS scroll-margin-top matches), so jumps and detection agree in
+ *    both layouts.
+ *  - One rAF loop eases the displayed time toward the scroll target with frame-rate
+ *    independent exponential damping (docs/ux/2026-09-timeline-and-geology-ux.md, motion spec)
+ *    and stops as soon as it settles. It is the only caller of engine.setTime: at most one call
+ *    per frame, none while settled.
+ *  - A chapter change issues engine.setState with the new chapter's target time; the displayed
+ *    time for the rail keeps easing from its previous value instead of snapping.
+ *  - Relative jumps (stepper, PageUp/PageDown) count from a jump still in progress, so two quick
+ *    "next" presses move two chapters.
+ *  - Keyboard: arrow keys, Home and End stay native. PageUp/PageDown jump chapters only while the
+ *    reading line is inside the story, without modifiers, when no other handler consumed the key
+ *    and focus is not in a form control or key-handling widget. At the last chapter PageDown
+ *    scrolls natively on to the sources.
+ *  - prefers-reduced-motion: no damping, time follows scroll directly; jumps are instant.
  */
 import type { ClientChapter } from './types';
 import { toSceneState } from './types';
@@ -39,6 +43,8 @@ type Subscriber = (s: StoryState) => void;
 export interface StoryController {
   subscribe(cb: Subscriber): () => void;
   goToChapter(index: number, opts?: { smooth?: boolean }): void;
+  /** Jump relative to the chapter being read, or to the target of a jump still in progress. */
+  step(delta: number): void;
   destroy(): void;
   getEngineManager(): EngineManager;
 }
@@ -49,13 +55,17 @@ interface StartOptions {
   globeEl: HTMLElement;
   terrainEl: HTMLElement;
   reduceMotion?: boolean;
-  /** passed to the engine factories (localized popup strings, locale) */
+  /** passed to the engine factories (localized strings, locale, ICS intervals) */
   engineOptions?: Record<string, unknown>;
 }
 
 /** Damping time constants (ms): inside a chapter, and while the rail catches up after a chapter change. */
 const TAU_SCROLL = 90;
 const TAU_CHAPTER = 200;
+/** Reading line position inside the reading band (0 = band top, 1 = viewport bottom). */
+const READING_LINE = 0.4;
+/** A programmatic jump counts as finished after this long without scroll events. */
+const JUMP_SETTLE_MS = 250;
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
@@ -64,11 +74,17 @@ const fromMa = (unit: 'ma' | 'ka', ma: number) => (unit === 'ka' ? ma * 1000 : m
 /** settle threshold in Ma: 0.01 of the chapter's unit */
 const epsMa = (unit: 'ma' | 'ka') => (unit === 'ka' ? 1e-5 : 1e-2);
 
+/** Elements that handle PageUp/PageDown themselves. */
+const KEY_WIDGETS = 'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="slider"], [role="spinbutton"], '
+  + '[role="listbox"], [role="combobox"], [role="menu"], [role="menubar"], [role="textbox"], [role="grid"], [role="tree"], [role="tablist"]';
+
 export function startStory(opts: StartOptions): StoryController {
   const { chapters, narrativeRoot, globeEl, terrainEl, reduceMotion = false } = opts;
   const em = createEngineManager(globeEl, terrainEl, { reduceMotion, engineOptions: opts.engineOptions });
 
   const sections = Array.from(narrativeRoot.querySelectorAll<HTMLElement>('[data-chapter]'));
+  const header = document.querySelector<HTMLElement>('.masthead');
+  const stageWrap = globeEl.closest<HTMLElement>('.stage-wrap') ?? globeEl.parentElement;
 
   const first = chapters[0];
   const state: StoryState = {
@@ -101,6 +117,9 @@ export function startStory(opts: StartOptions): StoryController {
   let lastT = 0;
   let currentAppliedIndex = -1;
   let destroyed = false;
+  /** target of a programmatic jump that is still scrolling */
+  let pendingTarget: number | null = null;
+  let pendingTimer = 0;
 
   /** One-frame scheduler: rAF when visible; a 16 ms timeout when hidden (no frames there). */
   function schedule() {
@@ -109,6 +128,33 @@ export function startStory(opts: StartOptions): StoryController {
     const run = (now: number) => { scheduled = false; tick(now); };
     if (document.hidden) window.setTimeout(() => run(performance.now()), 16);
     else requestAnimationFrame(run);
+  }
+
+  /**
+   * The reading band in viewport coordinates: its top is the lowest bottom edge of whatever
+   * covers the top of the text column (the sticky header, or the stage when it is stacked
+   * above the narrative rather than beside it).
+   */
+  function readingBand(): { top: number; line: number } {
+    const vh = window.innerHeight;
+    let top = 0;
+    const hr = header?.getBoundingClientRect();
+    if (hr && hr.top <= 1 && hr.bottom > 0) top = Math.max(top, hr.bottom);
+    const sr = stageWrap?.getBoundingClientRect();
+    const nr = narrativeRoot.getBoundingClientRect();
+    if (sr && sr.bottom > 0 && sr.top < vh && sr.left < nr.right - 1 && sr.right > nr.left + 1) top = Math.max(top, sr.bottom);
+    top = Math.min(top, vh - 80);
+    return { top, line: top + (vh - top) * READING_LINE };
+  }
+
+  /** The last section whose top has reached the reading line (sections are in document order). */
+  function activeIndexAt(line: number): number {
+    let idx = 0;
+    for (let i = 0; i < sections.length; i++) {
+      if (sections[i].getBoundingClientRect().top <= line + 1) idx = i;
+      else break;
+    }
+    return idx;
   }
 
   function applyChapter(index: number) {
@@ -123,23 +169,11 @@ export function startStory(opts: StartOptions): StoryController {
     if (next) em.preload(toSceneState(next, next.time.start)).catch(() => { /* not fatal */ });
   }
 
-  /** The section whose midpoint is closest to the viewport midpoint. */
-  function activeIndexFromScroll(): number {
-    const target = window.innerHeight * 0.5;
-    let best = state.activeIndex;
-    let bestDist = Infinity;
-    for (let i = 0; i < sections.length; i++) {
-      const r = sections[i].getBoundingClientRect();
-      const d = Math.abs(r.top + r.height * 0.5 - target);
-      if (d < bestDist) { bestDist = d; best = i; }
-    }
-    return best;
-  }
-
   /** Read scroll: active chapter, progress and target time. Returns true if state changed. */
   function measure(): boolean {
     let changed = false;
-    const nextIndex = activeIndexFromScroll();
+    const band = readingBand();
+    const nextIndex = activeIndexAt(band.line);
     if (nextIndex !== state.activeIndex) {
       state.activeIndex = nextIndex;
       changed = true;
@@ -149,8 +183,8 @@ export function startStory(opts: StartOptions): StoryController {
     const section = sections[state.activeIndex];
     if (ch && section) {
       const rect = section.getBoundingClientRect();
-      const traversable = Math.max(1, rect.height - window.innerHeight);
-      const progress = clamp01(-rect.top / traversable);
+      const traversable = Math.max(1, rect.height - (window.innerHeight - band.top));
+      const progress = clamp01((band.top - rect.top) / traversable);
       if (changed || Math.abs(progress - state.progress) >= 0.0005) {
         state.progress = progress;
         changed = true;
@@ -211,11 +245,26 @@ export function startStory(opts: StartOptions): StoryController {
     schedule();
   }
 
+  /** A jump is over once scrolling has been quiet for JUMP_SETTLE_MS (or on scrollend). */
+  function armJumpSettle() {
+    window.clearTimeout(pendingTimer);
+    if (pendingTarget !== null) pendingTimer = window.setTimeout(() => { pendingTarget = null; }, JUMP_SETTLE_MS);
+  }
+  function onScroll() {
+    if (pendingTarget !== null) armJumpSettle();
+    requestMeasure();
+  }
+  function onScrollEnd() {
+    pendingTarget = null;
+    window.clearTimeout(pendingTimer);
+  }
+
   // The scroll listener does the real work; IntersectionObserver is a nudge for touch and
   // momentum scrolling where scroll events can be sparse.
   const io = new IntersectionObserver(requestMeasure, { rootMargin: '-30% 0px -30% 0px', threshold: [0, 0.5, 1] });
   sections.forEach((s) => io.observe(s));
-  window.addEventListener('scroll', requestMeasure, { passive: true });
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scrollend', onScrollEnd);
   const ro = new ResizeObserver(() => {
     em.resize();
     requestMeasure();
@@ -223,23 +272,18 @@ export function startStory(opts: StartOptions): StoryController {
   ro.observe(document.body);
 
   function onKey(e: KeyboardEvent) {
-    if (e.target instanceof HTMLElement) {
-      const tag = e.target.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
-    }
-    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-      e.preventDefault();
-      goToChapter(state.activeIndex + 1);
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      e.preventDefault();
-      goToChapter(state.activeIndex - 1);
-    } else if (e.key === 'Home') {
-      e.preventDefault();
-      goToChapter(0);
-    } else if (e.key === 'End') {
-      e.preventDefault();
-      goToChapter(chapters.length - 1);
-    }
+    if (e.key !== 'PageDown' && e.key !== 'PageUp') return;
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.target instanceof Element && e.target.closest(KEY_WIDGETS)) return;
+    const band = readingBand();
+    const last = sections[sections.length - 1]?.getBoundingClientRect();
+    // at or past the end of the story (sources, footer): native scrolling
+    if (!last || band.line >= last.bottom) return;
+    const current = pendingTarget ?? activeIndexAt(band.line);
+    if (e.key === 'PageDown' && current >= sections.length - 1) return;
+    if (e.key === 'PageUp' && current <= 0) return;
+    e.preventDefault();
+    step(e.key === 'PageDown' ? 1 : -1);
   }
   window.addEventListener('keydown', onKey);
 
@@ -247,8 +291,15 @@ export function startStory(opts: StartOptions): StoryController {
     const idx = Math.max(0, Math.min(chapters.length - 1, index));
     const section = sections[idx];
     if (!section) return;
-    const behavior: ScrollBehavior = reduceMotion || options.smooth === false ? 'auto' : 'smooth';
-    section.scrollIntoView({ block: 'start', behavior });
+    const smooth = !(reduceMotion || options.smooth === false);
+    pendingTarget = smooth ? idx : null;
+    armJumpSettle();
+    section.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
+  }
+
+  function step(delta: number) {
+    const base = pendingTarget ?? activeIndexAt(readingBand().line);
+    goToChapter(base + delta);
   }
 
   // First paint: apply the section that matches the current scroll, without easing.
@@ -261,12 +312,15 @@ export function startStory(opts: StartOptions): StoryController {
       return () => subs.delete(cb);
     },
     goToChapter,
+    step,
     getEngineManager: () => em,
     destroy() {
       destroyed = true;
+      window.clearTimeout(pendingTimer);
       io.disconnect();
       ro.disconnect();
-      window.removeEventListener('scroll', requestMeasure);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scrollend', onScrollEnd);
       window.removeEventListener('keydown', onKey);
       em.destroy();
       subs.clear();

@@ -10,8 +10,10 @@ import type { IcsChart, IcsInterval } from '@/lib/content/ics';
 export interface GeologyKeyData {
   /** distinct dated units in view, by colour and younger age bound */
   units: Array<{ color: string; ageMin: number | null }>;
-  /** units without an age colour are rendered in view */
+  /** units whose source gives no usable age (age_basis none, or tiles without age_basis) are rendered in view */
   undated: boolean;
+  /** units whose stated age is withheld from colour (age_basis withheld) are rendered in view */
+  withheld: boolean;
   /** sources mapped coarser than 1:25,000 with units rendered in view: dataset id, localized name, formatted scale */
   coarse: Array<{ id: string; name: string; scale: string }>;
   /** a gaps layer (areas with no open geological map) is loaded */

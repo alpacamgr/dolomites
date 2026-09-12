@@ -35,7 +35,7 @@ size_bytes: 20186737
 checksum:
   algorithm: sha256
   value: "7b51939bba858ea6a1698ec0827b0047b713fce8b2e212e714aaf421df8a2c24"  # c0501031_litologiareg.geojson
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - A regional lithology map at 1:250,000: polygons are lithological classes (uc_lege), much coarser than the
     1:10,000 provincial maps. In the merged archive it only fills what South Tyrol and Trentino do not cover

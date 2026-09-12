@@ -9,13 +9,15 @@
   import type { IcsChart } from '@/lib/content/ics';
   import { groupGeologyKey, intervalName, type GeologyFocus, type GeologyKeyData } from '@/lib/story/geologyKey';
 
-  let { data, ics, uiStrings, locale, emphasis, onFocus }: {
+  let { data, ics, uiStrings, locale, emphasis, chapterId, onFocus }: {
     data: GeologyKeyData;
     ics: IcsChart | null;
     uiStrings: Record<string, string>;
     locale: string;
     /** the chapter's emphasis interval (Ma, older first) */
     emphasis?: { start_ma: number; end_ma: number };
+    /** the active chapter; a hover or pin never survives a chapter change */
+    chapterId?: string;
     onFocus: (focus: GeologyFocus | null) => void;
   } = $props();
 
@@ -39,6 +41,10 @@
     return fill(t(data.coarse.length > 1 ? 'geology_key.coarse_many' : 'geology_key.coarse_one'), { list });
   });
 
+  let undatedLabel = $derived(data.withheld
+    ? t(data.undated ? 'geology_key.undated_withheld' : 'geology_key.withheld')
+    : t('geology_key.undated'));
+
   let hovered = $state<string | null>(null);
   let pinned = $state<string | null>(null);
   /** row that drives the map: hover, else a tapped row, else the chapter emphasis */
@@ -60,6 +66,7 @@
 
   // a new chapter drops a stale hover or pin (the key data refreshes while hovering, so rows do not reset it)
   $effect(() => {
+    void chapterId;
     void emphasis;
     return () => {
       if (hovered || pinned) { hovered = null; pinned = null; onFocus(null); }
@@ -79,7 +86,7 @@
   {/if}
   <ul class="gkey-list">
     {#each otherRows as r (r.id)}{@render row(r.id, r.label, 'strip', r.colors)}{/each}
-    {#if data.undated}{@render row('undated', t('geology_key.undated'), 'undated', [])}{/if}
+    {#if data.undated || data.withheld}{@render row('undated', undatedLabel, 'undated', [])}{/if}
     <li>
       <span class="gkey-row static">
         {#if data.gapsLayer}
@@ -90,7 +97,7 @@
       </span>
     </li>
   </ul>
-  {#if rows.length === 0 && !data.undated}
+  {#if rows.length === 0 && !data.undated && !data.withheld}
     <p class="gkey-note">{t('geology_key.none')}</p>
   {/if}
   {#if coarseNote}<p class="gkey-note coarse">{coarseNote}</p>{/if}

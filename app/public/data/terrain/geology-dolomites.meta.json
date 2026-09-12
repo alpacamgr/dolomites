@@ -1,6 +1,6 @@
 {
   "dataset_id": "geology-dolomites",
-  "label": "observed",
+  "label": "interpreted",
   "source_ref": [
     "bz-geology-carg",
     "pat-geology-carta-geologica",
@@ -11,10 +11,10 @@
   ],
   "attribution": "Provincia autonoma di Bolzano - Alto Adige, Cartografia provinciale - P_BZ Carta geologica CARG - CC0 1.0 | Dati elaborati dal Servizio geologico della Provincia autonoma di Trento - Carta Geologica della PAT - CC BY 4.0 (modified) | Regione del Veneto - Database delle litologie scala 1:250.000 - IODL 2.0 (https://www.dati.gov.it/content/italian-open-data-license-v20) (modified) | Federal Office of Topography swisstopo - GeoCover (modified) | ISPRA - Servizio Geologico d'Italia, Carta Geologica d'Italia 1:100.000 (dataset INSPIRE) - CC BY 4.0 (modified) | © GeoSphere Austria - INSPIRE Geologische Einheiten 1:500.000 Österreich - CC BY 4.0 (modified)",
   "license": "CC0 1.0 Universal (bz-geology-carg) + CC BY 4.0 (pat-geology-carta-geologica) + IODL 2.0 (veneto-litologia-250k) + swisstopo terms of use for free geodata (OGD) (swisstopo-geocover) + CC BY 4.0 (ispra-geologia-100k-inspire) + CC BY 4.0 (geosphere-geologicunits-500k)",
-  "generated": "2026-09-12",
+  "generated": "2026-09-13",
   "script": "data/scripts/terrain/build_geology_pmtiles.py",
   "archive": "geology-dolomites.pmtiles",
-  "archive_bytes": 71782449,
+  "archive_bytes": 71888386,
   "tile_format": "mvt",
   "layer": "units",
   "crs": "EPSG:3857",
@@ -29,21 +29,21 @@
   "tiles_written": 3537,
   "tiles_empty": 0,
   "tile_bytes_per_zoom": {
-    "8": 806316,
-    "9": 1906611,
-    "10": 4890341,
-    "11": 8475154,
-    "12": 18223636,
-    "13": 37480994
+    "8": 807684,
+    "9": 1908481,
+    "10": 4895320,
+    "11": 8486410,
+    "12": 18248111,
+    "13": 37542971
   },
   "tile_bytes_per_zoom_note": "gzip-compressed bytes in the PMTiles archive; served_tile_bytes_per_zoom are the raw .pbf files",
   "served_tile_bytes_per_zoom": {
-    "8": 1882651,
-    "9": 4199009,
-    "10": 10135602,
-    "11": 15510533,
-    "12": 29543764,
-    "13": 61583833
+    "8": 1902331,
+    "9": 4240135,
+    "10": 10212223,
+    "11": 15612089,
+    "12": 29674439,
+    "13": 61767709
   },
   "generalisation": {
     "method": "All sources form one polygon coverage (boundaries noded together on a 1e-07 deg grid, faces given to the highest-priority polygon). Per zoom z8-z12, in Web Mercator: units smaller than merge_below_px2 pixels (512 px tiles) are merged into the neighbour with the longest shared edge (the merged unit keeps the attributes of its largest member; no area is dropped), then shapely.coverage_simplify (GEOS CoverageSimplifier, Visvalingam-Whyatt, shared edges simplified once so neighbours stay edge-matched). z13 is unsimplified. Tiles clip the zoom's coverage with a buffer of 16/4096 tile units and quantize to 4096; shared vertices quantize identically, so no gaps open between neighbours.",
@@ -227,7 +227,7 @@
       "scale_denominator": 25000,
       "coarser_than_1_25000": false,
       "scale_note": null,
-      "label": "observed",
+      "label": "interpreted",
       "clipping": {
         "features_in": 66054,
         "features_outside_bbox": 0,
@@ -240,21 +240,26 @@
         "polygons": 66051,
         "with_color": 65425,
         "age_basis": {
-          "source": 65492,
-          "None": 559
+          "source": 65425,
+          "none": 559,
+          "withheld": 67
+        },
+        "age_withheld_reason": {
+          "unmappable_interval": 67
         }
       },
       "ages": {
         "source_features": 66133,
         "units": 66054,
         "units_both_bounds": 65143,
-        "units_one_bound": 352,
-        "units_no_bound": 559,
+        "units_one_bound": 285,
+        "units_no_bound": 626,
         "units_without_age_string": 559,
         "units_with_color": 65428,
         "age_basis_units": {
-          "source": 65495,
-          "None": 559
+          "source": 65428,
+          "none": 559,
+          "withheld": 67
         },
         "units_dated_by_join_or_rule": {},
         "unmapped_strings": {
@@ -266,6 +271,9 @@
             "units": 67,
             "reason": "Tertiary is not a unit of the ICS chart (replaced by Paleogene + Neogene), and its upper bound depends on whether the pre-2009 or the current base of the Quaternary is meant."
           }
+        },
+        "age_withheld_reason_units": {
+          "unmappable_interval": 67
         },
         "units_with_swapped_age_fields": 255,
         "swapped_age_field_pairs": {
@@ -287,7 +295,7 @@
       "scale_denominator": 10000,
       "coarser_than_1_25000": false,
       "scale_note": null,
-      "label": "observed",
+      "label": "interpreted",
       "clipping": {
         "features_in": 225999,
         "features_outside_bbox": 13881,
@@ -301,8 +309,13 @@
         "with_color": 184841,
         "age_basis": {
           "source": 183427,
-          "None": 16482,
+          "withheld": 11662,
+          "none": 4820,
           "legend_join": 1414
+        },
+        "age_withheld_reason": {
+          "open_range": 11543,
+          "unmappable_interval": 119
         }
       },
       "ages": {
@@ -315,12 +328,12 @@
         "units_with_color": 206709,
         "age_basis_units": {
           "source": 204992,
-          "None": 19290,
+          "withheld": 14118,
+          "none": 5172,
           "legend_join": 1717
         },
         "units_dated_by_join_or_rule": {
           "Formazione del Monte Fernazza facies without an age statement (IMFb-IMFg)": 1425,
-          "Bodies of the Predazzo and Monzoni plutons": 775,
           "Porfiroidi del Comelico (GPC)": 292
         },
         "unmapped_strings": {
@@ -356,6 +369,13 @@
             "units": 2,
             "reason": "Older part 'Carbonifero sup.' stays null for the same reason as in the South Tyrol table (no ICS 'Upper Carboniferous')."
           }
+        },
+        "age_withheld_reason_units": {
+          "open_range": 13994,
+          "unmappable_interval": 124
+        },
+        "units_dated_from_own_legend_group_headings": {
+          "Bodies of the Predazzo and Monzoni plutons": 775
         },
         "units_age_from_parent_formation": 4204,
         "legend_units_without_age_statement_or_join": [
@@ -609,7 +629,7 @@
       "scale_denominator": 250000,
       "coarser_than_1_25000": true,
       "scale_note": "1:250,000 (digitised from 1:100,000 author originals): much coarser than the 1:10,000-1:25,000 provincial maps; its polygons are not detailed mapping at z11-13.",
-      "label": "observed",
+      "label": "interpreted",
       "clipping": {
         "features_in": 2608,
         "features_outside_bbox": 0,
@@ -625,8 +645,9 @@
           "source": 1144,
           "class_rule": 773,
           "legend_join": 604,
-          "None": 33
-        }
+          "none": 33
+        },
+        "age_withheld_reason": {}
       },
       "ages": {
         "source_features": 5048,
@@ -641,7 +662,7 @@
           "source": 1179,
           "class_rule": 788,
           "legend_join": 608,
-          "None": 33
+          "none": 33
         },
         "units_dated_by_join_or_rule": {
           "Depositi eluvio-colluviali, detritici e di frana": 386,
@@ -674,7 +695,8 @@
             "units": 2,
             "reason": "Written younger first. The older part 'Carbonifero sup.' stays null for the same reason as in the South Tyrol table (no ICS 'Upper Carboniferous'); the younger part 'Permiano inf.' -> Cisuralian, the same judgement call as the South Tyrol table."
           }
-        }
+        },
+        "age_withheld_reason_units": {}
       }
     },
     {
@@ -690,7 +712,7 @@
       "scale_denominator": 25000,
       "coarser_than_1_25000": false,
       "scale_note": null,
-      "label": "observed",
+      "label": "interpreted",
       "clipping": {
         "features_in": 5994,
         "features_outside_bbox": 0,
@@ -703,21 +725,26 @@
         "polygons": 5984,
         "with_color": 5602,
         "age_basis": {
-          "source": 5789,
-          "None": 195
+          "source": 5602,
+          "withheld": 382
+        },
+        "age_withheld_reason": {
+          "unmappable_interval": 187,
+          "open_range": 121,
+          "contradiction": 74
         }
       },
       "ages": {
         "source_features_in_bbox": 5994,
         "units": 5994,
         "units_both_bounds": 5606,
-        "units_one_bound": 187,
-        "units_no_bound": 201,
+        "units_one_bound": 0,
+        "units_no_bound": 388,
         "units_without_age_string": 0,
         "units_with_color": 5606,
         "age_basis_units": {
-          "source": 5793,
-          "None": 201
+          "source": 5606,
+          "withheld": 388
         },
         "units_dated_by_join_or_rule": {},
         "unmapped_strings": {
@@ -725,6 +752,11 @@
             "units": 187,
             "reason": "no chart unit"
           }
+        },
+        "age_withheld_reason_units": {
+          "unmappable_interval": 187,
+          "open_range": 121,
+          "contradiction": 80
         },
         "age_rule_polygons_loaded": {
           "source": 5793,
@@ -755,7 +787,7 @@
       "scale_denominator": 100000,
       "coarser_than_1_25000": true,
       "scale_note": "1:100,000 (sheets surveyed 1880-1980): much coarser than the 1:10,000-1:25,000 provincial maps; its polygons are not detailed mapping at z11-13.",
-      "label": "observed",
+      "label": "interpreted",
       "clipping": {
         "features_in": 45118,
         "features_outside_bbox": 0,
@@ -766,11 +798,17 @@
       "features_in_archive": 16005,
       "archive_polygons": {
         "polygons": 16005,
-        "with_color": 9257,
+        "with_color": 7845,
         "age_basis": {
-          "source": 9080,
-          "None": 6748,
-          "legend_join": 177
+          "withheld": 8126,
+          "source": 7666,
+          "legend_join": 179,
+          "none": 34
+        },
+        "age_withheld_reason": {
+          "metamorphic_event": 3827,
+          "contradiction": 2893,
+          "young_bedrock": 1406
         }
       },
       "ages": {
@@ -779,15 +817,16 @@
         "polygons_near_bbox": 45118,
         "units_near_bbox": 1072,
         "units": 45118,
-        "units_both_bounds": 29826,
+        "units_both_bounds": 27804,
         "units_one_bound": 0,
-        "units_no_bound": 15292,
-        "units_without_age_string": 15675,
-        "units_with_color": 29826,
+        "units_no_bound": 17314,
+        "units_without_age_string": 480,
+        "units_with_color": 27804,
         "age_basis_units": {
-          "source": 29443,
-          "None": 15292,
-          "legend_join": 383
+          "source": 27386,
+          "withheld": 17252,
+          "legend_join": 418,
+          "none": 62
         },
         "units_dated_by_join_or_rule": {
           "formazione a bellerophon": 92,
@@ -795,30 +834,47 @@
           "arenarie quarzose": 74,
           "ortogneiss del gran  veneziano": 34,
           "argillite di lozio": 25,
+          "granodioriti": 22,
           "carniola di bòvegno": 20,
           "rosso ammonitico veronese": 19,
           "scisti argillosi rossi": 10,
           "calcare di m. spitz": 10,
           "dolomia dello sciliar": 7,
+          "granito di monte croce": 7,
+          "calcari bianchi": 6,
           "calcare di quattervals": 2
         },
         "unmapped_strings": {},
+        "age_withheld_reason_units": {
+          "contradiction": 8345,
+          "metamorphic_event": 6880,
+          "young_bedrock": 2003,
+          "unmappable_interval": 24
+        },
         "age_rule_polygons_loaded": {
-          "source": 28501,
-          "contradiction_null": 8317,
-          "event_not_formation": 6889,
-          "contradiction_quaternary_kept": 942,
-          "contradiction_join": 383,
+          "source": 26357,
+          "contradiction_null": 8345,
+          "event_not_formation": 6880,
+          "young_bedrock": 2003,
+          "contradiction_quaternary_kept": 908,
+          "contradiction_join": 389,
+          "young_bedrock_cited": 121,
           "no_geological_age": 62,
+          "young_bedrock_join": 29,
           "age_unmapped": 24
         },
         "review": {
-          "source": 672,
-          "contradiction_null": 232,
-          "event_not_formation": 137,
-          "contradiction_join": 18,
-          "contradiction_quaternary_kept": 10,
+          "source": 590,
+          "contradiction_null": 235,
+          "event_not_formation": 136,
+          "young_bedrock": 73,
+          "contradiction_join": 19,
+          "join_from_name": 17,
+          "young_bedrock_cited": 8,
+          "contradiction_quaternary_kept": 6,
+          "join_from_description": 4,
           "no_geological_age": 2,
+          "young_bedrock_join": 2,
           "age_unmapped": 1
         }
       }
@@ -836,7 +892,7 @@
       "scale_denominator": 500000,
       "coarser_than_1_25000": true,
       "scale_note": "1:500,000: much coarser than the 1:10,000-1:25,000 provincial maps; its polygons are not detailed mapping at z11-13.",
-      "label": "observed",
+      "label": "interpreted",
       "clipping": {
         "features_in": 647,
         "features_outside_bbox": 0,
@@ -850,7 +906,11 @@
         "with_color": 563,
         "age_basis": {
           "source": 563,
-          "None": 81
+          "none": 77,
+          "withheld": 4
+        },
+        "age_withheld_reason": {
+          "metamorphic_event": 4
         }
       },
       "ages": {
@@ -859,14 +919,18 @@
         "units_both_bounds": 566,
         "units_one_bound": 0,
         "units_no_bound": 81,
-        "units_without_age_string": 81,
+        "units_without_age_string": 77,
         "units_with_color": 566,
         "age_basis_units": {
           "source": 566,
-          "None": 81
+          "none": 77,
+          "withheld": 4
         },
         "units_dated_by_join_or_rule": {},
         "unmapped_strings": {},
+        "age_withheld_reason_units": {
+          "metamorphic_event": 4
+        },
         "age_rule_polygons_loaded": {
           "source": 566,
           "null_unit": 77,
@@ -895,13 +959,14 @@
   "properties_schema": {
     "unit_name": "unit name: NOME_IT_1 (South Tyrol), nome (Trentino), depositi_a (Veneto; lists the formations of a lithological class), LITSTRAT or RUNC_LITSTRAT, else the lithology (swisstopo), GeologicUnit name (ISPRA; see the contradictions list: some ISPRA names do not match their description), legend description (GeoSphere)",
     "unit_code": "map symbol: SIGLA_1 (South Tyrol), sigla_cart (Trentino), uc_lege (Veneto legend class), SYMBOL (swisstopo), GeologicUnit gml:id e.g. GU_45 (ISPRA), inspireId localId (GeoSphere)",
-    "age_min_ma": "younger bound: end_ma of the younger ICS interval (chart 2026-06) of the unit's age; null if absent, unmapped or withheld by a rule",
-    "age_max_ma": "older bound: start_ma of the older ICS interval (chart 2026-06); null if absent, unmapped or withheld. age_min_ma <= age_max_ma",
-    "age_label": "the source's own age text, only when age_basis is 'source': 'MAX - MIN' ETA_CODICE_*_IT (South Tyrol, reordered by chart age where swapped); the 'Eta:' statement of the unit in the PAT unit legend (Trentino); the parenthesised age in depositi_a (Veneto); 'CHRONO_BASE - CHRONO_TOP' (swisstopo, German); 'olderNamedAge - youngerNamedAge' (ISPRA, GeoSphere). null for legend_join and class_rule ages",
-    "age_basis": "how the age was obtained: 'source' = stated by the polygon's own map (its attributes or unit legend); 'legend_join' = the map names formations without a usable age, joined by formation name to another cited legend (PAT unit legend, South Tyrol CARG attributes, the Veneto classes' own ages, ISPRA catalogue/sheet notes), envelope of the formations' ages; 'class_rule' = deposit-type rule with a cited basis (Quaternary deposits); null = no age (none given, unmappable, or withheld: metamorphic or other non-formation events, contradictory attributes). Rows and evidence: geology_age_mapping.json",
+    "age_min_ma": "younger bound in Ma: end_ma of the younger ICS interval (chart 2026-06); null unless the unit is dated (age_basis source, legend_join or class_rule)",
+    "age_max_ma": "older bound in Ma: start_ma of the older ICS interval (chart 2026-06); null if the older bound is unmappable or the unit is not dated. age_min_ma <= age_max_ma",
+    "age_label": "the source's own age text: 'MAX - MIN' ETA_CODICE_*_IT (South Tyrol); the 'Eta:' statement of the PAT unit legend (Trentino); the parenthesised age in depositi_a (Veneto); 'CHRONO_BASE - CHRONO_TOP' (swisstopo, German); 'olderNamedAge - youngerNamedAge' (ISPRA, GeoSphere). Present when age_basis is 'source' or 'withheld'; null for legend_join, class_rule and none",
+    "age_basis": "'source' = dated with the age stated by the polygon's own map; 'legend_join' = dated by joining formation names to another cited legend (envelope of their ages); 'class_rule' = dated by a deposit-type rule with a cited basis; 'withheld' = the source states an age that this site does not use for colour (see age_withheld_reason; age_label keeps the source's text, numbers and colour are null); 'none' = the source gives no usable age (no age, or water, ice, anthropic or unmappable ground)",
     "lithology": "TEG_DESC_I unit type (South Tyrol); deposit type 'denom' for Quaternary units, null for bedrock (Trentino); materiali_ (Veneto); LITHO_MAIN / RUNC_LITHO (swisstopo, German); INSPIRE lithology terms of the unit (ISPRA); representativeLithology (GeoSphere)",
-    "color": "ICS chart 2026-06 colour of the younger interval of the unit's age (stage colour for a stage, series colour for a series, ...); null if there is no younger bound (never borrowed from the older bound)",
-    "source": "dataset id of the polygon: bz-geology-carg, pat-geology-carta-geologica, veneto-litologia-250k, swisstopo-geocover, ispra-geologia-100k-inspire, geosphere-geologicunits-500k"
+    "color": "ICS chart 2026-06 colour of the younger interval of a dated unit; null for withheld and none",
+    "source": "dataset id of the polygon: bz-geology-carg, pat-geology-carta-geologica, veneto-litologia-250k, swisstopo-geocover, ispra-geologia-100k-inspire, geosphere-geologicunits-500k",
+    "age_withheld_reason": "only for age_basis 'withheld', else null: 'metamorphic_event' (the source's age is a metamorphic, deformation or subduction event: ISPRA metamorphicProcess/faulting, GeoSphere subduction); 'contradiction' (the source's attributes contradict each other: ISPRA name/description/age review, swisstopo description vs age fields or legend); 'young_bedrock' (ISPRA gives a Cenozoic or Quaternary age to volcanic, plutonic, dyke, metamorphic or lithified bedrock without a cited Cenozoic body); 'unmappable_interval' (a stated age with no ICS chart interval for its younger bound, e.g. 'Terziario (?)', 'frühes Paläozoikum', 'Unknown'); 'open_range' (an age open on one side or spanning eons, e.g. 'pre-Permiano', 'post-Carbonifero', Proterozoikum-Känozoikum)"
   },
   "ages": {
     "ics_chart_version": "2026-06",
@@ -983,30 +1048,38 @@
         "accessed": "2026-09-12"
       }
     },
-    "honesty_note": "Polygons and their stratigraphic attributions are the maps' (observed). Numeric ages and colours are the ICS chart's boundary ages and colours for the intervals named, not ages measured or published by the maps. Qualifiers (p.p., ?, inf./sup. on a stage, Trentino substages) are resolved to full chart intervals, so the ranges are outer envelopes. age_basis says where each age comes from. 'source': Trentino ages come from the Servizio Geologico's unit legend (joined by map symbol; members without their own statement take the age of their formation), South Tyrol ages from the CARG attributes, Veneto ages from the age text of its lithological classes, swisstopo ages from CHRONO_BASE (older) and CHRONO_TOP (younger), verified against swisstopo's data model, ISPRA and GeoSphere ages from the INSPIRE GeologicEvent. 'legend_join': Veneto classes that list formations without an age take the envelope of those formations' ages in another cited legend (and a few Trentino units without a statement take the age of the same formation elsewhere); classes ending in 'et al.' are dated from the named formations only. 'class_rule': Veneto Quaternary deposit classes (moraine, alluvial, fluvioglacial, lacustrine, eluvial-colluvial, scree, landslide) take the Quaternary as a whole, from the PAT legend's grouping of the same deposit types as 'Depositi quaternari'. Withheld (uncoloured): ISPRA units whose event is metamorphic (the age is then the metamorphism, e.g. orthogneiss 'Cenozoic') or faulting/unknown; ISPRA units whose name, description and age contradict each other or whose age disagrees with the detailed maps where both exist (unless the unit name, or for a generic name the one formation its description names, is unambiguous in the South Tyrol/Trentino legends, then legend_join); GeoSphere units dated by a subduction event, glaciers and water; swisstopo open ranges (Proterozoic-Cenozoic, whole Phanerozoic) and rows whose description contradicts the age fields. Water, anthropic deposits, unmappable areas and open-ended ages ('pre-Permiano') stay uncoloured. Every join, rule and ISPRA decision is recorded in the mapping table; the build recomputes each envelope from the evidence.",
+    "honesty_note": "Polygons and their stratigraphic attributions are the maps' (interpreted: drawn by researchers from field evidence). Numeric ages and colours are the ICS chart's boundary ages and colours for the intervals named, not ages measured or published by the maps. Qualifiers (p.p., ?, inf./sup. on a stage, Trentino substages) are resolved to full chart intervals, so the ranges are outer envelopes. age_basis says where each age comes from. 'source': Trentino ages come from the Servizio Geologico's unit legend (joined by map symbol; members without their own statement take the age of their formation), South Tyrol ages from the CARG attributes, Veneto ages from the age text of its lithological classes, swisstopo ages from CHRONO_BASE (older) and CHRONO_TOP (younger), verified against swisstopo's data model, ISPRA and GeoSphere ages from the INSPIRE GeologicEvent. 'legend_join': Veneto classes that list formations without an age take the envelope of those formations' ages in another cited legend (and a few Trentino units without a statement take the age of the same formation elsewhere); classes ending in 'et al.' are dated from the named formations only. 'class_rule': Veneto Quaternary deposit classes (moraine, alluvial, fluvioglacial, lacustrine, eluvial-colluvial, scree, landslide) take the Quaternary as a whole, from the PAT legend's grouping of the same deposit types as 'Depositi quaternari'. Withheld (uncoloured): ISPRA units whose event is metamorphic (the age is then the metamorphism, e.g. orthogneiss 'Cenozoic') or faulting/unknown; ISPRA units whose name, description and age contradict each other or whose age disagrees with the detailed maps where both exist (unless the unit name, or for a generic name the one formation its description names, is unambiguous in the South Tyrol/Trentino legends, then legend_join); GeoSphere units dated by a subduction event, glaciers and water; swisstopo open ranges (Proterozoic-Cenozoic, whole Phanerozoic) and rows whose description contradicts the age fields. Water, anthropic deposits, unmappable areas and open-ended ages ('pre-Permiano') stay uncoloured. Every join, rule and ISPRA decision is recorded in the mapping table; the build recomputes each envelope from the evidence. Since 2026-09-13 every uncoloured unit says why: age_basis 'withheld' with age_withheld_reason where the source states an age the site does not use, 'none' where the source gives no usable age. ISPRA 1:100,000 units with a Cenozoic or Quaternary age on volcanic, plutonic, dyke, metamorphic or lithified bedrock (e.g. the Bolzano porphyries and the Brixen granite given as 'Cenozoic') are withheld as young_bedrock unless a formation name joins to the South Tyrol / Trentino legends or the source gives a specific epoch that a cited authority confirms for that body (Adamello-Presanella tonalites, Paleogene basalts of the Veneto).",
     "ispra_review": {
       "rules": [
         "One decision per GeologicUnit that intersects the terrain bbox, written by data/scripts/terrain/review_ispra_100k_units.py (see its docstring for checks C1-C4 and the decision order).",
         "Ages are used only for formation events (event_process 'formation'); metamorphicProcess, faulting and unknown events give null, because their age is the metamorphism or deformation (e.g. orthogneiss 'Cenozoic').",
         "Units whose name, description and age contradict each other (C1-C3) or whose age disagrees with the detailed South Tyrol/Trentino/Veneto maps where both exist (C4) are left uncoloured, unless the name matches exactly one formation of the South Tyrol / Trentino legends (legend_join with that age, join_from 'name'), or the name is generic and the description names exactly one formation (inline or in parentheses) that matches exactly one map symbol, with no C1/C2 contradiction between name and description (legend_join, join_from 'description'), or both name and description are Quaternary deposits with a Quaternary age (ISPRA age kept).",
         "Check C4 reads the ages of the detailed maps from the previous build, so its flags can change when those ages change (e.g. after the Veneto legend joins of 2026-09-12).",
+        "Young bedrock (2026-09-13): a unit with a formation event whose ISPRA age lies within 0-66 Ma and whose name or description names volcanic, plutonic, dyke, metamorphic or (for a bare 'Cenozoic') lithified bedrock is withheld (withheld_reason young_bedrock), unless its name or description joins unambiguously to a South Tyrol / Trentino formation (rule young_bedrock_join) or its age names a specific epoch/period and a cited authority dates the named body in the Cenozoic (rule young_bedrock_cited, see young_bedrock_exception). Quaternary deposit names are exempt (their clasts may be bedrock).",
+        "withheld_reason for null decisions: contradiction_null -> contradiction, event_not_formation -> metamorphic_event (metamorphic and faulting events), young_bedrock -> young_bedrock, age_unmapped -> unmappable_interval; no_geological_age (glaciers, water, anthropic ground) has none (tile age_basis 'none').",
         "The unit name shown (unit_name) is ISPRA's GeologicUnit name even where it contradicts the description; the lithology property lists the INSPIRE lithology terms, which follow the description."
       ],
       "units_in_archive_by_rule": {
-        "source": 412,
-        "contradiction_null": 175,
-        "event_not_formation": 109,
+        "source": 350,
+        "contradiction_null": 179,
+        "event_not_formation": 108,
+        "young_bedrock": 60,
         "contradiction_join": 14,
-        "contradiction_quaternary_kept": 10,
-        "no_geological_age": 2
+        "contradiction_quaternary_kept": 6,
+        "no_geological_age": 2,
+        "young_bedrock_cited": 2,
+        "young_bedrock_join": 1
       },
       "polygons_in_archive_by_rule": {
-        "source": 8858,
-        "event_not_formation": 3833,
-        "contradiction_null": 2881,
-        "contradiction_quaternary_kept": 222,
+        "source": 7438,
+        "event_not_formation": 3827,
+        "contradiction_null": 2893,
+        "young_bedrock": 1406,
+        "contradiction_quaternary_kept": 210,
         "contradiction_join": 177,
-        "no_geological_age": 34
+        "no_geological_age": 34,
+        "young_bedrock_cited": 18,
+        "young_bedrock_join": 2
       },
       "contradictions_in_archive": [
         {
@@ -2354,9 +2427,9 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "applied_age": "Quaternary - Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "applied_age": null
         },
         {
           "unit": "GU_132",
@@ -2675,9 +2748,9 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "applied_age": "Quaternary - Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "applied_age": null
         },
         {
           "unit": "GU_151",
@@ -2732,9 +2805,9 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "applied_age": "Quaternary - Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "applied_age": null
         },
         {
           "unit": "GU_232",
@@ -3660,9 +3733,9 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "applied_age": "Quaternary - Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "applied_age": null
         },
         {
           "unit": "GU_212",
@@ -3935,16 +4008,21 @@
       ],
       "review": {
         "script": "data/scripts/terrain/review_ispra_100k_units.py",
-        "generated": "2026-09-12",
+        "generated": "2026-09-13",
         "chart": "2026-06",
         "units_in_bbox": 1072,
         "counts": {
-          "source": 672,
-          "contradiction_null": 232,
-          "event_not_formation": 137,
-          "contradiction_join": 18,
-          "contradiction_quaternary_kept": 10,
+          "source": 590,
+          "contradiction_null": 235,
+          "event_not_formation": 136,
+          "young_bedrock": 73,
+          "contradiction_join": 19,
+          "join_from_name": 17,
+          "young_bedrock_cited": 8,
+          "contradiction_quaternary_kept": 6,
+          "join_from_description": 4,
           "no_geological_age": 2,
+          "young_bedrock_join": 2,
           "age_unmapped": 1
         },
         "thresholds": {
@@ -3955,7 +4033,8 @@
           "schlern": "sciliar"
         }
       }
-    }
+    },
+    "basement_ages_across_sources": "One rule for all sources: an age is withheld when the source's own attributes say it is a metamorphic or deformation event (ISPRA eventProcess metamorphicProcess or faulting; GeoSphere eventProcess subduction), an open range ('pre-Permiano', Proterozoikum-Känozoikum) or contradictory; otherwise the stated range is taken as the formation (protolith) age. The sources describe the same crystalline basement differently, so colours still jump at their borders: GeoSphere gives formation ranges ('Altkristallin' paragneiss 'deposition' Neoproterozoic-Devonian, orthogneiss 'magmatic process' Ordovician-Carboniferous), swisstopo gives chronostratigraphic ranges (e.g. Proterozoikum-Paläozoikum), South Tyrol CARG gives 'Paleozoico' for phyllites and orthogneisses, while the ISPRA 1:100,000 map gives a metamorphic event age (withheld) and Trentino only 'pre-Permiano' (withheld, open_range). No source gives both the protolith and the metamorphic age, so the inconsistency is not harmonised; the coloured basement on the Austrian and Swiss side and the uncoloured basement on the Italian 1:100,000 side of the border reflect how each map records age, not a geological boundary."
   },
   "verification": {
     "points": {
@@ -3989,7 +4068,7 @@
             "unit_code": "ghi",
             "unit_name": "ghiacciaio",
             "age_label": null,
-            "age_basis": null,
+            "age_basis": "none",
             "age_min_ma": null,
             "age_max_ma": null,
             "color": null
@@ -4905,91 +4984,91 @@
           {
             "zoom": 8,
             "covered": 2991,
-            "dated": 2605,
-            "dated_share_of_covered": 0.8709,
-            "dated_share_delta_vs_max_pp": -0.41,
+            "dated": 2562,
+            "dated_share_of_covered": 0.8566,
+            "dated_share_delta_vs_max_pp": -0.48,
             "missing_vs_max": 3,
             "missing_vs_max_pct": 0.1,
             "extra_vs_max": 1,
             "overlap_points": 0,
             "tiles": 9,
-            "bytes": 1882651,
-            "max_tile_bytes": 801218,
+            "bytes": 1902331,
+            "max_tile_bytes": 808318,
             "max_tile": "8/136/90.pbf"
           },
           {
             "zoom": 9,
             "covered": 2988,
-            "dated": 2609,
-            "dated_share_of_covered": 0.8732,
-            "dated_share_delta_vs_max_pp": -0.19,
+            "dated": 2567,
+            "dated_share_of_covered": 0.8591,
+            "dated_share_delta_vs_max_pp": -0.22,
             "missing_vs_max": 5,
             "missing_vs_max_pct": 0.17,
             "extra_vs_max": 0,
             "overlap_points": 0,
             "tiles": 20,
-            "bytes": 4199009,
-            "max_tile_bytes": 853737,
+            "bytes": 4240135,
+            "max_tile_bytes": 859281,
             "max_tile": "9/271/181.pbf"
           },
           {
             "zoom": 10,
             "covered": 2989,
-            "dated": 2619,
-            "dated_share_of_covered": 0.8762,
-            "dated_share_delta_vs_max_pp": 0.12,
+            "dated": 2575,
+            "dated_share_of_covered": 0.8615,
+            "dated_share_delta_vs_max_pp": 0.01,
             "missing_vs_max": 4,
             "missing_vs_max_pct": 0.13,
             "extra_vs_max": 0,
             "overlap_points": 0,
             "tiles": 56,
-            "bytes": 10135602,
-            "max_tile_bytes": 879705,
+            "bytes": 10212223,
+            "max_tile_bytes": 881919,
             "max_tile": "10/544/363.pbf"
           },
           {
             "zoom": 11,
             "covered": 2993,
-            "dated": 2625,
-            "dated_share_of_covered": 0.877,
+            "dated": 2584,
+            "dated_share_of_covered": 0.8633,
             "dated_share_delta_vs_max_pp": 0.2,
             "missing_vs_max": 0,
             "missing_vs_max_pct": 0.0,
             "extra_vs_max": 0,
             "overlap_points": 0,
             "tiles": 195,
-            "bytes": 15510533,
-            "max_tile_bytes": 557584,
+            "bytes": 15612089,
+            "max_tile_bytes": 558700,
             "max_tile": "11/1088/727.pbf"
           },
           {
             "zoom": 12,
             "covered": 2993,
-            "dated": 2619,
-            "dated_share_of_covered": 0.875,
+            "dated": 2578,
+            "dated_share_of_covered": 0.8613,
             "dated_share_delta_vs_max_pp": 0.0,
             "missing_vs_max": 0,
             "missing_vs_max_pct": 0.0,
             "extra_vs_max": 0,
             "overlap_points": 0,
             "tiles": 672,
-            "bytes": 29543764,
-            "max_tile_bytes": 429384,
+            "bytes": 29674439,
+            "max_tile_bytes": 430516,
             "max_tile": "12/2177/1455.pbf"
           },
           {
             "zoom": 13,
             "covered": 2993,
-            "dated": 2619,
-            "dated_share_of_covered": 0.875,
+            "dated": 2578,
+            "dated_share_of_covered": 0.8613,
             "dated_share_delta_vs_max_pp": 0.0,
             "missing_vs_max": 0,
             "missing_vs_max_pct": 0.0,
             "extra_vs_max": 0,
             "overlap_points": 0,
             "tiles": 2585,
-            "bytes": 61583833,
-            "max_tile_bytes": 438093,
+            "bytes": 61767709,
+            "max_tile_bytes": 438186,
             "max_tile": "13/4355/2910.pbf"
           }
         ],
@@ -4998,30 +5077,38 @@
             "covered": 427,
             "undated": 4,
             "age_basis:source": 423,
-            "age_basis:None": 4,
+            "age_basis:none": 4,
             "undated_share": 0.0094
           },
           "geosphere-geologicunits-500k": {
             "covered": 677,
             "undated": 87,
             "age_basis:source": 590,
-            "age_basis:None": 87,
+            "age_basis:none": 86,
+            "age_basis:withheld": 1,
+            "withheld:metamorphic_event": 1,
             "undated_share": 0.1285
           },
           "ispra-geologia-100k-inspire": {
             "covered": 696,
-            "undated": 222,
-            "age_basis:source": 469,
-            "age_basis:None": 222,
+            "undated": 263,
+            "age_basis:source": 428,
+            "age_basis:withheld": 257,
+            "withheld:contradiction": 53,
+            "withheld:metamorphic_event": 160,
+            "withheld:young_bedrock": 44,
+            "age_basis:none": 6,
             "age_basis:legend_join": 5,
-            "undated_share": 0.319
+            "undated_share": 0.3779
           },
           "pat-geology-carta-geologica": {
             "covered": 601,
             "undated": 53,
             "age_basis:source": 545,
-            "age_basis:None": 53,
+            "age_basis:none": 13,
             "age_basis:legend_join": 3,
+            "age_basis:withheld": 40,
+            "withheld:open_range": 40,
             "undated_share": 0.0882
           },
           "swisstopo-geocover": {
@@ -5036,7 +5123,7 @@
             "age_basis:source": 268,
             "age_basis:class_rule": 178,
             "age_basis:legend_join": 92,
-            "age_basis:None": 8,
+            "age_basis:none": 8,
             "undated_share": 0.0147
           }
         },
@@ -5052,15 +5139,15 @@
             "fillade quarzifera di bressanone": 34,
             "gneiss biotitico": 22,
             "paragneiss": 17,
+            "graniti, granodioriti e leucotonaliti": 11,
+            "porfidi quarziferi normali": 10,
+            "graniti biotitici": 10,
             "quarziti, quarziti nere, micascisti gneissici conglomeratici": 9,
             "dolomie brecciate giallastre e calcari scuri": 8,
             "calcescisti": 8,
             "filladi quarzose": 7,
             "micascisto muscovitico": 7,
-            "micascisti e paragneis a due miche": 6,
-            "gneiss granitici e granodioritici": 6,
-            "gneiss occhialino": 5,
-            "scisti di edolo": 5
+            "micascisti e paragneis a due miche": 6
           },
           "pat-geology-carta-geologica": {
             "FILLADI E FILLADI QUARZIFERE": 10,
@@ -5082,10 +5169,11 @@
           }
         },
         "total_tiles": 3537,
-        "total_bytes": 122855392
+        "total_bytes": 123408926
       },
       "script": "data/scripts/terrain/check_geology_tiles.py"
     }
   },
-  "preview": "data/processed/terrain/preview/geology-dolomites-by-age.png"
+  "preview": "data/processed/terrain/preview/geology-dolomites-by-age.png",
+  "label_note": "Label 'interpreted' (docs/03-data-policy.md): a geological map is drawn by researchers from field evidence, and the numeric ages and colours are derived by this project from the maps' stage names; the polygons are not measurements."
 }

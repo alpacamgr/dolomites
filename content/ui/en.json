@@ -27,7 +27,7 @@
   "labels": {
     "observed": {
       "title": "Observed",
-      "explanation": "Directly measured today - a lidar surface, a mapped rock unit, a glacier outline."
+      "explanation": "Directly measured today - a lidar surface, a glacier outline."
     },
     "modeled": {
       "title": "Modeled",
@@ -90,7 +90,9 @@
     "none": "No mapped units in view",
     "coarse_one": "Coarser map in view: {list}.",
     "coarse_many": "Coarser maps in view: {list}.",
-    "period_not_given_many": "Period not given: {names}"
+    "period_not_given_many": "Period not given: {names}",
+    "undated_withheld": "Mapped, age not given or not reliable enough to colour",
+    "withheld": "Mapped, age not reliable enough to colour"
   },
   "geology_popup": {
     "unnamed": "Unnamed unit",
@@ -110,7 +112,35 @@
       "swisstopo-geocover": "GeoCover geological vector data (swisstopo)",
       "ispra-geologia-100k-inspire": "Geological Map of Italy (ISPRA)",
       "geosphere-geologicunits-500k": "Geological units of Austria (GeoSphere Austria)"
+    },
+    "withheld": "Not used for colour: {reason}.",
+    "withheld_plain": "Not used for colour.",
+    "withheld_reason": {
+      "metamorphic_event": "it dates a metamorphic or tectonic event, not the rock's formation",
+      "contradiction": "it contradicts other age information for this unit",
+      "young_bedrock": "it assigns a young age to bedrock",
+      "unmappable_interval": "the stated interval has no match in the ICS chart",
+      "open_range": "the stated range is open on one side"
     }
   },
-  "layer_cite_many": "{n} sources"
+  "layer_cite_many": "{n} sources",
+  "map_hint": {
+    "wheel_windows": "Use Ctrl + scroll to zoom the map",
+    "wheel_mac": "Use ⌘ + scroll to zoom the map",
+    "touch": "Use two fingers to move the map",
+    "globe_wheel_windows": "Use Ctrl + scroll to zoom the globe",
+    "globe_wheel_mac": "Use ⌘ + scroll to zoom the globe",
+    "globe_touch": "Use two fingers to turn the globe"
+  },
+  "not_found": {
+    "title": "Page not found",
+    "text": "This page does not exist, or it has moved.",
+    "link": "Go to the story in English"
+  },
+  "sources_list": {
+    "license": "Licence",
+    "data_files": "Data files",
+    "data_files_note": "These curve files ship in the site's data folder; no page draws them at present."
+  },
+  "language_nav": "Language"
 }

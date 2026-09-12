@@ -14,7 +14,7 @@
   import { loadPaleoPath, paleoLatAt, type PaleoPath } from '@/lib/story/paleoLat';
   import { axisSpec, chapterInterval, damp, relax, xPct, LENS_KA, LENS_MA } from '@/lib/story/timeAxis';
 
-  let { locale, uiStrings, ics, chapters, activeIndex, progress, unit, value, reduceMotion = false, onJump }: {
+  let { locale, uiStrings, ics, chapters, activeIndex, progress, unit, value, reduceMotion = false, onJump, onStep }: {
     locale: Locale;
     uiStrings: Record<string, string>;
     ics: IcsChart | null;
@@ -27,11 +27,15 @@
     value: number;
     reduceMotion?: boolean;
     onJump: (index: number) => void;
+    /** relative jump (stepper); the controller counts from a jump still in progress */
+    onStep: (delta: number) => void;
   } = $props();
 
   const t = (k: string, fb?: string) => uiStrings[k] ?? fb ?? k;
   /** Official localized ICS name from content/ui/<lang>.json `ics_names`, English fallback. */
   const tr = (name: string) => uiStrings[`ics_names.${name}`] ?? name;
+  /** Localized ICS name, or null where this language has no official translation (never English in de/it). */
+  const trOpt = (name: string) => uiStrings[`ics_names.${name}`] ?? (locale === 'en' ? name : null);
   const fill = (s: string, v: Record<string, string>) => s.replace(/\{(\w+)\}/g, (_, k) => v[k] ?? '');
   const nfInt = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 });
   const nfDec = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 });
@@ -175,7 +179,7 @@
       const width = Math.max(0, xPct(s.younger, spec, lens) - left);
       // the first band segment after the axis break keeps its label clear of the break slashes
       const afterBreak = s.band && spec.insetMa > 0 && Math.abs(s.older - spec.insetMa) < 1e-6;
-      const label = s.band ? fitLabel(tr(s.name), (width / 100) * axisW - (afterBreak ? 12 : 6)) : '';
+      const label = s.band ? fitLabel(trOpt(s.name) ?? '', (width / 100) * axisW - (afterBreak ? 12 : 6)) : '';
       return { ...s, left, width, label, afterBreak };
     });
   });
@@ -284,9 +288,11 @@
       return { label: names.map(tr).join(' – '), color: use[0]?.color };
     }
     const p = periods.find((x) => contains(x, ageMa));
-    const e = epochs.find((x) => contains(x, ageMa));
+    const found = epochs.find((x) => contains(x, ageMa));
+    // an epoch without an official translation in this language is left out rather than shown in English
+    const e = found && trOpt(found.name) ? found : undefined;
     // "Middle Triassic" already names its period: show the epoch alone (decided on the English names)
-    const label = p && e ? (e.name.includes(p.name) ? tr(e.name) : `${tr(p.name)} · ${tr(e.name)}`) : tr(p?.name ?? e?.name ?? '');
+    const label = p && e ? (e.name.includes(p.name) ? tr(e.name) : `${tr(p.name)} · ${tr(e.name)}`) : p ? tr(p.name) : e ? tr(e.name) : '';
     return { label, color: e?.color ?? p?.color };
   });
 
@@ -332,7 +338,7 @@
         disabled={activeIndex <= 0}
         title={activeIndex > 0 ? chapterLabel(activeIndex - 1) : undefined}
         aria-label={activeIndex > 0 ? `${t('rail.prev')}: ${chapterLabel(activeIndex - 1)}` : t('rail.prev')}
-        onclick={() => onJump(activeIndex - 1)}
+        onclick={() => onStep(-1)}
       ><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5 3 5l3.5 3.5" /></svg></button>
       <span class="step-count" title={fill(t('rail.chapter_n'), { n: String(activeIndex + 1), total: String(chapters.length) })}
         >{activeIndex + 1} / {chapters.length}</span>
@@ -342,7 +348,7 @@
         disabled={activeIndex >= chapters.length - 1}
         title={activeIndex < chapters.length - 1 ? chapterLabel(activeIndex + 1) : undefined}
         aria-label={activeIndex < chapters.length - 1 ? `${t('rail.next')}: ${chapterLabel(activeIndex + 1)}` : t('rail.next')}
-        onclick={() => onJump(activeIndex + 1)}
+        onclick={() => onStep(1)}
       ><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M3.5 1.5 7 5 3.5 8.5" /></svg></button>
     </span>
   </div>
@@ -367,7 +373,7 @@
             style:width="{s.width}%"
             style:background={s.color}
             style:color={s.band ? ink(s.color) : undefined}
-            title={tr(s.name)}
+            title={trOpt(s.name) ?? undefined}
           >{s.label}</span>
         {/each}
         {#if subjectBox}

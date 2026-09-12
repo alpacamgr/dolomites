@@ -24,7 +24,7 @@ download_date: 2026-09-12
 license:
   name: CC BY 4.0
   url: https://creativecommons.org/licenses/by/4.0/
-  attribution_text: "Dati elaborati dal Servizio geologico della Provincia autonoma di Trento"
+  attribution_text: "Dati elaborati dal Servizio geologico della Provincia autonoma di Trento - Carta Geologica della PAT - CC BY 4.0 (modified)"
   derivatives_allowed: true
   share_alike: false
   evidence: |
@@ -56,7 +56,7 @@ checksum:
     docs/Descrizione_delle_Unita_-_Carta_geologica_del_Trentino.pdf: {bytes: 178377, sha256: c94d6976a1b679225883036def234142834074aef1d9fadb0c5a8fadf19b25ac}
     docs/Legenda_Carta_Geologica_del_Trentino.pdf: {bytes: 342659, sha256: e08a111dab47fa418f789ddaef7c1936370cc767df23bc235a8e394da1a1a95a}
     docs/Carta_geologica_del_Trentino_-_aggiornamento_dicembre_2019.pdf: {bytes: 1393014, sha256: ccb9ed42bb96d201bc53a3ee6c11e87b25194eedfa3ddd4584bbdbd5a79d360a}
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - Coverage is the Province of Trento only (Latemar, Predazzo, Tesero, Val di Fassa, Pale di San Martino west side,
     Marmolada south-west flank up to the provincial border).

@@ -33,6 +33,7 @@
         "age_max_ma": "Number",
         "age_label": "String",
         "age_basis": "String",
+        "age_withheld_reason": "String",
         "lithology": "String",
         "color": "String",
         "source": "String"

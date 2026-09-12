@@ -3,7 +3,12 @@
 {
   "name": "dolomites",
   "compatibility_date": "2026-09-12",
+  // the workers.dev address is the site's public URL; preview URLs serve non-production branch builds
+  "workers_dev": true,
+  "preview_urls": true,
   "assets": {
-    "directory": "./app/dist"
+    "directory": "./app/dist",
+    // unknown paths get the localized app/dist/404.html (from app/src/pages/404.astro) with status 404
+    "not_found_handling": "404-page"
   }
 }

@@ -2,6 +2,7 @@
 
 Contract 3 (docs/04-data-contracts.md): each file has
 { "dataset_id", "label", "x", "unit", "series": [{name, values:[[x,y],...]}, ...] }
+plus "source_ref", "attribution" (with "(modified: ...)" where values are derived), "license" and "license_url".
 sorted by x descending (oldest first).
 """
 import csv
@@ -54,8 +55,10 @@ def build_phanda():
             'attribution': ('Judd E.J., Tierney J.E., Lunt D.J., Montañez I.P., '
                             'Huber B.T., Wing S.L., Valdes P.J. (2024). A 485-million-year '
                             "history of Earth's surface temperature. Science 385. "
-                            'Percentiles CSV: github.com/EJJudd/PhanDA.'),
+                            'Percentiles CSV: github.com/EJJudd/PhanDA. CC BY 4.0 '
+                            '(modified: GMST and CO2 percentile columns extracted and sorted by age).'),
             'license': 'CC BY 4.0',
+            'license_url': 'https://creativecommons.org/licenses/by/4.0/',
             'generated': GENERATED,
             'script': 'data/scripts/quaternary/build_curves.py',
             'x': 'ma',
@@ -117,8 +120,10 @@ def build_cenogrid():
         'source_ref': 'westerhold-2020',
         'attribution': ('Westerhold T., Marwan N., Drury A.J. et al. (2020). An astronomically '
                         "dated record of Earth's climate and its predictability over the last "
-                        '66 million years. Science 369, 1383-1387. Data: PANGAEA 917660.'),
+                        '66 million years. Science 369, 1383-1387. Data: PANGAEA 917660, CC BY 4.0 '
+                        '(modified: benthic d18O decimated to 10-kyr bin means).'),
         'license': 'CC BY 4.0',
+        'license_url': 'https://creativecommons.org/licenses/by/4.0/',
         'generated': GENERATED,
         'script': 'data/scripts/quaternary/build_curves.py',
         'x': 'ma',
@@ -178,8 +183,10 @@ def build_spratt():
         'source_ref': 'spratt-lisiecki-2016',
         'attribution': ('Spratt R.M., Lisiecki L.E. (2016). A Late Pleistocene sea level '
                         'stack. Climate of the Past 12, 1079-1092. NOAA dataset DOI '
-                        '10.25921/rd66-5820.'),
-        'license': 'public domain (NOAA)',
+                        '10.25921/rd66-5820. NOAA NCEI Paleoclimatology '
+                        '(modified: stack and 95% bound columns extracted and sorted by age).'),
+        'license': 'US Government / NOAA - open (attribution requested)',
+        'license_url': 'https://www.ncei.noaa.gov/access/paleo-search/study/19982',
         'generated': GENERATED,
         'script': 'data/scripts/quaternary/build_curves.py',
         'x': 'ka',
@@ -234,8 +241,11 @@ def build_uplift():
         'attribution': ('Sánchez L., Völksen Ch., Sokolov A., Arenz H., Seitz F. (2018). '
                         'Present-day surface deformation of the Alpine region inferred from '
                         'geodetic techniques. Earth System Science Data 10, 1503-1526. '
-                        'Data: PANGAEA 886889, file ALPS2017_DEF_VT.GRD.'),
+                        'Data: PANGAEA 886889, file ALPS2017_DEF_VT.GRD, CC BY 3.0 '
+                        '(modified: vertical velocity and its uncertainty at the grid cell nearest the '
+                        'reference point, converted from m/yr to mm/yr).'),
         'license': 'CC BY 3.0',
+        'license_url': 'https://creativecommons.org/licenses/by/3.0/',
         'generated': GENERATED,
         'script': 'data/scripts/quaternary/build_curves.py',
         'x': 'ma',

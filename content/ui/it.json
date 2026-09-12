@@ -27,7 +27,7 @@
   "labels": {
     "observed": {
       "title": "Osservato",
-      "explanation": "Misurato oggi in diretta - una superficie LiDAR, un'unità rocciosa cartografata, un perimetro glaciale."
+      "explanation": "Misurato oggi in diretta - una superficie LiDAR, un perimetro glaciale."
     },
     "modeled": {
       "title": "Modellato",
@@ -88,7 +88,10 @@
     "Meghalayan": "Meghalayano",
     "Paleozoic": "Paleozoico",
     "Mesozoic": "Mesozoico",
-    "Phanerozoic": "Fanerozoico"
+    "Phanerozoic": "Fanerozoico",
+    "Chibanian": "Chibaniano",
+    "Greenlandian": "Groenlandiano",
+    "Northgrippian": "Nordgrippiano"
   },
   "ics_names_sources": {
     "chart": "https://stratigraphy.org/ICSchart/ChronostratChart2022-02Italian.pdf",
@@ -129,7 +132,9 @@
     "none": "Nessuna unità cartografata in vista",
     "coarse_one": "Carta meno dettagliata in vista: {list}.",
     "coarse_many": "Carte meno dettagliate in vista: {list}.",
-    "period_not_given_many": "Periodo non indicato: {names}"
+    "period_not_given_many": "Periodo non indicato: {names}",
+    "undated_withheld": "Cartografate, età assente o non abbastanza affidabile per il colore",
+    "withheld": "Cartografate, età non abbastanza affidabile per il colore"
   },
   "geology_popup": {
     "unnamed": "Unità senza nome",
@@ -149,7 +154,35 @@
       "swisstopo-geocover": "Dati geologici vettoriali GeoCover (swisstopo)",
       "ispra-geologia-100k-inspire": "Carta geologica d'Italia (ISPRA)",
       "geosphere-geologicunits-500k": "Unità geologiche dell'Austria (GeoSphere Austria)"
+    },
+    "withheld": "Non usata per il colore: {reason}.",
+    "withheld_plain": "Non usata per il colore.",
+    "withheld_reason": {
+      "metamorphic_event": "data un evento metamorfico o tettonico, non la formazione della roccia",
+      "contradiction": "contraddice altre indicazioni d'età per questa unità",
+      "young_bedrock": "attribuisce un'età recente a roccia in posto",
+      "unmappable_interval": "l'intervallo indicato non ha corrispondenza nella tavola ICS",
+      "open_range": "l'intervallo indicato è aperto da un lato"
     }
   },
-  "layer_cite_many": "{n} fonti"
+  "layer_cite_many": "{n} fonti",
+  "map_hint": {
+    "wheel_windows": "Usa Ctrl + scorrimento per ingrandire la mappa",
+    "wheel_mac": "Usa ⌘ + scorrimento per ingrandire la mappa",
+    "touch": "Usa due dita per spostare la mappa",
+    "globe_wheel_windows": "Usa Ctrl + scorrimento per ingrandire il globo",
+    "globe_wheel_mac": "Usa ⌘ + scorrimento per ingrandire il globo",
+    "globe_touch": "Usa due dita per ruotare il globo"
+  },
+  "not_found": {
+    "title": "Pagina non trovata",
+    "text": "Questa pagina non esiste o è stata spostata.",
+    "link": "Vai alla storia in italiano"
+  },
+  "sources_list": {
+    "license": "Licenza",
+    "data_files": "File di dati",
+    "data_files_note": "Questi file di curve sono nella cartella dati del sito; al momento nessuna pagina li rappresenta."
+  },
+  "language_nav": "Lingua"
 }

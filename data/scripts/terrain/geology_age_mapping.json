@@ -3806,7 +3806,8 @@
         "'Scitico' (Scythian) is an obsolete name for the Lower Triassic -> Lower Triassic; its qualifiers use the full series.",
         "'?' marks are the authors' uncertainty; the interval names are unambiguous, so the rows are mapped (as in the South Tyrol table) and age_label keeps the '?'.",
         "Open-ended 'pre-X' / 'post-X' ages and 'Terziario' give null: the first two have no bound on one side, and Tertiary is not an ICS unit (as in the South Tyrol table).",
-        "Units without an age statement may match a row of unit_joins (regex on sigla_cart and nome): 'legend_join' rows take the envelope of the same formation's age in another cited legend; 'source' rows cite the PAT legend sheet itself (group headings). The build recomputes each envelope from the evidence."
+        "Units without an age statement may match a row of unit_joins (regex on sigla_cart and nome): 'legend_join' rows take the envelope of the same formation's age in another cited legend; 'source' rows cite the PAT legend sheet itself (group headings). The build recomputes each envelope from the evidence.",
+        "Tile contract (2026-09-13): 'pre-X' / 'post-X' ages are age_basis 'withheld' (open_range) and '?Terziario' is 'unmappable_interval', with the statement kept in age_label; units without a statement are 'none'. The pluton row of unit_joins has basis 'source' and is counted under units_dated_from_own_legend_group_headings, not under units_dated_by_join_or_rule."
       ],
       "terms": [
         {
@@ -5532,8 +5533,15 @@
       "rules": [
         "Polygons: Unconsolidated_Deposits_PLG and Bedrock_PLG of sheets 1179, 1199, 1219, 1239 (German GeoPackages). The two layers tile the ground; where they overlap (0.42% of sheet 1179, 0.07% of 1199: cover polygons lying inside bedrock polygons) the unconsolidated deposit is drawn, because the reader lists it first and faces go to the first polygon. swisstopo does not document a drawing order; judgement call.",
         "German names -> chart intervals with 'terms'; a pair listed in null_pairs gives null ages and no colour.",
-        "Contradiction check: where DESCRIPTION states an age range 'X bis Y' with both names in description_age_terms and that range does not overlap the CHRONO_BASE-CHRONO_TOP range, the ages are left null and the unit is listed in the meta (e.g. 'Campanien bis Maastrichtien' stored as Cénomanien/Coniacien)."
-      ]
+        "Contradiction check: where DESCRIPTION states an age range 'X bis Y' with both names in description_age_terms and that range does not overlap the CHRONO_BASE-CHRONO_TOP range, the ages are left null and the unit is listed in the meta (e.g. 'Campanien bis Maastrichtien' stored as Cénomanien/Coniacien).",
+        "Tile contract (2026-09-13): null_pairs are age_basis 'withheld' with the reason in null_pair_reasons; description contradictions are 'contradiction'; 'frühes Paläozoikum' as the younger bound is 'unmappable_interval'. age_label keeps 'CHRONO_BASE - CHRONO_TOP'."
+      ],
+      "null_pair_reasons": {
+        "Känozoikum|Proterozoikum": "open_range",
+        "Känozoikum|Paläozoikum": "open_range",
+        "Phanerozoikum|Phanerozoikum": "contradiction",
+        "Mesozoikum|Proterozoikum": "contradiction"
+      }
     },
     "geosphere-geologicunits-500k": {
       "fields": {
@@ -5585,8 +5593,13 @@
       "rules": [
         "olderNamedAge / youngerNamedAge are INSPIRE GeochronologicEra names, which are ICS chart names; age_names maps them one to one and the build checks each against the chart.",
         "Each unit has one GeologicEvent. Its age is used only when eventProcess is a formation process ('formation' in event_process). 'subduction' (metasediment with eclogite, Jurassic-Cretaceous) gives the age of a metamorphic/tectonic event, not of formation, and is left uncoloured, like ISPRA's metamorphicProcess units. 'magmatic process' on orthogneiss and amphibolite is taken as the protolith's magmatic age (judgement call).",
-        "Scale 1:500,000: a context fill for Austria only."
-      ]
+        "Scale 1:500,000: a context fill for Austria only.",
+        "Tile contract (2026-09-13): the subduction unit is age_basis 'withheld' (metamorphic_event, age_label kept); glaciers and water bodies are 'none'. 'geologic process' occurs only on the glacier unit, which null_units handles first."
+      ],
+      "withheld_reasons": {
+        "subduction": "metamorphic_event",
+        "geologic process": "metamorphic_event"
+      }
     },
     "ispra-geologia-100k-inspire": {
       "age_names": {
@@ -5610,7 +5623,7 @@
         "massWasting": "formation",
         "metamorphicProcess": "not_formation",
         "faulting": "not_formation",
-        "unknown": "not_formation"
+        "unknown": "formation"
       },
       "units": {
         "GU_1": {
@@ -5741,7 +5754,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_11": {
           "name": "anfiboliti",
@@ -5754,7 +5768,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_12": {
           "name": "serpentine",
@@ -5767,7 +5782,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_13": {
           "name": "marmi bianchi o giallastri",
@@ -5780,7 +5796,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_14": {
           "name": "gneiss granitici e granodioritici",
@@ -5793,7 +5810,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_15": {
           "name": "litotipi marginali",
@@ -5806,7 +5824,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_16": {
           "name": "gneiss anfibolici e anfiboliti gneissiche",
@@ -5819,7 +5838,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_17": {
           "name": "gneiss aplitici",
@@ -5832,7 +5852,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_18": {
           "name": "gneiss dioritici e gabbrodioritici",
@@ -5845,7 +5866,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_19": {
           "name": "filoni di quarzo",
@@ -5871,7 +5893,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_21": {
           "name": "marmo della bocchetta di porto",
@@ -5884,7 +5907,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_22": {
           "name": "dolomia principale",
@@ -6001,7 +6025,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_31": {
           "name": "formazione di werfen",
@@ -6148,7 +6173,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_41": {
           "name": "gneiss conglomeratici",
@@ -6161,7 +6187,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_42": {
           "name": "micascisti granatiferi",
@@ -6174,7 +6201,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_43": {
           "name": "scisti",
@@ -6187,7 +6215,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_44": {
           "name": "calcare del castello di brunico",
@@ -6213,7 +6242,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_46": {
           "name": "micascisti granatiferi",
@@ -6226,7 +6256,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_47": {
           "name": "quarziti e filladi",
@@ -6252,7 +6283,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_49": {
           "name": "anfiboliti",
@@ -6265,7 +6297,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_50": {
           "name": "cloritoscisti",
@@ -6278,7 +6311,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_51": {
           "name": "fillade di steinach",
@@ -6291,7 +6325,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_52": {
           "name": "micascisti filladici",
@@ -6304,7 +6339,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_53": {
           "name": "paragneiss",
@@ -6317,7 +6353,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_54": {
           "name": "paragneiss",
@@ -6330,7 +6367,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_55": {
           "name": "calcari",
@@ -6356,7 +6394,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_57": {
           "name": "gneiss",
@@ -6369,7 +6408,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_58": {
           "name": "gneiss granitici",
@@ -6382,7 +6422,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_59": {
           "name": "gneiss occhiadini",
@@ -6395,7 +6436,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_60": {
           "name": "graniti biotitici",
@@ -6405,10 +6447,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 133,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "granit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('granit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_61": {
           "name": "tonaliti e dioriti",
@@ -6418,10 +6463,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 8,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_62": {
           "name": "dioriti quarzifere",
@@ -6431,10 +6479,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 28,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_63": {
           "name": "gabbri",
@@ -6444,10 +6495,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 7,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "gabbr",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('gabbr').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_64": {
           "name": "filoni di porfido granitico e granodioritico",
@@ -6457,10 +6511,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 10,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_65": {
           "name": "filoni aplitici",
@@ -6470,10 +6527,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 38,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_66": {
           "name": "filoni di porfirite",
@@ -6483,10 +6543,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 24,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_67": {
           "name": "porfiriti anfiboliche",
@@ -6496,10 +6559,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfirit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfirit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_68": {
           "name": "alluvioni recenti ed attuali",
@@ -6563,10 +6629,11 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "older": "Quaternary",
-          "younger": "Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "older": null,
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_73": {
           "name": "zone di fratturazione",
@@ -6578,10 +6645,11 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "older": "Quaternary",
-          "younger": "Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "older": null,
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_74": {
           "name": "zone di fratturazione",
@@ -6596,7 +6664,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_75": {
           "name": "zone di fratturazione",
@@ -6611,7 +6680,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_76": {
           "name": "morenico",
@@ -6627,7 +6697,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_77": {
           "name": "morenico di stadi compiuti",
@@ -6643,7 +6714,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_78": {
           "name": "prasiniti anfibolico-epidotiche",
@@ -6659,7 +6731,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_79": {
           "name": "facies metamorfiche",
@@ -6674,7 +6747,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_80": {
           "name": "prasiniti prevalentemente epidotiche",
@@ -6687,7 +6761,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_81": {
           "name": "serpentini",
@@ -6704,7 +6779,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_82": {
           "name": "calcescisti",
@@ -6720,7 +6796,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'calcescisti' matches several map symbols ['GMK', 'OMAb', 'OSC', 'OTC']; no join."
+          "note": "Name key 'calcescisti' matches several map symbols ['GMK', 'OMAb', 'OSC', 'OTC']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_83": {
           "name": "calcari e dolomie",
@@ -6737,7 +6814,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_84": {
           "name": "calcari e dolomie",
@@ -6754,7 +6832,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_85": {
           "name": "quarziti e quarziti filladiche sericitiche",
@@ -6769,7 +6848,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_86": {
           "name": "prasiniti biotitico-orneblendiche",
@@ -6784,7 +6864,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_87": {
           "name": "anfiboliti granatifere, orneblendico-gastalditiche",
@@ -6797,10 +6878,12 @@
             "C1 lithology: name ['amphibolite'] vs description ['quartzite', 'schist']",
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "anfibolit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_88": {
           "name": "parascisti del picco",
@@ -6813,7 +6896,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_89": {
           "name": "gneiss a facies scistosa",
@@ -6826,7 +6910,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_90": {
           "name": "calcari e dolomie",
@@ -6842,7 +6927,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_91": {
           "name": "alluvioni attuali e terreni acquitrinosi e torbosi",
@@ -6920,7 +7006,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_97": {
           "name": "brecce e calcari grigi",
@@ -6972,7 +7059,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_101": {
           "name": "arenarie calcaree gialle scistose ed arenarie quarzifere chiare",
@@ -6995,10 +7083,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 6,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_103": {
           "name": "filoni basici. diabasi e porfiriti diabasiche e dioritiche",
@@ -7008,10 +7099,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 11,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_104": {
           "name": "anfiboliti e scisti orneblendici",
@@ -7024,7 +7118,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_105": {
           "name": "gneiss tonalitico",
@@ -7037,7 +7132,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_106": {
           "name": "gneiss granitico a biotite",
@@ -7050,7 +7146,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_107": {
           "name": "gneiss occhialino",
@@ -7063,7 +7160,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_108": {
           "name": "gneiss granitico a moscovite",
@@ -7076,7 +7174,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_109": {
           "name": "calcari saccaroidi",
@@ -7086,10 +7185,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 5,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "marmi",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('marmi').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_110": {
           "name": "quarzite, gneiss quarzitico e micascisto",
@@ -7099,10 +7201,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 9,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "quarzit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('quarzit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_111": {
           "name": "fillade granatifera",
@@ -7115,7 +7220,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_112": {
           "name": "micascisto granatifero e quarzite del similaun",
@@ -7128,7 +7234,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_113": {
           "name": "micascisto muscovitico",
@@ -7141,7 +7248,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_114": {
           "name": "micascisti biotitici",
@@ -7154,7 +7262,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_115": {
           "name": "gneiss filladico, gneis diaftoritico",
@@ -7167,7 +7276,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_116": {
           "name": "gneiss biotitico squamoso",
@@ -7180,7 +7290,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_117": {
           "name": "scisti biotitici",
@@ -7193,7 +7304,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_118": {
           "name": "gneiss biotitico",
@@ -7206,7 +7318,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_119": {
           "name": "coni di deiezione e coni detritici",
@@ -7330,7 +7443,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_127": {
           "name": "rioliti in filoni",
@@ -7346,7 +7460,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_128": {
           "name": "andesiti",
@@ -7362,7 +7477,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_129": {
           "name": "arenarie grigio-verdi con livelli argillosi e tufacei",
@@ -7378,7 +7494,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_130": {
           "name": "conglomerato ad elementi cristallini e vulcanici",
@@ -7394,7 +7511,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_131": {
           "name": "fillade quarzifera di bressanone",
@@ -7410,7 +7528,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_132": {
           "name": "filladi nerastre carboniose",
@@ -7425,7 +7544,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_133": {
           "name": "gneiss filladici a grossi",
@@ -7440,7 +7560,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_134": {
           "name": "anfiboliti",
@@ -7457,7 +7578,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'anfiboliti' matches several map symbols ['BSA', 'DSF', 'NDA', 'OAF', 'OAL', 'OCA', 'OJA', 'OSA', 'OTF', 'OUA', 'OVA', 'OZA', 'TSA', 'TTA', 'TUA']; no join."
+          "note": "Name key 'anfiboliti' matches several map symbols ['BSA', 'DSF', 'NDA', 'OAF', 'OAL', 'OCA', 'OJA', 'OSA', 'OTF', 'OUA', 'OVA', 'OZA', 'TSA', 'TTA', 'TUA']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_135": {
           "name": "granodioriti e graniti",
@@ -7470,10 +7592,12 @@
             "C1 lithology: name ['granitoid'] vs description ['clastic', 'quartzite', 'schist']",
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "granodior",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_136": {
           "name": "tonaliti e dioriti quarzifere",
@@ -7486,10 +7610,12 @@
             "C1 lithology: name ['granitoid'] vs description ['quartzite']",
             "C2 wording: 33% of the name's words in the description"
           ],
+          "young_bedrock_word": "tonalit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_137": {
           "name": "porfiriti quarzo-dioritiche granofiriche a granato",
@@ -7502,10 +7628,12 @@
             "C1 lithology: name ['granitoid', 'volcanic'] vs description ['clastic']",
             "C2 wording: 20% of the name's words in the description"
           ],
+          "young_bedrock_word": "porfirit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_138": {
           "name": "fillade di steinach",
@@ -7522,7 +7650,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_139": {
           "name": "marmo della bocchetta di porto",
@@ -7538,7 +7667,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_140": {
           "name": "dolomia principale",
@@ -7554,7 +7684,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_141": {
           "name": "filladi scure a porfiroblasti biotitici",
@@ -7569,7 +7700,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_142": {
           "name": "dolomia del wetterstein",
@@ -7586,7 +7718,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join."
+          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_143": {
           "name": "conglomerato della val di fleres",
@@ -7602,7 +7735,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_144": {
           "name": "dolomie chiare",
@@ -7618,7 +7752,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_145": {
           "name": "quarziti bianche",
@@ -7635,7 +7770,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join."
+          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_146": {
           "name": "anfiboliti",
@@ -7652,7 +7788,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'anfiboliti' matches several map symbols ['BSA', 'DSF', 'NDA', 'OAF', 'OAL', 'OCA', 'OJA', 'OSA', 'OTF', 'OUA', 'OVA', 'OZA', 'TSA', 'TTA', 'TUA']; no join."
+          "note": "Name key 'anfiboliti' matches several map symbols ['BSA', 'DSF', 'NDA', 'OAF', 'OAL', 'OCA', 'OJA', 'OSA', 'OTF', 'OUA', 'OVA', 'OZA', 'TSA', 'TTA', 'TUA']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_147": {
           "name": "gneiss granitici e granodioritici biotitici e/o muscovitici",
@@ -7668,7 +7805,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_148": {
           "name": "micascisti filladici muscovitico-paragonitici grigio-plumbei",
@@ -7683,7 +7821,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_149": {
           "name": "micascisti filladici muscovitico-paragonatici laminati e fogliettati",
@@ -7698,7 +7837,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_150": {
           "name": "micascisti filladici",
@@ -7711,7 +7851,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_151": {
           "name": "scisti calcariferi, marmi",
@@ -7726,7 +7867,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_152": {
           "name": "anfiboliti, anfiboliti granatifere, gneiss anfibolici, scisti anfibolici, scisti a covoni di orneble",
@@ -7738,10 +7880,12 @@
           "flags": [
             "C2 wording: 33% of the name's words in the description"
           ],
+          "young_bedrock_word": "anfibolit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_153": {
           "name": "quarziti, quarziti nere, micascisti gneissici conglomeratici",
@@ -7754,7 +7898,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_154": {
           "name": "calcari cristallini",
@@ -7770,7 +7915,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_155": {
           "name": "quarziti bianche e grigie",
@@ -7787,7 +7933,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join."
+          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_156": {
           "name": "micascisti filladici e micascisti ricchi in sericite",
@@ -7803,7 +7950,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_157": {
           "name": "micascisti argentei medio-minuti muscovitico-paragonitici",
@@ -7819,7 +7967,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_158": {
           "name": "marmi bianchi",
@@ -7836,7 +7985,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'marmi' matches several map symbols ['MCM', 'NDR', 'OMA', 'OML', 'OVB', 'SDR', 'SZM', 'TGIb', 'TTM']; no join."
+          "note": "Name key 'marmi' matches several map symbols ['MCM', 'NDR', 'OMA', 'OML', 'OVB', 'SDR', 'SZM', 'TGIb', 'TTM']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_159": {
           "name": "quarziti e quarziti micacee",
@@ -7851,7 +8001,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_160": {
           "name": "paragneiss",
@@ -7866,7 +8017,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_161": {
           "name": "litotipi ad intensa cristallizzazione statica di plagioclasio",
@@ -7881,7 +8033,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_162": {
           "name": "litotipi a sillimanite",
@@ -7897,7 +8050,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_163": {
           "name": "litotipi ad intensa differenziazione metamorfica",
@@ -7912,7 +8066,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_164": {
           "name": "gneiss granitici a muscovite",
@@ -7927,7 +8082,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_165": {
           "name": "gneiss granitoidi biotitici",
@@ -7942,7 +8098,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_166": {
           "name": "migmatiti",
@@ -7957,7 +8114,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_167": {
           "name": "paragneiss leucocratici",
@@ -7973,7 +8131,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'leucocratici' matches several map symbols ['OOGc', 'OUO', 'TSO']; no join."
+          "note": "Name key 'leucocratici' matches several map symbols ['OOGc', 'OUO', 'TSO']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_168": {
           "name": "gneiss pegmatitici",
@@ -7989,7 +8148,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_169": {
           "name": "fels albitici",
@@ -8004,7 +8164,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_170": {
           "name": "gneiss granitoidi indistinti",
@@ -8021,7 +8182,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'granitoidi' matches several map symbols ['OCO', 'OJO', 'OTL']; no join."
+          "note": "Name key 'granitoidi' matches several map symbols ['OCO', 'OJO', 'OTL']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_171": {
           "name": "anfiboliti, gneiss anfibolici",
@@ -8037,7 +8199,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_172": {
           "name": "calcescisti, alternati a livelli di micascisti filladici",
@@ -8052,7 +8215,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_173": {
           "name": "anfiboliti",
@@ -8069,7 +8233,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'anfiboliti' matches several map symbols ['BSA', 'DSF', 'NDA', 'OAF', 'OAL', 'OCA', 'OJA', 'OSA', 'OTF', 'OUA', 'OVA', 'OZA', 'TSA', 'TTA', 'TUA']; no join."
+          "note": "Name key 'anfiboliti' matches several map symbols ['BSA', 'DSF', 'NDA', 'OAF', 'OAL', 'OCA', 'OJA', 'OSA', 'OTF', 'OUA', 'OVA', 'OZA', 'TSA', 'TTA', 'TUA']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_174": {
           "name": "morenico attuale e recente",
@@ -8150,10 +8315,11 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "older": "Quaternary",
-          "younger": "Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "older": null,
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_180": {
           "name": "morenico antico in generale",
@@ -8182,7 +8348,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_182": {
           "name": "morene",
@@ -8194,10 +8361,11 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
-          "decision": "source",
-          "rule": "contradiction_quaternary_kept",
-          "older": "Quaternary",
-          "younger": "Quaternary"
+          "decision": "null",
+          "rule": "contradiction_null",
+          "older": null,
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_183": {
           "name": "calcari cristallini stratificati",
@@ -8213,7 +8381,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_184": {
           "name": "calcari marnosi e marne",
@@ -8228,7 +8397,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_185": {
           "name": "dolomie marnose",
@@ -8244,7 +8414,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_186": {
           "name": "marne e calcari gialli marnosi",
@@ -8259,7 +8430,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_187": {
           "name": "arenarie e marne",
@@ -8275,7 +8447,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_188": {
           "name": "calcari marnosi lastriformi",
@@ -8291,7 +8464,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_189": {
           "name": "dolomia dello sciliar",
@@ -8338,7 +8512,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_191": {
           "name": "calcari compatti cristallini",
@@ -8353,7 +8528,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_192": {
           "name": "calcari bianchi",
@@ -8366,10 +8542,25 @@
             "C3 stated age: description opens with ['Carnian'], unit age Anisian-Anisian",
             "C4 detailed maps: 4 of 71 points on dated South Tyrol/Trentino/Veneto units overlap Anisian-Anisian"
           ],
-          "decision": "null",
-          "rule": "contradiction_null",
-          "older": null,
-          "younger": null
+          "decision": "legend_join",
+          "rule": "contradiction_join",
+          "age_basis": "legend_join",
+          "join_from": "description",
+          "older": "Ladinian",
+          "younger": "Carnian",
+          "evidence": [
+            {
+              "formation": "strati di san cassiano",
+              "authority": "bz-carg-attributes",
+              "sigla": "SCS"
+            },
+            {
+              "formation": "strati di san cassiano",
+              "authority": "pat-unit-legend",
+              "unit": "SCS|FORMAZIONE DI SAN CASSIANO"
+            }
+          ],
+          "note": "The name is not a formation name; the description names one formation, 'strati di san cassiano' (key 'san cassiano'), which matches map symbol SCS only."
         },
         "GU_193": {
           "name": "arenarie argillo-micacee",
@@ -8387,7 +8578,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_194": {
           "name": "calcari bituminosi",
@@ -8404,7 +8596,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_195": {
           "name": "arenarie di val gardena",
@@ -8454,7 +8647,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_197": {
           "name": "conglomerato grigio a elementi filladici",
@@ -8471,7 +8665,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_198": {
           "name": "filladi passanti a sedimenti più evidentemente argilloscistosi",
@@ -8488,7 +8683,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_199": {
           "name": "porfiroide del m. elmo",
@@ -8506,7 +8702,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_200": {
           "name": "calcari marnosi zonati",
@@ -8521,7 +8718,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_201": {
           "name": "scisti argillosi rossi",
@@ -8568,7 +8766,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_203": {
           "name": "dolomia principale",
@@ -8584,7 +8783,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_204": {
           "name": "paragneiss e micascisti minuti",
@@ -8597,7 +8797,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_205": {
           "name": "micascisti e paragneiss a tessitura nodulare",
@@ -8613,7 +8814,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_206": {
           "name": "quarziti",
@@ -8630,7 +8832,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join."
+          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_207": {
           "name": "ortogneiss granitico-muscovitico di anterselva",
@@ -8646,7 +8849,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_208": {
           "name": "ortogneiss granitico a biotite di val casies",
@@ -8661,7 +8865,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_209": {
           "name": "dolomie scure a giroporelle",
@@ -8677,7 +8882,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_210": {
           "name": "calcari chiari zonati",
@@ -8693,7 +8899,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_211": {
           "name": "arenarie gialle",
@@ -8710,7 +8917,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_212": {
           "name": "micascisti filladici",
@@ -8727,7 +8935,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'micascisti filladici' matches several map symbols ['NFD', 'OZL']; no join."
+          "note": "Name key 'micascisti filladici' matches several map symbols ['NFD', 'OZL']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_213": {
           "name": "scisti filladici verdi nodulari",
@@ -8742,7 +8951,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_214": {
           "name": "paragneiss e micascisti minuti",
@@ -8755,7 +8965,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_215": {
           "name": "scisti anfibolici e anfibolico-biotitici",
@@ -8770,7 +8981,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_216": {
           "name": "quarziti associate a filladi quarzifere e micascisti filladici",
@@ -8783,7 +8995,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_217": {
           "name": "calcari saccaroidi corrispondenti ai marmi di laas",
@@ -8799,7 +9012,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_218": {
           "name": "ortogneiss aplitici e pegmatitici a muscovite",
@@ -8814,7 +9028,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_219": {
           "name": "ortogneiss granitico-muscovitico di anterselva",
@@ -8830,7 +9045,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_220": {
           "name": "ortogneiss occhiadino muscovitico",
@@ -8843,7 +9059,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_221": {
           "name": "dolomie e calcari",
@@ -8860,7 +9077,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_222": {
           "name": "calcescisti e calcari scuri",
@@ -8877,7 +9095,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'calcescisti' matches several map symbols ['GMK', 'OMAb', 'OSC', 'OTC']; no join."
+          "note": "Name key 'calcescisti' matches several map symbols ['GMK', 'OMAb', 'OSC', 'OTC']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_223": {
           "name": "quarziti bianche",
@@ -8893,7 +9112,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join."
+          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_224": {
           "name": "parascisti diversi",
@@ -8906,7 +9126,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_225": {
           "name": "paragneiss e micascisti",
@@ -8919,7 +9140,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_226": {
           "name": "micascisti e filladi micacee",
@@ -8934,7 +9156,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_227": {
           "name": "prasiniti",
@@ -8951,7 +9174,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'prasiniti' matches several map symbols ['COW', 'OPS']; no join."
+          "note": "Name key 'prasiniti' matches several map symbols ['COW', 'OPS']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_228": {
           "name": "prasiniti epidotiche e cloritiche",
@@ -8966,7 +9190,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_229": {
           "name": "serpentini",
@@ -8982,7 +9207,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_230": {
           "name": "oficalci e calcefiri associati ai serpentini",
@@ -8998,7 +9224,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_231": {
           "name": "calcescisti",
@@ -9015,7 +9242,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'calcescisti' matches several map symbols ['GMK', 'OMAb', 'OSC', 'OTC']; no join."
+          "note": "Name key 'calcescisti' matches several map symbols ['GMK', 'OMAb', 'OSC', 'OTC']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_232": {
           "name": "calcari e dolomie",
@@ -9031,7 +9259,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_233": {
           "name": "quarziti compatte e quarziti fogliettate",
@@ -9047,7 +9276,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_234": {
           "name": "ortogneiss del gran  veneziano",
@@ -9083,10 +9313,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 5,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_236": {
           "name": "differenziazioni lamprofiriche",
@@ -9101,7 +9334,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_237": {
           "name": "scisti vari",
@@ -9114,7 +9348,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_238": {
           "name": "scisti vari",
@@ -9127,7 +9362,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_239": {
           "name": "scisti vari",
@@ -9140,10 +9376,12 @@
             "C1 lithology: name ['schist'] vs description ['granitoid']",
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "scist",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_240": {
           "name": "scisti vari",
@@ -9155,10 +9393,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "scist",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_241": {
           "name": "dioriti e tonaliti passanti talora a grano-dioriti",
@@ -9174,7 +9414,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_242": {
           "name": "differenziazioni lamprofiriche",
@@ -9189,7 +9430,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_243": {
           "name": "alluvioni attuali e recenti",
@@ -9386,7 +9628,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_259": {
           "name": "calcari grigio-scuri o neri",
@@ -9911,7 +10154,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_305": {
           "name": "porfìroidi",
@@ -9921,10 +10165,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 7,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "scist",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('scist').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_306": {
           "name": "filladi quarzose",
@@ -9937,7 +10184,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_465": {
           "name": "detriti di falda",
@@ -10038,10 +10286,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 9,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "gabbr",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('gabbr').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_473": {
           "name": "gabbro di sòndalo",
@@ -10053,10 +10304,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "gabbr",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_474": {
           "name": "gabbro di sòndalo",
@@ -10068,10 +10321,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "gabbr",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_475": {
           "name": "granito del pizzo bianco",
@@ -10081,10 +10336,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 2,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "granit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('granit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_478": {
           "name": "filoni di pegmatiti ed apliti",
@@ -10094,10 +10352,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 2,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_482": {
           "name": "formazione della val forcola",
@@ -10113,7 +10374,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'forcola' matches several map symbols ['FOR_fs', 'FOR_sz']; no join."
+          "note": "Name key 'forcola' matches several map symbols ['FOR_fs', 'FOR_sz']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_484": {
           "name": "dolomia di wetterstein",
@@ -10141,7 +10403,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_486": {
           "name": "arenarie variegate",
@@ -10157,7 +10420,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_487": {
           "name": "verrucano",
@@ -10173,7 +10437,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_488": {
           "name": "gneiss del passo dei pastori",
@@ -10190,7 +10455,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_489": {
           "name": "gneiss del passo dei pastori",
@@ -10207,7 +10473,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_492": {
           "name": "membro degli gneiss del m. sterile",
@@ -10224,7 +10491,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_493": {
           "name": "membro degli gneiss del m. sterile",
@@ -10240,7 +10508,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_494": {
           "name": "membro degli gneiss del m. sterile",
@@ -10256,7 +10525,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_496": {
           "name": "membro delle filladi del m. radisca",
@@ -10272,7 +10542,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_497": {
           "name": "membro delle filladi del m. radisca",
@@ -10288,7 +10559,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_501": {
           "name": "calcare di quattervals",
@@ -10331,7 +10603,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join."
+          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_506": {
           "name": "formazione di val pila",
@@ -10346,7 +10619,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_509": {
           "name": "filladi di bormio",
@@ -10362,7 +10636,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_513": {
           "name": "membro degli gneiss occhiadini del grasso d e 11' a b 1 è s",
@@ -10378,7 +10653,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_514": {
           "name": "dolomia principale",
@@ -10394,7 +10670,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_515": {
           "name": "dolomia di wetterstein",
@@ -10411,7 +10688,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join."
+          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_516": {
           "name": "formazione di val pila",
@@ -10426,7 +10704,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_517": {
           "name": "arenarie variegate",
@@ -10442,7 +10721,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_518": {
           "name": "verrucano",
@@ -10457,7 +10737,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_519": {
           "name": "gneiss del monte tonale",
@@ -10473,7 +10754,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_520": {
           "name": "gneiss del monte tonale",
@@ -10488,7 +10770,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_521": {
           "name": "gneiss del monte tonale",
@@ -10503,7 +10786,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_522": {
           "name": "gneiss del monte tonale",
@@ -10518,7 +10802,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_523": {
           "name": "gneiss del monte tonale",
@@ -10533,7 +10818,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_524": {
           "name": "micascisti della cima rovaia",
@@ -10549,7 +10835,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_525": {
           "name": "micascisti della cima rovaia",
@@ -10564,7 +10851,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_526": {
           "name": "micascisti della cima rovaia",
@@ -10579,7 +10867,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_527": {
           "name": "micascisti della cima rovaia",
@@ -10595,7 +10884,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_528": {
           "name": "formazione della punta di pietra rossa",
@@ -10610,7 +10900,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_529": {
           "name": "membro delle quarziti del corno di capra",
@@ -10626,7 +10917,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_530": {
           "name": "membro degli gneiss occhiadini del dosso cornin",
@@ -10641,7 +10933,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_531": {
           "name": "membro degli gneiss listati del monte varàdega",
@@ -10656,7 +10949,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_532": {
           "name": "calcare di valle del monte",
@@ -10672,7 +10966,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_533": {
           "name": "broccatello",
@@ -10687,7 +10982,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_534": {
           "name": "calcare del leverone",
@@ -10703,7 +10999,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_535": {
           "name": "dolomia principale",
@@ -10719,7 +11016,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_536": {
           "name": "carniola del monte garone",
@@ -10734,7 +11032,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_537": {
           "name": "dolomia di wetterstein",
@@ -10751,7 +11050,8 @@
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join."
+          "note": "Name key 'wetterstein' matches several map symbols ['WET', 'WET_fs', 'WET_ts']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_538": {
           "name": "formazione di val pila",
@@ -10766,7 +11066,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_543": {
           "name": "diorite del pizzo bernina",
@@ -10782,7 +11083,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_546": {
           "name": "diorite del pizzo bernina",
@@ -10798,7 +11100,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_553": {
           "name": "ghiacciai e nevati.",
@@ -10900,7 +11203,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_560": {
           "name": "concrezioni calcaree entro depositi quaternari",
@@ -10915,7 +11219,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_561": {
           "name": "calcari grigi",
@@ -10943,7 +11248,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_563": {
           "name": "calcari grigi del lias",
@@ -10971,7 +11277,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_565": {
           "name": "dolomia principale",
@@ -11000,7 +11307,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_567": {
           "name": "strati argillosi",
@@ -11029,7 +11337,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_569": {
           "name": "dolomiti ferrifere",
@@ -11045,7 +11354,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_570": {
           "name": "filladi sericitiche riferibili",
@@ -11060,7 +11370,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_571": {
           "name": "miloniti filladiche",
@@ -11076,7 +11387,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_572": {
           "name": "ortogneiss granitici",
@@ -11089,7 +11401,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_573": {
           "name": "ortogneiss muscovitici o aplitici",
@@ -11102,7 +11415,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_574": {
           "name": "ortogneiss muscovitici o aplitici",
@@ -11117,7 +11431,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_575": {
           "name": "ortogneiss granitici o granodioritici a tessitura occhiadina",
@@ -11130,7 +11445,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_576": {
           "name": "ortogneiss granitici o granodioritici a tessitura occhiadina",
@@ -11145,7 +11461,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_577": {
           "name": "anfiboliti, gneis e scisti anfibolici",
@@ -11160,7 +11477,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_578": {
           "name": "anfiboliti milonitiche cloritico-sericitiche",
@@ -11172,10 +11490,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "anfibolit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_579": {
           "name": "tormalinite di m. casera",
@@ -11190,7 +11510,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_580": {
           "name": "cloritoscisti e prasiniti cloritiche",
@@ -11202,10 +11523,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "scist",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_581": {
           "name": "quarziti",
@@ -11218,11 +11541,13 @@
             "C1 lithology: name ['quartzite'] vs description ['carbonate']",
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "quarzit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
           "younger": null,
-          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join."
+          "note": "Name key 'quarziti' matches several map symbols ['LPT', 'MCQ', 'NDQ', 'OCQ', 'OJQ', 'OLQ', 'OQU', 'OSQ', 'OTQ', 'OVQ', 'OZQ', 'QZK', 'SDQ', 'SZQ', 'TGIc', 'THQ', 'TTQ']; no join.",
+          "withheld_reason": "contradiction"
         },
         "GU_582": {
           "name": "calcari saccaroidi",
@@ -11239,7 +11564,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_583": {
           "name": "oliviniti",
@@ -11255,7 +11581,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_584": {
           "name": "filladi quarzifere",
@@ -11268,7 +11595,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_585": {
           "name": "filladi a granato visibile macroscopicamente",
@@ -11283,7 +11611,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_586": {
           "name": "micascisti a grossi cristalli",
@@ -11298,7 +11627,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_587": {
           "name": "filladi iniettate",
@@ -11313,7 +11643,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_588": {
           "name": "micascisti a due miche",
@@ -11326,7 +11657,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_589": {
           "name": "micascisti e paragneis a due miche",
@@ -11339,7 +11671,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_590": {
           "name": "micascisti e paragneis",
@@ -11352,7 +11685,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_591": {
           "name": "micascisti e paragneis a due miche di mesozona",
@@ -11365,7 +11699,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_592": {
           "name": "micascisti e paragneis a due miche di mesozona",
@@ -11378,7 +11713,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_593": {
           "name": "micascisti e paragneis a due miche",
@@ -11391,7 +11727,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_594": {
           "name": "metagneis",
@@ -11404,7 +11741,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_595": {
           "name": "micascisti di meso-epizona",
@@ -11419,7 +11757,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_596": {
           "name": "paragneiss e micascisti a due miche di catazona",
@@ -11432,7 +11771,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_597": {
           "name": "paragneiss e micascisti di catazona",
@@ -11444,10 +11784,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "gneis",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_598": {
           "name": "rocce filoniane",
@@ -11459,10 +11801,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "filon",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_599": {
           "name": "dioriti e dioriti quarzifere",
@@ -11474,10 +11818,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "diorit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_600": {
           "name": "alluvioni attuali",
@@ -11648,7 +11994,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_613": {
           "name": "calcari stratificati grigi",
@@ -11831,10 +12178,13 @@
           "ispra_younger": "Quaternary",
           "polygons_in_bbox": 5,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Quaternary",
-          "younger": "Quaternary"
+          "young_bedrock_word": "vitrofir",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Quaternary-Quaternary (within 0-66 Ma) but its name or description names bedrock ('vitrofir').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_626": {
           "name": "porfidi quarziferi normali",
@@ -11844,10 +12194,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 85,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_627": {
           "name": "tufi",
@@ -11857,10 +12210,13 @@
           "ispra_younger": "Holocene",
           "polygons_in_bbox": 78,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Quaternary",
-          "younger": "Holocene"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Quaternary-Holocene (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_628": {
           "name": "tufi a bombe di porfidi e porfirit",
@@ -11870,10 +12226,13 @@
           "ispra_younger": "Holocene",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Quaternary",
-          "younger": "Holocene"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Quaternary-Holocene (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_629": {
           "name": "porfidi quarziferi",
@@ -11883,10 +12242,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 8,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_630": {
           "name": "porfidi",
@@ -11896,10 +12258,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 21,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_631": {
           "name": "porfiriti in colate",
@@ -11909,10 +12274,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 9,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfirit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfirit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_632": {
           "name": "porfidi brecciati",
@@ -11922,10 +12290,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 9,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_633": {
           "name": "conglomerato a facies di \"verrucano\"",
@@ -11951,7 +12322,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_635": {
           "name": "ortogneiss pegmatitici ed aplitici",
@@ -11964,7 +12336,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_636": {
           "name": "ortogneiss",
@@ -11977,7 +12350,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_637": {
           "name": "ortogneiss occhiadini",
@@ -11990,7 +12364,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_638": {
           "name": "anfiboliti e scisti anfibolici",
@@ -12003,7 +12378,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_639": {
           "name": "oliviniti",
@@ -12016,7 +12392,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_640": {
           "name": "quarziti",
@@ -12026,10 +12403,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 35,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "quarzit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('quarzit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_641": {
           "name": "calcari saccaroidi",
@@ -12042,7 +12422,8 @@
           "decision": "null",
           "rule": "age_unmapped",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "unmappable_interval"
         },
         "GU_642": {
           "name": "filladi quarzifere",
@@ -12055,7 +12436,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_643": {
           "name": "filladi quarzifere",
@@ -12068,7 +12450,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_644": {
           "name": "micascisti e paragnais a due miche",
@@ -12081,7 +12464,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_645": {
           "name": "micascisti e paragneis a due miche di mesozona",
@@ -12094,7 +12478,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_646": {
           "name": "paragneiss e micascisti a due miche di catazona",
@@ -12107,7 +12492,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_647": {
           "name": "paragneiss e micascisti a due miche di catazona",
@@ -12120,7 +12506,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_648": {
           "name": "porfiriti varie",
@@ -12130,10 +12517,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 23,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfirit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfirit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_649": {
           "name": "porfidi granitici",
@@ -12143,10 +12533,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 38,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_650": {
           "name": "granito di monte croce",
@@ -12156,10 +12549,21 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 7,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "granit",
+          "decision": "legend_join",
+          "rule": "young_bedrock_join",
+          "age_basis": "legend_join",
+          "join_from": "name",
+          "older": "Cisuralian",
+          "younger": "Cisuralian",
+          "evidence": [
+            {
+              "formation": "granito di monte croce",
+              "authority": "bz-carg-attributes",
+              "sigla": "GMR"
+            }
+          ],
+          "note": "Formation name key 'croce' matches map symbol GMR only."
         },
         "GU_651": {
           "name": "diorite a tessitura parallela del m. croce",
@@ -12169,10 +12573,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_652": {
           "name": "diorite quarzitera",
@@ -12182,10 +12589,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_653": {
           "name": "alluvioni attuali e recenti",
@@ -12787,7 +13197,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_698": {
           "name": "filladi",
@@ -12800,7 +13211,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_699": {
           "name": "paragneiss albitici",
@@ -12813,7 +13225,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_700": {
           "name": "marmi saccaroidi",
@@ -12826,7 +13239,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_701": {
           "name": "anfiboliti epidotiche",
@@ -12839,7 +13253,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_702": {
           "name": "filoni aplitici",
@@ -12849,10 +13264,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 17,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_703": {
           "name": "filoni sienitici e sienitico-eleolitici",
@@ -12862,10 +13280,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 6,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_704": {
           "name": "filoni lamprofìrici",
@@ -12875,10 +13296,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 19,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_705": {
           "name": "sienite quarzifero",
@@ -12888,10 +13312,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "sienit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('sienit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_706": {
           "name": "monzodioriti",
@@ -12901,10 +13328,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 28,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "monzo",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('monzo').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_707": {
           "name": "monzogabbri e gabbri normali",
@@ -12914,10 +13344,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 12,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "monzo",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('monzo').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_708": {
           "name": "pirosseniti",
@@ -12927,10 +13360,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 2,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "pirossenit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('pirossenit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_709": {
           "name": "dioriti quarzifere",
@@ -12940,10 +13376,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 21,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_710": {
           "name": "coni di deiezione e coni detritici",
@@ -13385,7 +13824,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_940": {
           "name": "detriti di falda",
@@ -13501,6 +13941,7 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 28,
           "flags": [],
+          "young_bedrock_word": "granodior",
           "decision": "null",
           "rule": "no_geological_age",
           "older": null,
@@ -13514,10 +13955,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 47,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_950": {
           "name": "tonalite dell' adamello",
@@ -13529,10 +13973,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "tonalit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_951": {
           "name": "tonalite dell' adamello",
@@ -13545,10 +13991,12 @@
             "C1 lithology: name ['granitoid'] vs description ['amphibolite']",
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "tonalit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_952": {
           "name": "gabbro di sòndalo",
@@ -13558,10 +14006,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 12,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "gabbr",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('gabbr').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_953": {
           "name": "gabbro di sòndalo",
@@ -13573,10 +14024,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "gabbr",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_954": {
           "name": "diorite del monte serottini",
@@ -13586,10 +14039,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 38,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_955": {
           "name": "diorite del monte serottini",
@@ -13601,10 +14057,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "diorit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_956": {
           "name": "diorite del monte serottini",
@@ -13616,10 +14074,12 @@
           "flags": [
             "C2 wording: 33% of the name's words in the description"
           ],
+          "young_bedrock_word": "diorit",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_959": {
           "name": "gabbro del monte masuccio",
@@ -13631,10 +14091,12 @@
           "flags": [
             "C2 wording: 0% of the name's words in the description"
           ],
+          "young_bedrock_word": "gabbr",
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_960": {
           "name": "filoni aplitici e pegmatitici",
@@ -13644,10 +14106,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 72,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_961": {
           "name": "filoni di porfiriti",
@@ -13657,10 +14122,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 20,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_962": {
           "name": "filoni di porfiriti quarzifere e di porfiriti plagioclasico-anfiboliche",
@@ -13670,10 +14138,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 23,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_967": {
           "name": "argillite di lozio",
@@ -13797,7 +14268,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_975": {
           "name": "servino",
@@ -13812,7 +14284,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_976": {
           "name": "formazione a bellerophon",
@@ -13857,7 +14330,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_979": {
           "name": "formazione di collio",
@@ -13872,7 +14346,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_980": {
           "name": "conglomerato basale",
@@ -13888,7 +14363,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_983": {
           "name": "scisti di edolo",
@@ -13904,7 +14380,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_984": {
           "name": "scisti di edolo",
@@ -13920,7 +14397,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_986": {
           "name": "scisti di edolo",
@@ -13933,7 +14411,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_995": {
           "name": "dolomie brecciate giallastre e calcari scuri",
@@ -13949,7 +14428,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_996": {
           "name": "anageniti",
@@ -13964,7 +14444,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_997": {
           "name": "porfiriti plagioclasiche e porfiriti diabasiche in filoni",
@@ -13979,7 +14460,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_998": {
           "name": "formazione di valle grosina",
@@ -13994,7 +14476,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_999": {
           "name": "membro delle migmatiti di vernuga",
@@ -14009,7 +14492,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1000": {
           "name": "granito del monte rolla",
@@ -14025,7 +14509,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1001": {
           "name": "granito del monte rolla",
@@ -14041,7 +14526,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1005": {
           "name": "gneiss del monte tonale",
@@ -14054,7 +14540,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1008": {
           "name": "micascisti della cima rovaia",
@@ -14070,7 +14557,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1009": {
           "name": "micascisti della cima rovaia",
@@ -14086,7 +14574,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1010": {
           "name": "micascisti della cima rovaia",
@@ -14102,7 +14591,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1011": {
           "name": "membro degli gneiss della cima verda",
@@ -14117,7 +14607,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1012": {
           "name": "formazione della punta di pietra rossa",
@@ -14132,7 +14623,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1014": {
           "name": "formazione della punta di pietra rossa",
@@ -14147,7 +14639,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1015": {
           "name": "membro degli gneiss occhiadini del dosso cornin",
@@ -14163,7 +14656,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1016": {
           "name": "membro degli gneiss listati del monte varàdega",
@@ -14179,7 +14673,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1017": {
           "name": "membro degli gneiss listati del monte varàdega",
@@ -14192,7 +14687,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1018": {
           "name": "membro delle filladi di grosotto",
@@ -14207,7 +14703,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1019": {
           "name": "membro delle filladi di grosotto",
@@ -14223,7 +14720,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1020": {
           "name": "dioriti spesso quarzifere",
@@ -14239,7 +14737,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1021": {
           "name": "formazione della vetta ron",
@@ -14254,7 +14753,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1022": {
           "name": "membro degli gneiss del pizzo sareggio",
@@ -14267,7 +14767,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1023": {
           "name": "granito del pizzo di canciano",
@@ -14283,7 +14784,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1028": {
           "name": "membro degli gneiss dell'alpe cavaglia",
@@ -14299,7 +14801,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1036": {
           "name": "torbiere -a terreni torbosi",
@@ -14439,10 +14942,13 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 64,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Paleogene"
+          "young_bedrock_word": "granit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Paleogene (within 0-66 Ma) but its name or description names bedrock ('granit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1047": {
           "name": "tonaliti biotitico-anfiboliche",
@@ -14452,10 +14958,42 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 65,
           "flags": [],
+          "young_bedrock_word": "tonalit",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Cenozoic",
-          "younger": "Paleogene"
+          "younger": "Paleogene",
+          "young_bedrock_exception": {
+            "body": "adamello-presanella",
+            "cited_range_ma": [
+              66.0,
+              2.58
+            ],
+            "evidence": [
+              {
+                "authority": "pat-unit-legend",
+                "unit": "PPC|TONALITE DELLA PRESANELLA CENTRALE"
+              },
+              {
+                "authority": "pat-unit-legend",
+                "unit": "TAC|TONALITE DELL'ADAMELLO OCCIDENTALE"
+              },
+              {
+                "authority": "pat-unit-legend",
+                "unit": "RCT|TONALITE DEL RE DI CASTELLO"
+              },
+              {
+                "statement": "legend group heading of the Adamello-Presanella units",
+                "authority": "pat-legend",
+                "age_text": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello",
+                "older": "Paleogene",
+                "younger": "Neogene",
+                "where": "legend sheet, heading above PPC, PPG, PPN, TAC, RCT ...",
+                "quote": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello"
+              }
+            ],
+            "note": "Trentino unit legend: Tonalite della Presanella centrale 'Oligocene', Tonalite dell'Adamello occidentale 'Eocene sup', Tonalite del Re di Castello 'Eocene medio'."
+          }
         },
         "GU_1048": {
           "name": "tonaliti a grana media",
@@ -14465,10 +15003,42 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 10,
           "flags": [],
+          "young_bedrock_word": "tonalit",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Cenozoic",
-          "younger": "Paleogene"
+          "younger": "Paleogene",
+          "young_bedrock_exception": {
+            "body": "adamello-presanella",
+            "cited_range_ma": [
+              66.0,
+              2.58
+            ],
+            "evidence": [
+              {
+                "authority": "pat-unit-legend",
+                "unit": "PPC|TONALITE DELLA PRESANELLA CENTRALE"
+              },
+              {
+                "authority": "pat-unit-legend",
+                "unit": "TAC|TONALITE DELL'ADAMELLO OCCIDENTALE"
+              },
+              {
+                "authority": "pat-unit-legend",
+                "unit": "RCT|TONALITE DEL RE DI CASTELLO"
+              },
+              {
+                "statement": "legend group heading of the Adamello-Presanella units",
+                "authority": "pat-legend",
+                "age_text": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello",
+                "older": "Paleogene",
+                "younger": "Neogene",
+                "where": "legend sheet, heading above PPC, PPG, PPN, TAC, RCT ...",
+                "quote": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello"
+              }
+            ],
+            "note": "Trentino unit legend: Tonalite della Presanella centrale 'Oligocene', Tonalite dell'Adamello occidentale 'Eocene sup', Tonalite del Re di Castello 'Eocene medio'."
+          }
         },
         "GU_1049": {
           "name": "tonaliti biotitico-anfiboliche",
@@ -14478,10 +15048,42 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 20,
           "flags": [],
+          "young_bedrock_word": "tonalit",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Cenozoic",
-          "younger": "Paleogene"
+          "younger": "Paleogene",
+          "young_bedrock_exception": {
+            "body": "adamello-presanella",
+            "cited_range_ma": [
+              66.0,
+              2.58
+            ],
+            "evidence": [
+              {
+                "authority": "pat-unit-legend",
+                "unit": "PPC|TONALITE DELLA PRESANELLA CENTRALE"
+              },
+              {
+                "authority": "pat-unit-legend",
+                "unit": "TAC|TONALITE DELL'ADAMELLO OCCIDENTALE"
+              },
+              {
+                "authority": "pat-unit-legend",
+                "unit": "RCT|TONALITE DEL RE DI CASTELLO"
+              },
+              {
+                "statement": "legend group heading of the Adamello-Presanella units",
+                "authority": "pat-legend",
+                "age_text": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello",
+                "older": "Paleogene",
+                "younger": "Neogene",
+                "where": "legend sheet, heading above PPC, PPG, PPN, TAC, RCT ...",
+                "quote": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello"
+              }
+            ],
+            "note": "Trentino unit legend: Tonalite della Presanella centrale 'Oligocene', Tonalite dell'Adamello occidentale 'Eocene sup', Tonalite del Re di Castello 'Eocene medio'."
+          }
         },
         "GU_1050": {
           "name": "dioriti e gabbrodioriti anfiboliche",
@@ -14491,10 +15093,13 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Paleogene"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Paleogene (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1051": {
           "name": "gabbri",
@@ -14504,10 +15109,13 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Paleogene"
+          "young_bedrock_word": "gabbr",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Paleogene (within 0-66 Ma) but its name or description names bedrock ('gabbr').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1052": {
           "name": "quarziti",
@@ -14517,10 +15125,13 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 11,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Paleogene"
+          "young_bedrock_word": "quarzit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Paleogene (within 0-66 Ma) but its name or description names bedrock ('quarzit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1053": {
           "name": "apliti e pegmatiti",
@@ -14530,10 +15141,13 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 1,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Paleogene"
+          "young_bedrock_word": "aplit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Paleogene (within 0-66 Ma) but its name or description names bedrock ('aplit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1054": {
           "name": "filoni di granodioriti",
@@ -14543,10 +15157,13 @@
           "ispra_younger": "Paleogene",
           "polygons_in_bbox": 235,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Paleogene"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Paleogene (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1055": {
           "name": "filoni di minettes",
@@ -14559,7 +15176,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1056": {
           "name": "scaglia rossa",
@@ -14585,7 +15203,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1058": {
           "name": "calcari selciferi neri",
@@ -14819,7 +15438,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1076": {
           "name": "micascisti sericitici",
@@ -14834,7 +15454,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1077": {
           "name": "filladi nere",
@@ -14847,7 +15468,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1078": {
           "name": "calcefiri della val seria",
@@ -14860,7 +15482,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1079": {
           "name": "quarziti sericitiche",
@@ -14886,7 +15509,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1081": {
           "name": "paragneiss minuti a due miche",
@@ -14901,7 +15525,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1082": {
           "name": "miloniti",
@@ -14914,7 +15539,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1083": {
           "name": "micascisti filladici e filladi",
@@ -14927,7 +15553,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1084": {
           "name": "micascisti",
@@ -14940,7 +15567,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1085": {
           "name": "paragneiss",
@@ -14953,7 +15581,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1086": {
           "name": "quarziti grigie compatte",
@@ -14979,7 +15608,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1088": {
           "name": "anfiboliti",
@@ -14992,7 +15622,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1089": {
           "name": "oliviniti",
@@ -15005,7 +15636,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1090": {
           "name": "ortogneiss pegmatitici",
@@ -15018,7 +15650,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1091": {
           "name": "ortogneiss muscovitici chiari",
@@ -15031,7 +15664,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1092": {
           "name": "miloniti e zone di clastesi",
@@ -15044,7 +15678,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1093": {
           "name": "alluvioni attuali e recenti",
@@ -15197,10 +15832,25 @@
           "ispra_younger": "Lutetian",
           "polygons_in_bbox": 11,
           "flags": [],
+          "young_bedrock_word": "basalt",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Paleocene",
-          "younger": "Lutetian"
+          "younger": "Lutetian",
+          "young_bedrock_exception": {
+            "body": "veneto-paleogene-basalts",
+            "cited_range_ma": [
+              59.24,
+              23.04
+            ],
+            "evidence": [
+              {
+                "authority": "veneto-litologia-250k",
+                "depositi_a": "Vulcaniti basaltiche (Oligocene-Paleocene sup.)"
+              }
+            ],
+            "note": "Veneto lithology map: class 'Vulcaniti basaltiche (Oligocene-Paleocene sup.)' dates the basaltic volcanics of the Veneto; applied only to ISPRA basalt units with a specific Paleocene-Oligocene age."
+          }
         },
         "GU_1105": {
           "name": "basalti augitici ed olivinici",
@@ -15210,10 +15860,25 @@
           "ispra_younger": "Lutetian",
           "polygons_in_bbox": 4,
           "flags": [],
+          "young_bedrock_word": "basalt",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Paleocene",
-          "younger": "Lutetian"
+          "younger": "Lutetian",
+          "young_bedrock_exception": {
+            "body": "veneto-paleogene-basalts",
+            "cited_range_ma": [
+              59.24,
+              23.04
+            ],
+            "evidence": [
+              {
+                "authority": "veneto-litologia-250k",
+                "depositi_a": "Vulcaniti basaltiche (Oligocene-Paleocene sup.)"
+              }
+            ],
+            "note": "Veneto lithology map: class 'Vulcaniti basaltiche (Oligocene-Paleocene sup.)' dates the basaltic volcanics of the Veneto; applied only to ISPRA basalt units with a specific Paleocene-Oligocene age."
+          }
         },
         "GU_1106": {
           "name": "scaglia grigia",
@@ -15252,7 +15917,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1109": {
           "name": "rosso ammonitico veronese",
@@ -15397,7 +16063,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1120": {
           "name": "dolomia del serla",
@@ -15700,7 +16367,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1142": {
           "name": "graniti porfirici",
@@ -15752,7 +16420,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1146": {
           "name": "rocce di contatto: scisti cornubianitici da filladi",
@@ -15765,7 +16434,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1147": {
           "name": "rocce di contatto: porfìroidi e parascisti carboniosi",
@@ -15793,7 +16463,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1149": {
           "name": "porfìroidi",
@@ -15819,7 +16490,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1151": {
           "name": "fìlladi e quarziti carboniose",
@@ -15832,7 +16504,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1152": {
           "name": "coni detritici e di deiezione",
@@ -16011,10 +16684,25 @@
           "ispra_younger": "Oligocene",
           "polygons_in_bbox": 2,
           "flags": [],
+          "young_bedrock_word": "basalt",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Eocene",
-          "younger": "Oligocene"
+          "younger": "Oligocene",
+          "young_bedrock_exception": {
+            "body": "veneto-paleogene-basalts",
+            "cited_range_ma": [
+              59.24,
+              23.04
+            ],
+            "evidence": [
+              {
+                "authority": "veneto-litologia-250k",
+                "depositi_a": "Vulcaniti basaltiche (Oligocene-Paleocene sup.)"
+              }
+            ],
+            "note": "Veneto lithology map: class 'Vulcaniti basaltiche (Oligocene-Paleocene sup.)' dates the basaltic volcanics of the Veneto; applied only to ISPRA basalt units with a specific Paleocene-Oligocene age."
+          }
         },
         "GU_1166": {
           "name": "formazione di priabona",
@@ -16510,7 +17198,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1204": {
           "name": "filoni lamprofirici",
@@ -16525,7 +17214,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1205": {
           "name": "graniti e grenosieniti",
@@ -16540,7 +17230,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1206": {
           "name": "sieniti potassiche",
@@ -16568,7 +17259,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1208": {
           "name": "pirosseniti",
@@ -16724,7 +17416,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1220": {
           "name": "filladi quarzose",
@@ -16737,7 +17430,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1221": {
           "name": "scisti albitico-muscovitici",
@@ -16750,7 +17444,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1222": {
           "name": "gneiss a grane medio-minuta",
@@ -16765,7 +17460,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1223": {
           "name": "gneiss a grossi porfiroblasti di feldspato potassico",
@@ -16778,7 +17474,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1224": {
           "name": "parascisti albitici nodulari",
@@ -16791,7 +17488,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1225": {
           "name": "coni detritici e di deiezione",
@@ -16962,7 +17660,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1238": {
           "name": "marne a protoma rotifera",
@@ -16977,7 +17676,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1239": {
           "name": "argille e marne scagliose",
@@ -16992,7 +17692,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1240": {
           "name": "molasse e marne",
@@ -17356,7 +18057,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1268": {
           "name": "filladi carboniose",
@@ -17369,7 +18071,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1269": {
           "name": "ortogneiss e rocce anfiboliche connesse",
@@ -17382,7 +18085,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1270": {
           "name": "coni di deiezione",
@@ -17795,10 +18499,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 30,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "granodior",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('granodior').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1642": {
           "name": "tonaliti e leucotonaliti",
@@ -17808,10 +18515,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 60,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1643": {
           "name": "granodioriti e leuco-quarzodioriti",
@@ -17821,10 +18531,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 5,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "granodior",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('granodior').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1644": {
           "name": "tonaliti e leuco-tonaliti",
@@ -17834,10 +18547,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 5,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1645": {
           "name": "dioriti anfibolico-biotitiche e gabbrodioriti anfiboliche",
@@ -17847,10 +18563,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 50,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1646": {
           "name": "gabbri anfibolici",
@@ -17860,10 +18579,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 13,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "gabbr",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('gabbr').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1647": {
           "name": "filoni di quarzo e di quarzite feldspatica",
@@ -17873,10 +18595,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 3,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1648": {
           "name": "filoni differenziati",
@@ -17886,10 +18611,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 89,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1649": {
           "name": "filoni poco differenziati",
@@ -17899,10 +18627,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 54,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1650": {
           "name": "filoni differenziali in senso melanocratico",
@@ -17912,10 +18643,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 253,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1666": {
           "name": "marmi dolomitici e calcareo-dolomitici",
@@ -17928,7 +18662,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1667": {
           "name": "dolomia principale",
@@ -17993,7 +18728,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1677": {
           "name": "calcare di esino",
@@ -18032,7 +18768,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1680": {
           "name": "formazione di wengen (o di la valle)",
@@ -18058,7 +18795,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1683": {
           "name": "calcare di buchenstein (o di livinallongo)",
@@ -18110,7 +18848,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1687": {
           "name": "calcare di angolo",
@@ -18229,7 +18968,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1698": {
           "name": "formazione di collio",
@@ -18281,7 +19021,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1703": {
           "name": "micascisti muscovitici",
@@ -18294,7 +19035,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1704": {
           "name": "paragneiss biotitici",
@@ -18307,7 +19049,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1705": {
           "name": "gneiss occhiadini",
@@ -18320,7 +19063,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1706": {
           "name": "granodiorite di val navazze",
@@ -18343,10 +19087,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 22,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfirit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfirit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1709": {
           "name": "filoni di quarzo",
@@ -18356,10 +19103,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 11,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1710": {
           "name": "filoni di barite",
@@ -18369,10 +19119,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 3,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1711": {
           "name": "cono di deiezione",
@@ -18582,7 +19335,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1728": {
           "name": "marne, calcari marnosi e ciottolame calcare e basalto",
@@ -18592,10 +19346,25 @@
           "ispra_younger": "Priabonian",
           "polygons_in_bbox": 4,
           "flags": [],
+          "young_bedrock_word": "basalt",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Priabonian",
-          "younger": "Priabonian"
+          "younger": "Priabonian",
+          "young_bedrock_exception": {
+            "body": "veneto-paleogene-basalts",
+            "cited_range_ma": [
+              59.24,
+              23.04
+            ],
+            "evidence": [
+              {
+                "authority": "veneto-litologia-250k",
+                "depositi_a": "Vulcaniti basaltiche (Oligocene-Paleocene sup.)"
+              }
+            ],
+            "note": "Veneto lithology map: class 'Vulcaniti basaltiche (Oligocene-Paleocene sup.)' dates the basaltic volcanics of the Veneto; applied only to ISPRA basalt units with a specific Paleocene-Oligocene age."
+          }
         },
         "GU_1729": {
           "name": "marne scagliose, calcari marnosi e calcari nulliporici",
@@ -18712,7 +19481,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1738": {
           "name": "dolomia principale",
@@ -18865,10 +19635,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 52,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfid",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfid').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1751": {
           "name": "verrucano",
@@ -18894,7 +19667,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1753": {
           "name": "granodioriti",
@@ -18904,10 +19678,21 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 22,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "granodior",
+          "decision": "legend_join",
+          "rule": "young_bedrock_join",
+          "age_basis": "legend_join",
+          "join_from": "description",
+          "older": "Eocene",
+          "younger": "Eocene",
+          "evidence": [
+            {
+              "formation": "granodioriti del monte bruffione",
+              "authority": "pat-unit-legend",
+              "unit": "GBR|GRANODIORITE DEL BRUFFIONE"
+            }
+          ],
+          "note": "The name is not a formation name; the description names one formation, 'granodioriti del monte bruffione' (key 'bruffione'), which matches map symbol GBR only."
         },
         "GU_1754": {
           "name": "tonaliti",
@@ -18917,10 +19702,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 6,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1755": {
           "name": "tonaliti a tessitura parallela",
@@ -18930,10 +19718,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 2,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "tonalit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('tonalit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1756": {
           "name": "dioriti e gabbrodioriti",
@@ -18943,10 +19734,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 9,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "diorit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('diorit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1757": {
           "name": "filoni di quarzite",
@@ -18956,10 +19750,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 2,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1758": {
           "name": "filoni di aplite",
@@ -18969,10 +19766,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 18,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1759": {
           "name": "porfiriti plagioclasiche",
@@ -18982,10 +19782,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 29,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfirit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfirit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1760": {
           "name": "porfiriti anfibolico - plagioclasiche",
@@ -18995,10 +19798,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 14,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "porfirit",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('porfirit').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1761": {
           "name": "filoni di barite",
@@ -19008,10 +19814,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 4,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "filon",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('filon').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1762": {
           "name": "brecce tettoniche",
@@ -19021,10 +19830,13 @@
           "ispra_younger": "Cenozoic",
           "polygons_in_bbox": 19,
           "flags": [],
-          "decision": "source",
-          "rule": "source",
-          "older": "Cenozoic",
-          "younger": "Cenozoic"
+          "young_bedrock_word": "brecc",
+          "decision": "null",
+          "rule": "young_bedrock",
+          "older": null,
+          "younger": null,
+          "note": "ISPRA dates this unit Cenozoic-Cenozoic (within 0-66 Ma) but its name or description names bedrock ('brecc').",
+          "withheld_reason": "young_bedrock"
         },
         "GU_1763": {
           "name": "alluvioni attuali e recenti",
@@ -19182,7 +19994,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1776": {
           "name": "marna di priabona",
@@ -19236,7 +20049,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1780": {
           "name": "brecce d'esplosione dei diatremi",
@@ -19534,7 +20348,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1805": {
           "name": "scisti albitico cloritico-epidotici",
@@ -19547,7 +20362,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1806": {
           "name": "detriti di falda",
@@ -19700,10 +20516,25 @@
           "ispra_younger": "Eocene",
           "polygons_in_bbox": 5,
           "flags": [],
+          "young_bedrock_word": "basalt",
           "decision": "source",
-          "rule": "source",
+          "rule": "young_bedrock_cited",
           "older": "Eocene",
-          "younger": "Oligocene"
+          "younger": "Oligocene",
+          "young_bedrock_exception": {
+            "body": "veneto-paleogene-basalts",
+            "cited_range_ma": [
+              59.24,
+              23.04
+            ],
+            "evidence": [
+              {
+                "authority": "veneto-litologia-250k",
+                "depositi_a": "Vulcaniti basaltiche (Oligocene-Paleocene sup.)"
+              }
+            ],
+            "note": "Veneto lithology map: class 'Vulcaniti basaltiche (Oligocene-Paleocene sup.)' dates the basaltic volcanics of the Veneto; applied only to ISPRA basalt units with a specific Paleocene-Oligocene age."
+          }
         },
         "GU_1819": {
           "name": "marne azzurro-cenerine",
@@ -19768,7 +20599,8 @@
           "decision": "null",
           "rule": "event_not_formation",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "metamorphic_event"
         },
         "GU_1825": {
           "name": "calcari varicolori e radiolariti nerastre e violacee",
@@ -19783,7 +20615,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1826": {
           "name": "calcari bianchi, rosei",
@@ -20201,7 +21034,8 @@
           "decision": "null",
           "rule": "contradiction_null",
           "older": null,
-          "younger": null
+          "younger": null,
+          "withheld_reason": "contradiction"
         },
         "GU_1859": {
           "name": "molasse argillose a pettinidi",
@@ -20393,10 +21227,10 @@
           "ispra_younger": "Holocene",
           "polygons_in_bbox": 9,
           "flags": [],
-          "decision": "null",
-          "rule": "event_not_formation",
-          "older": null,
-          "younger": null
+          "decision": "source",
+          "rule": "source",
+          "older": "Holocene",
+          "younger": "Holocene"
         },
         "GU_1876": {
           "name": "alluvioni ghiaiose",
@@ -20495,20 +21329,27 @@
         "Ages are used only for formation events (event_process 'formation'); metamorphicProcess, faulting and unknown events give null, because their age is the metamorphism or deformation (e.g. orthogneiss 'Cenozoic').",
         "Units whose name, description and age contradict each other (C1-C3) or whose age disagrees with the detailed South Tyrol/Trentino/Veneto maps where both exist (C4) are left uncoloured, unless the name matches exactly one formation of the South Tyrol / Trentino legends (legend_join with that age, join_from 'name'), or the name is generic and the description names exactly one formation (inline or in parentheses) that matches exactly one map symbol, with no C1/C2 contradiction between name and description (legend_join, join_from 'description'), or both name and description are Quaternary deposits with a Quaternary age (ISPRA age kept).",
         "Check C4 reads the ages of the detailed maps from the previous build, so its flags can change when those ages change (e.g. after the Veneto legend joins of 2026-09-12).",
+        "Young bedrock (2026-09-13): a unit with a formation event whose ISPRA age lies within 0-66 Ma and whose name or description names volcanic, plutonic, dyke, metamorphic or (for a bare 'Cenozoic') lithified bedrock is withheld (withheld_reason young_bedrock), unless its name or description joins unambiguously to a South Tyrol / Trentino formation (rule young_bedrock_join) or its age names a specific epoch/period and a cited authority dates the named body in the Cenozoic (rule young_bedrock_cited, see young_bedrock_exception). Quaternary deposit names are exempt (their clasts may be bedrock).",
+        "withheld_reason for null decisions: contradiction_null -> contradiction, event_not_formation -> metamorphic_event (metamorphic and faulting events), young_bedrock -> young_bedrock, age_unmapped -> unmappable_interval; no_geological_age (glaciers, water, anthropic ground) has none (tile age_basis 'none').",
         "The unit name shown (unit_name) is ISPRA's GeologicUnit name even where it contradicts the description; the lithology property lists the INSPIRE lithology terms, which follow the description."
       ],
       "review": {
         "script": "data/scripts/terrain/review_ispra_100k_units.py",
-        "generated": "2026-09-12",
+        "generated": "2026-09-13",
         "chart": "2026-06",
         "units_in_bbox": 1072,
         "counts": {
-          "source": 672,
-          "contradiction_null": 232,
-          "event_not_formation": 137,
-          "contradiction_join": 18,
-          "contradiction_quaternary_kept": 10,
+          "source": 590,
+          "contradiction_null": 235,
+          "event_not_formation": 136,
+          "young_bedrock": 73,
+          "contradiction_join": 19,
+          "join_from_name": 17,
+          "young_bedrock_cited": 8,
+          "contradiction_quaternary_kept": 6,
+          "join_from_description": 4,
           "no_geological_age": 2,
+          "young_bedrock_join": 2,
           "age_unmapped": 1
         },
         "thresholds": {
@@ -20518,7 +21359,8 @@
         "name_alias": {
           "schlern": "sciliar"
         }
-      }
+      },
+      "event_process_note": "'unknown' is treated as a formation event since 2026-09-13: the dataset does not say the event is metamorphic (1 unit in the bbox, 'bassure di risorgiva', Holocene); the young-bedrock rule still applies."
     }
   },
   "authorities": {
@@ -20597,5 +21439,20 @@
       "url": "https://www.swisstopo.admin.ch/dam/en/sd-web/Np-QwyB4JAjX/datamodel-de.pdf",
       "accessed": "2026-09-12"
     }
+  },
+  "age_basis_contract": {
+    "source": "dated with the age stated by the polygon's own map",
+    "legend_join": "dated by joining formation names to another cited legend (evidence rows; envelope)",
+    "class_rule": "dated by a deposit-type rule with a cited basis",
+    "withheld": "the source states an age that the site does not use for colour; the tile keeps the source's age text in age_label and gives age_withheld_reason",
+    "none": "the source gives no usable age",
+    "withheld_reasons": {
+      "metamorphic_event": "the stated age is a metamorphic, deformation or subduction event",
+      "contradiction": "the source's attributes contradict each other",
+      "young_bedrock": "a Cenozoic/Quaternary age on volcanic, plutonic, dyke, metamorphic or lithified bedrock (ISPRA)",
+      "unmappable_interval": "no ICS chart interval for the stated younger bound",
+      "open_range": "an age open on one side or spanning eons"
+    },
+    "since": "2026-09-13 (before: age_basis null for both)"
   }
 }

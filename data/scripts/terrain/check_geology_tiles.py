@@ -36,7 +36,7 @@ ROOT = Path(r"E:/Projects/Dolomites")
 DEFAULT_TILES = ROOT / "app/public/data/terrain/geology"
 EARTH_R = 6378137.0
 ORIGIN_M = math.pi * EARTH_R
-PROPS = ("source", "color", "age_basis", "unit_name")
+PROPS = ("source", "color", "age_basis", "age_withheld_reason", "unit_name")
 
 
 def lonlat_to_tile(lon: float, lat: float, z: int) -> tuple[int, int]:
@@ -160,6 +160,8 @@ def main() -> int:
         s["covered"] += 1
         s["undated"] += p["color"] is None
         s[f"age_basis:{p.get('age_basis')}"] += 1
+        if p.get("age_withheld_reason"):
+            s[f"withheld:{p['age_withheld_reason']}"] += 1
     undated_names = collections.defaultdict(collections.Counter)
     for p in top:
         if p is not None and p["color"] is None:

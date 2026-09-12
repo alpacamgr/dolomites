@@ -22,7 +22,7 @@ map_state:
       label: interpreted
       source_ref: "diss-3-3-1"
     - id: "geology-suedtirol"
-      label: observed
+      label: interpreted
       source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"]
 facts:
   - text:
@@ -67,4 +67,4 @@ scene:
   layers:
     - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
     - { id: "diss-3-3-1", label: interpreted, source_ref: "diss-3-3-1", style: "fault-lines" }
-    - { id: "geology-suedtirol", label: observed, source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"] }
+    - { id: "geology-suedtirol", label: interpreted, source_ref: ["bolzano-geologia", "pat-geologia", "veneto-litologia", "swisstopo-geocover", "ispra-geologia-100k", "geosphere-ge-500k"] }

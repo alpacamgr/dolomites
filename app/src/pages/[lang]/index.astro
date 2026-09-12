@@ -7,6 +7,7 @@ import Stage from '@/components/Stage.svelte';
 import { LOCALES, type Locale, loadUi } from '@/lib/i18n';
 import { loadChapters, anyFixtureInUse } from '@/lib/content/chapters';
 import { loadIcs } from '@/lib/content/ics';
+import { loadLicenseLinks } from '@/lib/content/licenses';
 import { shortCite } from '@/lib/content/bibliography';
 import type { ClientChapter } from '@/lib/story/types';
 
@@ -19,6 +20,7 @@ const locale = lang;
 const strings = loadUi(locale);
 const chapters = loadChapters();
 const ics = loadIcs();
+const licenseLinks = loadLicenseLinks();
 const usingFixtures = anyFixtureInUse();
 
 // Marshal minimal per-chapter data for the client controller.
@@ -88,6 +90,7 @@ const description = strings['site.tagline'];
           locale={locale}
           uiStrings={strings}
           ics={ics}
+          licenses={licenseLinks}
           debug={debug}
         />
       </div>

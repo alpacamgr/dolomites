@@ -4,6 +4,8 @@ import type { Locale } from '@/lib/i18n';
 import { loadUi } from '@/lib/i18n';
 import { bibEntry, shortCite } from '@/lib/content/bibliography';
 import { loadNarrative } from '@/lib/content/narrative';
+import { loadCurveFiles, loadLicenseLinks } from '@/lib/content/licenses';
+import { splitLicenses } from '@/lib/story/licenseText';
 
 interface Props {
   chapters: LoadedChapter[];
@@ -35,6 +37,8 @@ for (const ch of chapters) {
 }
 
 const rows = refs.map((k) => ({ key: k, entry: bibEntry(k), label: shortCite(k) }));
+const licenseLinks = loadLicenseLinks();
+const dataFiles = loadCurveFiles();
 const pending = chapters.flatMap((ch) =>
   (ch.facts ?? [])
     .filter((f) => f.verification === 'pending')
@@ -63,6 +67,9 @@ function referenceHtml(s: string): string {
                 {r.entry.url && (
                   <a class="src-url" href={r.entry.url} rel="noopener">{r.entry.url.replace(/^https?:\/\//, '')}</a>
                 )}
+                {r.entry.openAccess && (
+                  <span class="src-license">{t('sources_list.license')}: {splitLicenses(r.entry.openAccess, licenseLinks).map((p) => (p.url ? <a href={p.url} rel="license noopener">{p.text}</a> : p.text))}</span>
+                )}
               </>
             ) : (
               <span class="unresolved">{t('sources.unresolved')}</span>
@@ -70,6 +77,24 @@ function referenceHtml(s: string): string {
           </li>
         ))}
       </ol>
+    )}
+
+    {dataFiles.length > 0 && (
+      <>
+        <h3>{t('sources_list.data_files')}</h3>
+        <p class="sources-note">{t('sources_list.data_files_note')}</p>
+        <ul class="sources-list">
+          {dataFiles.map((d) => (
+            <li id={`data-${d.datasetId}`}>
+              <span class="src-label">{d.files.join(', ')}</span>
+              <span class="src-ref">{d.attribution}</span>
+              {d.licenseName && (
+                <span class="src-license">{t('sources_list.license')}: {d.licenseUrl ? <a href={d.licenseUrl} rel="license noopener">{d.licenseName}</a> : d.licenseName}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </>
     )}
 
     {pending.length > 0 && (

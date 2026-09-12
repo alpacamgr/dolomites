@@ -12,6 +12,7 @@
  *    switch is not blank.
  */
 import type { SceneEngine, SceneState, EngineStatus } from '../scene-api';
+import { importWithReload } from './chunkReload';
 
 export type EngineKind = 'globe' | 'terrain';
 
@@ -45,11 +46,12 @@ export const CROSSFADE_MS = 650;
 const CROSSFADE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 async function loadFactory(kind: EngineKind): Promise<(opts?: Record<string, unknown>) => SceneEngine> {
+  // a chunk missing after a deploy reloads the page once (chunkReload.ts); other failures use the stub
   if (kind === 'globe') {
-    const m = await import('@/lib/globe');
+    const m = await importWithReload(() => import('@/lib/globe'));
     return m.createGlobeEngine;
   }
-  const m = await import('@/lib/terrain');
+  const m = await importWithReload(() => import('@/lib/terrain'));
   return m.createTerrainEngine;
 }
 

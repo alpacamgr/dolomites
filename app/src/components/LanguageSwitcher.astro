@@ -10,7 +10,7 @@ interface Props {
 const { locale, suffix = '/' } = Astro.props;
 const strings = loadUi(locale);
 ---
-<nav class="lang-switch" aria-label={strings['nav.chapters']}>
+<nav class="lang-switch" aria-label={strings['language_nav'] ?? 'Language'}>
   {LOCALES.map((l) => (
     <a
       href={`/${l}${suffix === '/' ? '/' : suffix}`}

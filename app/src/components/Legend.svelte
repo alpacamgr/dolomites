@@ -3,10 +3,11 @@
   import type { ClientChapter } from '@/lib/story/types';
   import type { IcsChart } from '@/lib/content/ics';
   import type { GeologyFocus, GeologyKeyData } from '@/lib/story/geologyKey';
+  import { importWithReload } from '@/lib/story/chunkReload';
 
   // The key only appears once the terrain engine reports geology, so it stays out of the initial bundle.
   let keyModule: Promise<typeof import('./GeologyKey.svelte').default> | null = null;
-  const loadGeologyKey = () => (keyModule ??= import('./GeologyKey.svelte').then((m) => m.default));
+  const loadGeologyKey = () => (keyModule ??= importWithReload(() => import('./GeologyKey.svelte')).then((m) => m.default));
 
   let { chapter, uiStrings, loading, ics, locale, geologyKey, onGeologyFocus }: {
     chapter: ClientChapter | undefined;
@@ -91,7 +92,7 @@
       {/if}
       {#if showKey && geologyKey}
         {#await loadGeologyKey() then GeologyKey}
-          <GeologyKey data={geologyKey} {ics} {uiStrings} {locale} emphasis={chapter?.emphasis} onFocus={onGeologyFocus} />
+          <GeologyKey data={geologyKey} {ics} {uiStrings} {locale} emphasis={chapter?.emphasis} chapterId={chapter?.id} onFocus={onGeologyFocus} />
         {/await}
       {/if}
     </div>

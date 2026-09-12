@@ -306,7 +306,7 @@ gap-fill candidates and their evaluation: research/geology/geology-gap-fill-sour
   per tile and lost polygons at low zoom.
 - `geology-coverage.geojson`: per source, the union of its polygons, simplified
   0.005 deg and repaired, with `source`, `attribution`, `license`, `scale`,
-  `scale_denominator`, `label: observed`. `geology-gaps.geojson`: DEM bbox minus
+  `scale_denominator`, `label: interpreted`. `geology-gaps.geojson`: DEM bbox minus
   all coverage (128.6 km2, 0.45% of the bbox), opened with 0.0001 deg,
   simplified 0.0001 deg, parts under 1e-7 deg2 dropped (128.4 km2 listed in
   277 parts, one feature per part with `kind: no_open_geology`, `area_km2`,
@@ -352,6 +352,43 @@ unit lists there); the grid/point "before" is `geology-suedtirol.pmtiles`.
   mosaic from the archive, units in their ICS colour (grey where null),
   coverage outlines per source.
 
+## Withheld ages and basement consistency
+
+Tile contract since 2026-09-13 (docs/04 section 2.2): every uncoloured unit says
+why. `age_basis: "withheld"` means the source states an age that the site does not
+use for colour; the source's own text stays in `age_label` and
+`age_withheld_reason` is one of `metamorphic_event`, `contradiction`,
+`young_bedrock`, `unmappable_interval` or `open_range`. `age_basis: "none"` means
+the source gives no usable age. Numbers and colour are null for both. Per source:
+South Tyrol 'Terziario (?)' younger bounds are `unmappable_interval`; Trentino
+'pre-Permiano' / 'post-Carbonifero' are `open_range` and '?Terziario'
+`unmappable_interval`; swisstopo open ranges are `open_range`, legend or description
+contradictions `contradiction`, 'frühes Paläozoikum' `unmappable_interval`; ISPRA
+reasons come from the per-unit review (metamorphic and faulting events, name /
+description / age contradictions, young bedrock, 'Unknown'); GeoSphere's subduction
+unit is `metamorphic_event`. Glaciers, water, anthropic and unmappable ground are
+`none`.
+
+Young bedrock (ISPRA 1:100,000): a unit dated within 0-66 Ma whose name or
+description names volcanic, plutonic, dyke, metamorphic or (for a bare
+'Cenozoic') lithified bedrock is withheld, unless its name or description joins
+unambiguously to a South Tyrol / Trentino formation or its age names a specific
+epoch that a cited authority confirms for the named body (Adamello-Presanella
+tonalites from the Trentino unit legend; Paleogene basalts from the Veneto map).
+
+Basement across source borders: one rule for all sources, an age is withheld when
+the source's attributes call it a metamorphic or deformation event, an open range
+or contradictory, and used otherwise. The sources record the same crystalline
+basement differently, so colours still jump at their borders: GeoSphere gives
+formation ranges ('Altkristallin' paragneiss, event 'deposition', Neoproterozoic -
+Devonian), swisstopo chronostratigraphic ranges (e.g. Proterozoikum - Paläozoikum)
+and South Tyrol 'Paleozoico', while ISPRA gives a metamorphic event (withheld)
+and Trentino only 'pre-Permiano' (withheld). No source gives both ages, so this
+is documented (meta `ages.basement_ages_across_sources`) rather than harmonised.
+
+The geology layer is labelled `interpreted` (docs/03): a geological map is drawn
+by researchers from field evidence, and the numeric ages are derived here.
+
 ## Geology ages
 
 ### South Tyrol (`bz-geology-carg`)
@@ -385,7 +422,8 @@ the qualifier "(p.p.)" (pro parte) or "(?)" (uncertain).
   boundaries) and "Terziario (?)" (not an ICS unit). Mapping Lower and Upper
   Permian to the Cisuralian and Lopingian series is a judgement call, noted in
   the table.
-- The polygons and their attributions stay `observed`; the numbers are the
+- The polygons and their attributions are the map's (label `interpreted` since
+  2026-09-13: a geological map is drawn from field evidence); the numbers are the
   chart's boundary ages, not ages published by the map. Mapped and unmapped
   unit counts are under `sources[].ages` in `geology-dolomites.meta.json`.
 

@@ -27,7 +27,7 @@
   "labels": {
     "observed": {
       "title": "Beobachtet",
-      "explanation": "Heute direkt gemessen - eine LiDAR-Oberfläche, eine kartierte Gesteinseinheit, ein Gletscherumriss."
+      "explanation": "Heute direkt gemessen - eine LiDAR-Oberfläche, ein Gletscherumriss."
     },
     "modeled": {
       "title": "Modelliert",
@@ -88,7 +88,10 @@
     "Meghalayan": "Meghalayum",
     "Paleozoic": "Paläozoikum",
     "Mesozoic": "Mesozoikum",
-    "Phanerozoic": "Phanerozoikum"
+    "Phanerozoic": "Phanerozoikum",
+    "Chibanian": "Chibanium",
+    "Greenlandian": "Grönlandium",
+    "Northgrippian": "Nordgrippium"
   },
   "ics_names_sources": {
     "chart": "https://stratigraphy.org/ICSchart/ChronostratChart2022-02German.pdf",
@@ -129,7 +132,9 @@
     "none": "Keine kartierten Einheiten im Bild",
     "coarse_one": "Gröbere Karte im Bild: {list}.",
     "coarse_many": "Gröbere Karten im Bild: {list}.",
-    "period_not_given_many": "Periode nicht angegeben: {names}"
+    "period_not_given_many": "Periode nicht angegeben: {names}",
+    "undated_withheld": "Kartiert, Alter fehlt oder zu unsicher für die Farbe",
+    "withheld": "Kartiert, Alter zu unsicher für die Farbe"
   },
   "geology_popup": {
     "unnamed": "Unbenannte Einheit",
@@ -149,7 +154,35 @@
       "swisstopo-geocover": "Geologische Vektordaten GeoCover (swisstopo)",
       "ispra-geologia-100k-inspire": "Geologische Karte Italiens (ISPRA)",
       "geosphere-geologicunits-500k": "Geologische Einheiten Österreichs (GeoSphere Austria)"
+    },
+    "withheld": "Nicht für die Farbe verwendet: {reason}.",
+    "withheld_plain": "Nicht für die Farbe verwendet.",
+    "withheld_reason": {
+      "metamorphic_event": "es datiert eine Metamorphose oder ein tektonisches Ereignis, nicht die Entstehung des Gesteins",
+      "contradiction": "es widerspricht anderen Altersangaben zu dieser Einheit",
+      "young_bedrock": "es weist Festgestein ein junges Alter zu",
+      "unmappable_interval": "das angegebene Intervall hat keine Entsprechung in der ICS-Tabelle",
+      "open_range": "der angegebene Bereich ist nach einer Seite offen"
     }
   },
-  "layer_cite_many": "{n} Quellen"
+  "layer_cite_many": "{n} Quellen",
+  "map_hint": {
+    "wheel_windows": "Strg + Scrollen zoomt die Karte",
+    "wheel_mac": "⌘ + Scrollen zoomt die Karte",
+    "touch": "Mit zwei Fingern die Karte bewegen",
+    "globe_wheel_windows": "Strg + Scrollen zoomt den Globus",
+    "globe_wheel_mac": "⌘ + Scrollen zoomt den Globus",
+    "globe_touch": "Mit zwei Fingern den Globus drehen"
+  },
+  "not_found": {
+    "title": "Seite nicht gefunden",
+    "text": "Diese Seite gibt es nicht, oder sie ist umgezogen.",
+    "link": "Zur Geschichte auf Deutsch"
+  },
+  "sources_list": {
+    "license": "Lizenz",
+    "data_files": "Datendateien",
+    "data_files_note": "Diese Kurvendateien liegen im Datenordner der Seite; derzeit stellt keine Seite sie dar."
+  },
+  "language_nav": "Sprache"
 }

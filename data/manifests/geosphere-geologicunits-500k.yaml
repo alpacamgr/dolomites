@@ -32,7 +32,7 @@ size_bytes: 23490560
 checksum:
   algorithm: sha256
   value: "8d39d3b36d997028cdb8a00b5853949df666cca48f6b1c2f3fa138a33666f46a"  # insp_ge_gu_sg500_epsg4258.gpkg
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - Priority 6 (last) in the merged Dolomites geology: fills the Austrian part of the terrain bbox (Ötztal, Stubai, Zillertal,
     Hohe Tauern, East Tyrol). 1:500,000, 20x coarser than the South Tyrol map: context only; the meta gives its scale and a

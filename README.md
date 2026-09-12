@@ -53,6 +53,12 @@ Python 3.13 virtual environment in `.venv` (pygplates, gplately, rasterio, xarra
 - Six narrative facts are still marked *verification pending*; the site flags them.
 - Rock colours come from six open geological maps at very different scales: South Tyrol and Trentino 1:10,000-1:25,000, swisstopo GeoCover 1:25,000, Veneto 1:250,000, and, where no provincial map is open, the older ISPRA 1:100,000 national map and GeoSphere Austria 1:500,000. About 0.5 % of the terrain area has no open geological map (hatched). Units whose age is missing or not trustworthy enough (for example ISPRA units whose stated age is a metamorphic age or contradicts their description) are drawn light grey, not coloured. The age mapping for the gap-fill sources awaits review by a geologist; judgement calls are listed in `data/scripts/terrain/geology_age_mapping.json` and the geology meta.
 
+## Licence
+
+- **Code** (`app/`, `data/scripts/`, `tools/`, configuration): MIT, see [LICENSE](LICENSE).
+- **Written content** (`content/`, `docs/`, `research/`): CC BY 4.0, see [LICENSE-CONTENT.md](LICENSE-CONTENT.md).
+- **Data** in `app/public/data/`: each dataset keeps its source's licence and attribution requirements, listed in [research/sources/license-register.md](research/sources/license-register.md) and in the metadata file next to each dataset.
+
 ## Folder layout
 
 ```

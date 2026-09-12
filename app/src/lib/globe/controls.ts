@@ -1,6 +1,7 @@
 /**
- * Orbit controls for a unit globe: drag to rotate (with inertia), wheel and
- * pinch to zoom, eased programmatic moves, and a lock for the story controller.
+ * Orbit controls for a unit globe: drag to rotate (with inertia), Ctrl/⌘ + wheel or a two-finger
+ * pinch to zoom (a plain wheel and a one-finger drag scroll the page), eased programmatic moves,
+ * and a lock for the story controller.
  * Time-based damping, so behaviour does not depend on the frame rate.
  *
  * Zoom limits. Default 1.6..4.0 Earth radii (brief). Resolution check for a
@@ -56,6 +57,8 @@ export class GlobeControls {
     private readonly el: HTMLElement,
     private readonly onInput: () => void,
     private readonly opts: ControlsOptions,
+    /** shows a short hint when a gesture is left to the page (wheel without Ctrl/⌘, one-finger touch) */
+    private readonly hint?: (kind: 'wheel' | 'touch') => void,
   ) {
     const on = <K extends keyof HTMLElementEventMap>(type: K, fn: (e: HTMLElementEventMap[K]) => void, o?: AddEventListenerOptions) => {
       el.addEventListener(type, fn, o);
@@ -72,7 +75,8 @@ export class GlobeControls {
   setLocked(v: boolean) {
     this.locked = v;
     // When locked the page must keep scrolling on touch and wheel.
-    this.el.style.touchAction = v ? 'auto' : 'none';
+    // One finger always scrolls the page (the browser pans); two fingers reach the globe as pointer events.
+    this.el.style.touchAction = v ? 'auto' : 'pan-x pan-y';
     this.el.style.cursor = v ? '' : 'grab';
     if (v) { this.vLat = this.vLon = 0; this.pointers.clear(); }
   }
@@ -184,6 +188,11 @@ export class GlobeControls {
     const dy = e.clientY - p.y;
     p.x = e.clientX;
     p.y = e.clientY;
+    if (e.pointerType === 'touch' && this.pointers.size < 2) {
+      // one finger belongs to the page; the browser normally cancels this pointer as it starts scrolling
+      this.hint?.('touch');
+      return;
+    }
     if (this.pointers.size >= 2) {
       const [a, b] = Array.from(this.pointers.values());
       const dist = Math.hypot(a.x - b.x, a.y - b.y);
@@ -219,6 +228,11 @@ export class GlobeControls {
 
   private wheel(e: WheelEvent) {
     if (this.locked) return; // let the page scroll
+    // The wheel scrolls the story; Ctrl/⌘ + wheel (and a trackpad pinch, which reports ctrlKey) zooms.
+    if (!(e.ctrlKey || e.metaKey)) {
+      this.hint?.('wheel');
+      return;
+    }
     e.preventDefault();
     this.easing = false;
     const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;

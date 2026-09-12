@@ -48,6 +48,8 @@ export interface GlobeOptions {
   debug?: boolean;
   /** prefers-reduced-motion: chapter camera changes jump instead of easing, default false */
   reduceMotion?: boolean;
+  /** flat UI strings (content/ui) for the gesture hint; English fallbacks are built in */
+  strings?: Record<string, string>;
 }
 
 export interface GlobeStats {
@@ -147,6 +149,8 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
   let blankTex: THREE.DataTexture | null = null;
   let flatNormalTex: THREE.DataTexture | null = null;
   let controls: GlobeControls | null = null;
+  let hintEl: HTMLDivElement | null = null;
+  let hintTimer = 0;
   let overlays: Overlays | null = null;
   let store: TextureStore | null = null;
   let ro: ResizeObserver | null = null;
@@ -618,7 +622,24 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
       scene.add(overlays.group);
       if (pendingLayers) { applyLayers(pendingLayers); pendingLayers = null; }
 
-      controls = new GlobeControls(canvas, markDirty, { minDistance, maxDistance, fovDeg: FOV_DEG });
+      // Short gesture hint over the globe, like MapLibre's cooperative-gestures screen on the terrain.
+      hintEl = document.createElement('div');
+      hintEl.className = 'gl-hint';
+      hintEl.setAttribute('aria-hidden', 'true');
+      el.appendChild(hintEl);
+      const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+      const hs = options.strings ?? {};
+      const showHint = (kind: 'wheel' | 'touch') => {
+        if (!hintEl) return;
+        hintEl.textContent = kind === 'touch'
+          ? hs['map_hint.globe_touch'] ?? 'Use two fingers to turn the globe'
+          : isMac ? hs['map_hint.globe_wheel_mac'] ?? 'Use ⌘ + scroll to zoom the globe'
+            : hs['map_hint.globe_wheel_windows'] ?? 'Use Ctrl + scroll to zoom the globe';
+        hintEl.classList.add('on');
+        window.clearTimeout(hintTimer);
+        hintTimer = window.setTimeout(() => hintEl?.classList.remove('on'), 1200);
+      };
+      controls = new GlobeControls(canvas, markDirty, { minDistance, maxDistance, fovDeg: FOV_DEG }, showHint);
       controls.setLocked(locked);
       controls.jumpTo(pendingView ?? DEFAULT_VIEW);
       pendingView = null;
@@ -745,6 +766,9 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
         renderer.dispose();
         try { renderer.forceContextLoss(); } catch { /* already lost */ }
         renderer.domElement.remove();
+        window.clearTimeout(hintTimer);
+        hintEl?.remove();
+        hintEl = null;
       }
       renderer = null; controls = null; overlays = null; store = null; ro = null;
       globeMesh = null; atmoMesh = null; globeMat = null; atmoMat = null; stars = null;

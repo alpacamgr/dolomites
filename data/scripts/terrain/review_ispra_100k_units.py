@@ -33,8 +33,12 @@ Decision (rule), in this order:
   contradiction_quaternary_kept  only C1/C2, name and description both name Quaternary deposits and the age is
                                  Quaternary -> ISPRA age kept (the mismatch does not change the age)
   contradiction_null             any other flag -> null
-  event_not_formation            eventProcess metamorphicProcess, faulting or unknown -> null
+  event_not_formation            eventProcess metamorphicProcess or faulting -> null (withheld, metamorphic_event)
   age_unmapped                   an age name without a chart interval (e.g. 'Unknown') -> null
+  young_bedrock                  (formation event, no flag) ISPRA's age lies within 0-66 Ma but the name or description
+                                 names volcanic, plutonic, dyke, metamorphic or, for a bare 'Cenozoic', lithified bedrock
+                                 -> null (withheld, young_bedrock); a formation join makes it young_bedrock_join, a
+                                 specific epoch confirmed by a cited authority for the named body young_bedrock_cited
   source                         ISPRA's olderNamedAge / youngerNamedAge
 
 Usage: review_ispra_100k_units.py [--dry-run] [--list N]
@@ -95,7 +99,7 @@ AGE_WORDS = {
 AGE_QUAL = set("inf inferiore sup superiore medio media basso alto e ed p pp in genere generale".split())
 TYPE_WORDS = set("formazione formazioni dolomia dolomie calcare calcari arenaria arenarie conglomerato conglomerati gruppo strati "
                  "membro membri marna marne scisti scisto filladi fillade quarzifera quarzifere quarzosa quarzose gneiss ortogneiss "
-                 "paragneiss porfiroide porfiroidi unita complesso breccia brecce calcarenite calcareniti".split())
+                 "paragneiss porfiroide porfiroidi unita complesso breccia brecce calcarenite calcareniti granito graniti tonalite tonaliti granodiorite granodioriti".split())
 NAME_STOP = STOP | set("val valle monte m auct".split())
 ALIAS = {"schlern": "sciliar"}  # German / Italian name of the same place (judgement: Dolomia dello Schlern = Sciliar)
 NULL_NAME = re.compile(r"\b(ghiacciai|ghiacciaio|nevai|nevati|laghi|lago|acque|bacini|riporti|discariche|antropic)")
@@ -103,7 +107,7 @@ NULL_NAME = re.compile(r"\b(ghiacciai|ghiacciaio|nevai|nevati|laghi|lago|acque|b
 # 'formazione a bellerophon', 'ortogneiss del gran veneziano') or 'rosso ammonitico'; lithological descriptions
 # ('micascisti sericitici', 'dolomie e calcari') are never joined
 FORMATION_NAME = re.compile(r"\b(formazione|formazioni|dolomia|dolomie|calcare|calcari|arenaria|arenarie|conglomerato|gruppo|strati|marne|marna|"
-                            r"argillite|argilliti|carniola|fillade|filladi|scisti|ortogneiss|gneiss|granito|tonalite|granodiorite|porfiroide|porfiroidi)"
+                            r"argillite|argilliti|carniola|fillade|filladi|scisti|ortogneiss|gneiss|granito|graniti|tonalite|tonaliti|granodiorite|granodioriti|porfiroide|porfiroidi)"
                             r"\s+(di|del|della|dello|dei|degli|delle|dell|a|ad)\b|\brosso ammonitico\b")
 
 
@@ -133,8 +137,77 @@ def leading_ages(desc: str | None) -> list[str]:
 
 FORMATION_PHRASE = re.compile(
     r"\b(?:formazione|formazioni|dolomia|dolomie|calcare|calcari|arenaria|arenarie|conglomerato|gruppo|strati|marne|marna|argillite|"
-    r"argilliti|carniola|fillade|filladi|scisti|ortogneiss|gneiss|granito|tonalite|granodiorite|porfiroide|porfiroidi)\s+"
+    r"argilliti|carniola|fillade|filladi|scisti|ortogneiss|gneiss|granito|graniti|tonalite|tonaliti|granodiorite|granodioriti|porfiroide|porfiroidi)\s+"
     r"(?:di|del|della|dello|dei|degli|delle|dell|a|ad)\b[^.,;:()\[\]=\-]*|\brosso ammonitico\b[^.,;:()\[\]=\-]*")
+
+
+YOUNG_MAX_MA = 66.0  # base of the Cenozoic in chart 2026-06
+BEDROCK = re.compile(r"porfid|porfirit|vitrofir|ignimbrit|riolit|dacit|andesit|basalt|trachit|diabas|granit|granodior|tonalit|diorit|"
+                     r"gabbr|monzo|sienit|pirossenit|peridotit|serpentin|olivinit|orneblendit|filon|aplit|pegmatit|lamprofir|kersantit|"
+                     r"gneis|scist|fillad|quarzit|marm[oi]|marmor|anfibolit|prasinit|milonit|fillonit|cornubianit|migmatit|eclogit|"
+                     r"ofiolit|oficalc|\blav[ae]\b|vulcanit|barite")
+LITHIFIED = re.compile(r"dolomi|calcar|arenari|\bmarn|conglomerat|argillit|siltit|selc|radiolarit|gess|flysch|scaglia|biancone|"
+                       r"maiolica|molass|calcarenit|brecc")
+BARE_ERA = {"Cenozoic", "Quaternary"}
+# Exception (a) of the young-bedrock rule: the unit's age names a specific epoch or period, its text names the body, and a
+# cited authority dates that body in the Cenozoic (the ISPRA age must overlap the cited ages).
+CENOZOIC_BODIES = [
+    {"id": "adamello-presanella", "match": r"adamello|presanella|re di castello",
+     "evidence": [{"authority": "pat-unit-legend", "unit_sigla": "PPC"}, {"authority": "pat-unit-legend", "unit_sigla": "TAC"},
+                  {"authority": "pat-unit-legend", "unit_sigla": "RCT"},
+                  {"statement": "legend group heading of the Adamello-Presanella units", "authority": "pat-legend",
+                   "age_text": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello", "older": "Paleogene", "younger": "Neogene",
+                   "where": "legend sheet, heading above PPC, PPG, PPN, TAC, RCT ...", "quote": "Magmatismo tardo-Alpino - Batolite terziario dell'Adamello"}],
+     "note": "Trentino unit legend: Tonalite della Presanella centrale 'Oligocene', Tonalite dell'Adamello occidentale 'Eocene sup', Tonalite del Re di Castello 'Eocene medio'."},
+    {"id": "vedrette-di-ries", "match": r"vedrette di ries|rieserferner",
+     "evidence": [{"authority": "bz-carg-attributes", "sigla": "VDR"}],
+     "note": "South Tyrol CARG: Tonaliti delle Vedrette di Ries (VDR) 'Oligocene'."},
+    {"id": "veneto-paleogene-basalts", "match": r"basalt",
+     "evidence": [{"authority": "veneto-litologia-250k", "depositi_a": "Vulcaniti basaltiche (Oligocene-Paleocene sup.)"}],
+     "note": "Veneto lithology map: class 'Vulcaniti basaltiche (Oligocene-Paleocene sup.)' dates the basaltic volcanics of the Veneto; applied only to ISPRA basalt units with a specific Paleocene-Oligocene age."},
+]
+WITHHELD_REASON = {"contradiction_null": "contradiction", "event_not_formation": "metamorphic_event", "young_bedrock": "young_bedrock",
+                   "age_unmapped": "unmappable_interval"}
+
+
+def young_bedrock(u: dict, o, y, fn: set) -> str | None:
+    """The word that marks a unit as pre-Quaternary bedrock although ISPRA dates it within 0-66 Ma, or None."""
+    if not (o and y) or o["start_ma"] > YOUNG_MAX_MA + 1e-9:
+        return None
+    if "quaternary" in fn:  # Quaternary deposit names (morene, alluvioni, detrito ...) may list the bedrock of their clasts
+        return None
+    text = ascii_lower(f"{u['name']} {u['description'] or ''}")
+    m = BEDROCK.search(text)
+    if m:
+        return m.group(0)
+    m = LITHIFIED.search(text)
+    if m and u["older"] == "Cenozoic" and u["younger"] == "Cenozoic":
+        return m.group(0)
+    return None
+
+
+def cenozoic_body(u: dict, o, y, ctx) -> dict | None:
+    """Exception (a): specific age + named body + cited Cenozoic age that overlaps ISPRA's."""
+    if {u["older"], u["younger"]} <= BARE_ERA:
+        return None
+    text = ascii_lower(f"{u['name']} {u['description'] or ''}")
+    for body in CENOZOIC_BODIES:
+        if not re.search(body["match"], text):
+            continue
+        evidence, res = [], []
+        for ev in body["evidence"]:
+            ev = dict(ev)
+            if "unit_sigla" in ev:
+                keys = [k for k, r in ctx.pat["unit_ages"]["units"].items() if r["sigla"] == ev["unit_sigla"] and r["age"]]
+                ev = {"authority": "pat-unit-legend", "unit": keys[0]}
+            evidence.append(ev)
+            res.append(ctx.resolve(ev, f"young bedrock body {body['id']}"))
+        start = max(r["older"]["start_ma"] for r in res)
+        end = min(r["younger"]["end_ma"] for r in res)
+        if start > YOUNG_MAX_MA + 1e-9 or not (o["start_ma"] > end and y["end_ma"] < start):
+            continue
+        return {"body": body["id"], "cited_range_ma": [start, end], "evidence": evidence, "note": body["note"]}
+    return None
 
 
 def description_formation(desc: str | None, cand: dict, name_is_formation: bool, flags: list[str]):
@@ -147,7 +220,10 @@ def description_formation(desc: str | None, cand: dict, name_is_formation: bool,
     if any(f.startswith(("C1", "C2")) for f in flags):
         return None, "description contradicts the name"
     found, unmatched = {}, []
-    for m in FORMATION_PHRASE.finditer(ascii_lower(desc)):
+    text = ascii_lower(desc)
+    text = re.sub(r"\bm\s*\.\s*(?:te\s+)?", "monte ", text)  # 'M. Bruffione', 'M. te Re di Castello'
+    text = re.sub(r"\bs\s*\.\s*", "san ", text)  # 'S. Cassiano'
+    for m in FORMATION_PHRASE.finditer(text):
         toks = m.group(0).split()
         hit = None
         for n in range(len(toks), 1, -1):  # longest leading part of the phrase that is a legend formation
@@ -277,8 +353,13 @@ def main() -> int:
         matches = cand.get(key, set()) if key else set()
         siglas = {m[2] for m in matches}
         name_is_formation = bool(FORMATION_NAME.search(ascii_lower(u["name"])))
+        formation_event = cfg["event_process"].get(u["event_process"]) == "formation"
+        yb = young_bedrock(u, o, y, fn) if formation_event else None
+        if yb:
+            row["young_bedrock_word"] = yb
+        joinable = bool(flags) or bool(yb)
         desc_hit, desc_why = None, None
-        if flags and not (len(siglas) == 1 and name_is_formation):
+        if joinable and not (len(siglas) == 1 and name_is_formation):
             desc_hit, desc_why = description_formation(u["description"], cand, name_is_formation, flags)
 
         def join(formation, matches_, key_, source, note):
@@ -290,20 +371,20 @@ def main() -> int:
             res = [ctx.resolve(e, f"ISPRA {uid}") for e in evidence]
             old = max((r["older"] for r in res), key=lambda iv: (iv["start_ma"], -(iv["start_ma"] - iv["end_ma"])))
             yng = min((r["younger"] for r in res), key=lambda iv: (iv["end_ma"], iv["start_ma"] - iv["end_ma"]))
-            row.update(decision="legend_join", rule="contradiction_join", age_basis="legend_join", join_from=source,
+            row.update(decision="legend_join", rule="contradiction_join" if flags else "young_bedrock_join", age_basis="legend_join", join_from=source,
                        older=old["name"], younger=yng["name"], evidence=evidence, note=note)
 
         if NULL_NAME.search(ascii_lower(u["name"])):
             row.update(decision="null", rule="no_geological_age", older=None, younger=None)
-        elif flags and len(siglas) == 1 and name_is_formation:
+        elif joinable and len(siglas) == 1 and name_is_formation:
             join(u["name"], matches, key, "name", f"Formation name key '{key}' matches map symbol {next(iter(siglas))} only.")
         elif desc_hit:
             phrase, dkey, dmatches = desc_hit
             join(phrase, dmatches, dkey, "description",
                  f"The name is not a formation name; the description names one formation, '{phrase}' (key '{dkey}'), "
                  f"which matches map symbol {next(iter({m[2] for m in dmatches}))} only.")
-        elif (flags and all(f.startswith(("C1", "C2")) for f in flags) and fn <= {"quaternary"} and fd <= {"quaternary"}
-              and (fn or fd) and o and y and o["start_ma"] <= QUATERNARY_START + 1e-9):
+        elif (flags and all(f.startswith(("C1", "C2")) for f in flags) and fn == {"quaternary"} and fd == {"quaternary"}
+              and o and y and o["start_ma"] <= QUATERNARY_START + 1e-9):
             row.update(decision="source", rule="contradiction_quaternary_kept", older=on, younger=yn)
         elif flags:
             row.update(decision="null", rule="contradiction_null", older=None, younger=None)
@@ -318,9 +399,21 @@ def main() -> int:
         else:
             if o["start_ma"] < y["start_ma"]:
                 on, yn = yn, on
-            row.update(decision="source", rule="source", older=on, younger=yn)
+                o, y = y, o
+            cited = cenozoic_body(u, o, y, ctx) if yb else None
+            if yb and not cited:
+                row.update(decision="null", rule="young_bedrock", older=None, younger=None,
+                           note=f"ISPRA dates this unit {u['older']}-{u['younger']} (within 0-66 Ma) but its name or description names bedrock ('{yb}').")
+            elif yb:
+                row.update(decision="source", rule="young_bedrock_cited", older=on, younger=yn, young_bedrock_exception=cited)
+            else:
+                row.update(decision="source", rule="source", older=on, younger=yn)
+        if row["decision"] == "null" and row["rule"] in WITHHELD_REASON:
+            row["withheld_reason"] = WITHHELD_REASON[row["rule"]]
         rows[uid] = row
         counts[row["rule"]] += 1
+        if row.get("join_from"):
+            counts[f"join_from_{row['join_from']}"] += 1
 
     cfg["units"] = dict(sorted(rows.items(), key=lambda kv: int(kv[0].split("_")[1])))
     cfg["rules"] = [
@@ -328,6 +421,8 @@ def main() -> int:
         "Ages are used only for formation events (event_process 'formation'); metamorphicProcess, faulting and unknown events give null, because their age is the metamorphism or deformation (e.g. orthogneiss 'Cenozoic').",
         "Units whose name, description and age contradict each other (C1-C3) or whose age disagrees with the detailed South Tyrol/Trentino/Veneto maps where both exist (C4) are left uncoloured, unless the name matches exactly one formation of the South Tyrol / Trentino legends (legend_join with that age, join_from 'name'), or the name is generic and the description names exactly one formation (inline or in parentheses) that matches exactly one map symbol, with no C1/C2 contradiction between name and description (legend_join, join_from 'description'), or both name and description are Quaternary deposits with a Quaternary age (ISPRA age kept).",
         "Check C4 reads the ages of the detailed maps from the previous build, so its flags can change when those ages change (e.g. after the Veneto legend joins of 2026-09-12).",
+        "Young bedrock (2026-09-13): a unit with a formation event whose ISPRA age lies within 0-66 Ma and whose name or description names volcanic, plutonic, dyke, metamorphic or (for a bare 'Cenozoic') lithified bedrock is withheld (withheld_reason young_bedrock), unless its name or description joins unambiguously to a South Tyrol / Trentino formation (rule young_bedrock_join) or its age names a specific epoch/period and a cited authority dates the named body in the Cenozoic (rule young_bedrock_cited, see young_bedrock_exception). Quaternary deposit names are exempt (their clasts may be bedrock).",
+        "withheld_reason for null decisions: contradiction_null -> contradiction, event_not_formation -> metamorphic_event (metamorphic and faulting events), young_bedrock -> young_bedrock, age_unmapped -> unmappable_interval; no_geological_age (glaciers, water, anthropic ground) has none (tile age_basis 'none').",
         "The unit name shown (unit_name) is ISPRA's GeologicUnit name even where it contradicts the description; the lithology property lists the INSPIRE lithology terms, which follow the description.",
     ]
     cfg["review"] = {

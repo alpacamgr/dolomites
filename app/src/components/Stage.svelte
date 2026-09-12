@@ -15,12 +15,15 @@
   import DebugOverlay from './DebugOverlay.svelte';
   import type { Locale } from '@/lib/i18n/client';
   import type { IcsChart } from '@/lib/content/ics';
+  import type { LicenseLink } from '@/lib/story/licenseText';
 
-  let { chapters, locale, uiStrings, ics, debug: initialDebug = false }: {
+  let { chapters, locale, uiStrings, ics, licenses = [], debug: initialDebug = false }: {
     chapters: ClientChapter[];
     locale: Locale;
     uiStrings: Record<string, string>;
     ics: IcsChart | null;
+    /** licence names -> URLs from the data manifests, for the credits panel */
+    licenses?: LicenseLink[];
     debug?: boolean;
   } = $props();
 
@@ -125,6 +128,7 @@
         unit={timeUnit}
         value={time}
         onJump={jump}
+        onStep={(delta) => controller?.step(delta)}
       />
     </div>
     <div class="overlay-bottom">
@@ -137,7 +141,7 @@
         loading={engineLoading}
         onGeologyFocus={(f) => setGeologyFocus(f)}
       />
-      <Credits {attributions} {uiStrings} />
+      <Credits {attributions} {uiStrings} {licenses} />
     </div>
   </div>
 </div>

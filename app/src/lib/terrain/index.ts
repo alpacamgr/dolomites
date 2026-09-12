@@ -23,6 +23,7 @@ import type {
 } from '../scene-api';
 import {
   elevationExpression, geologyFillColorExpression, geologyIsDatedExpression, isDatedColor, faultColorExpression,
+  GEOLOGY_UNDATED_FILL,
 } from './palette';
 import {
   detectTerrain, exists, fetchJson, readTileJson,
@@ -502,6 +503,18 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
     popup = null;
     popupFor = null;
   }
+  /** Remove the popup, the hovered unit's highlight and the help cursor. */
+  function clearGeologyHover() {
+    if (map && hoveredUnit != null && map.getSource('geology')) {
+      map.setFeatureState({ source: 'geology', sourceLayer: 'units', id: hoveredUnit }, { hover: false });
+    }
+    hoveredUnit = null;
+    if (map) map.getCanvas().style.cursor = '';
+    hidePopup();
+  }
+  const gapHtml = () => '<div class="tg-pop-title"><span class="tg-pop-swatch hatch"></span>'
+    + `${esc(S('geology_popup.gap_title', 'No open geological map'))}</div>`
+    + `<div class="tg-pop-row">${esc(S('geology_popup.gap_text', 'No open vector geological map covers this area. This is a gap in the open data, not an absence of rock.'))}</div>`;
 
   // ---------- geology colour key ----------
   let keyDirty = true;
@@ -556,6 +569,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
     const units = new Map<string, { color: string; ageMin: number | null }>();
     const coarse = new Map<string, { id: string; name: string; scale: string }>();
     let undated = false;
+    let withheld = false;
     const step = () => {
       if (run !== keyRun || disposed || paused || map !== m) return;
       if (m.isMoving()) { keyDirty = true; return; }
@@ -571,13 +585,15 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
             const ageMin = typeof p.age_min_ma === 'number' ? p.age_min_ma : null;
             const k = unitKey(p.color, ageMin);
             if (!units.has(k)) units.set(k, { color: p.color, ageMin });
-          } else undated = true;
+          } else if (p.age_basis === 'withheld') withheld = true;
+          else undated = true;
         }
       } while (boxes.length && performance.now() - t0 < 10);
       if (boxes.length) { onIdle(step); return; }
       publishKey({
         units: [...units.values()].sort((a, b) => (a.ageMin ?? 1e9) - (b.ageMin ?? 1e9) || a.color.localeCompare(b.color)),
         undated,
+        withheld,
         coarse: [...coarse.values()],
         gapsLayer: !!m.getLayer('geology-gaps'),
       });
@@ -689,9 +705,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       m.on('mousemove', 'geology-gaps', (e) => {
         if (hoveredUnit != null) return;
         m.getCanvas().style.cursor = 'help';
-        showPopup('gap', e.lngLat, () => '<div class="tg-pop-title"><span class="tg-pop-swatch hatch"></span>'
-          + `${esc(S('geology_popup.gap_title', 'No open geological map'))}</div>`
-          + `<div class="tg-pop-row">${esc(S('geology_popup.gap_text', 'No open vector geological map covers this area. This is a gap in the open data, not an absence of rock.'))}</div>`);
+        showPopup('gap', e.lngLat, gapHtml);
       });
       m.on('mouseleave', 'geology-gaps', () => {
         if (popupFor !== 'gap') return;
@@ -723,6 +737,43 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       hoveredUnit = name;
       if (name != null) m.setFeatureState({ source: 'geology', sourceLayer: 'units', id: name }, { hover: true });
     };
+    const unitHtml = (p: Record<string, unknown>, name: string | null) => {
+      const ageMin = typeof p.age_min_ma === 'number' ? p.age_min_ma : null;
+      const ageMax = typeof p.age_max_ma === 'number' ? p.age_max_ma : null;
+      const basisKind = typeof p.age_basis === 'string' ? p.age_basis : null;
+      // withheld: the source states an age that this site does not use for colour; the source text stays in age_label
+      const withheld = basisKind === 'withheld';
+      const range = withheld ? null : ageMin != null && ageMax != null ? rangeText(ageMax, ageMin)
+        : (ageMin ?? ageMax) != null ? ageOne((ageMin ?? ageMax)!) : null;
+      // no age string in the source record: name the interval only where the chart boundaries match exactly
+      const derived = !withheld && !p.age_label && ageMin != null && ageMax != null ? rangeName(ageMax, ageMin) : null;
+      const reason = withheld && typeof p.age_withheld_reason === 'string' ? S(`geology_popup.withheld_reason.${p.age_withheld_reason}`, '') : '';
+      const withheldLine = !withheld ? '' : reason
+        ? fill(S('geology_popup.withheld', 'Not used for colour: {reason}.'), { reason })
+        : S('geology_popup.withheld_plain', 'Not used for colour.');
+      const basis = basisKind && basisKind !== 'none' && !withheld ? S(`geology_popup.basis.${basisKind}`, '') : '';
+      // "not given" only when the source gives no usable age ('none'), or on older tiles without age_basis
+      const noAge = basisKind === 'none' || (basisKind == null && !p.age_label && !range);
+      const dated = isDatedColor(p.color);
+      const src = sourceInfo(p.source);
+      const rows = [
+        p.unit_code ? `<div class="tg-pop-row">${esc(p.unit_code)}</div>` : '',
+        p.lithology ? `<div class="tg-pop-row">${esc(p.lithology)}</div>` : '',
+        p.age_label ? `<div class="tg-pop-row">${esc(p.age_label)}</div>` : '',
+        derived ? `<div class="tg-pop-row">${esc(derived)}</div>` : '',
+        range ? `<div class="tg-pop-row">${esc(range)} <span class="tg-pop-note">${esc(S('geology_popup.ics_bounds', 'ICS chart bounds'))}</span></div>` : '',
+        basis ? `<div class="tg-pop-note">${esc(basis)}</div>` : '',
+        withheldLine ? `<div class="tg-pop-muted">${esc(withheldLine)}</div>` : '',
+        noAge ? `<div class="tg-pop-muted">${esc(S('geology_popup.age_not_given', 'Age not given in the source map'))}</div>` : '',
+        src.label ? `<div class="tg-pop-row">${esc(src.label)}</div>` : '',
+      ].join('');
+      const swatch = `<span class="tg-pop-swatch" style="background:${esc(dated ? p.color : GEOLOGY_UNDATED_FILL)}"></span>`;
+      // the honesty label the chapter declares for this layer; the dataset meta label only as a fallback
+      const label = wanted.get(ID.GEOLOGY)?.label ?? meta?.label ?? 'interpreted';
+      return `<div class="tg-pop-title">${swatch}${esc(name ?? S('geology_popup.unnamed', 'Unnamed unit'))}</div>${rows}`
+        + `<span class="tg-pop-badge">${esc(S(`label.${label}`, label))}</span>`
+        + (src.attribution ? `<div class="tg-pop-src">${esc(src.attribution)}</div>` : '');
+    };
     m.on('mousemove', 'geology-fill', (e) => {
       const f = e.features?.[0];
       if (!f) return;
@@ -730,38 +781,28 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       const name = p.unit_name == null ? null : String(p.unit_name);
       m.getCanvas().style.cursor = 'help';
       setHover(name);
-      showPopup(`unit:${name}`, e.lngLat, () => {
-        const ageMin = typeof p.age_min_ma === 'number' ? p.age_min_ma : null;
-        const ageMax = typeof p.age_max_ma === 'number' ? p.age_max_ma : null;
-        const range = ageMin != null && ageMax != null ? rangeText(ageMax, ageMin)
-          : (ageMin ?? ageMax) != null ? ageOne((ageMin ?? ageMax)!) : null;
-        // no age string in the source record: name the interval only where the chart boundaries match exactly
-        const derived = !p.age_label && ageMin != null && ageMax != null ? rangeName(ageMax, ageMin) : null;
-        const dated = isDatedColor(p.color);
-        const src = sourceInfo(p.source);
-        // 'none' adds nothing: the popup already says the map gives no age
-        const basis = typeof p.age_basis === 'string' && p.age_basis !== 'none' ? S(`geology_popup.basis.${p.age_basis}`, '') : '';
-        const rows = [
-          p.unit_code ? `<div class="tg-pop-row">${esc(p.unit_code)}</div>` : '',
-          p.lithology ? `<div class="tg-pop-row">${esc(p.lithology)}</div>` : '',
-          p.age_label ? `<div class="tg-pop-row">${esc(p.age_label)}</div>` : '',
-          derived ? `<div class="tg-pop-row">${esc(derived)}</div>` : '',
-          range ? `<div class="tg-pop-row">${esc(range)} <span class="tg-pop-note">${esc(S('geology_popup.ics_bounds', 'ICS chart bounds'))}</span></div>` : '',
-          basis ? `<div class="tg-pop-note">${esc(basis)}</div>` : '',
-          !p.age_label && !range ? `<div class="tg-pop-muted">${esc(S('geology_popup.age_not_given', 'Age not given in the source map'))}</div>` : '',
-          src.label ? `<div class="tg-pop-row">${esc(src.label)}</div>` : '',
-        ].join('');
-        const swatch = `<span class="tg-pop-swatch" style="background:${esc(dated ? p.color : '#e4e7e8')}"></span>`;
-        const label = meta?.label ?? 'observed';
-        return `<div class="tg-pop-title">${swatch}${esc(name ?? S('geology_popup.unnamed', 'Unnamed unit'))}</div>${rows}`
-          + `<span class="tg-pop-badge">${esc(S(`label.${label}`, label))}</span>`
-          + (src.attribution ? `<div class="tg-pop-src">${esc(src.attribution)}</div>` : '');
-      });
+      showPopup(`unit:${name}`, e.lngLat, () => unitHtml(p, name));
     });
     m.on('mouseleave', 'geology-fill', () => {
       m.getCanvas().style.cursor = '';
       setHover(null);
       hidePopup();
+    });
+    // Touch has no hover: a tap (or click) opens the same popup, a tap elsewhere closes it.
+    m.on('click', (e) => {
+      const layers = ['geology-fill', 'geology-gaps'].filter((l) => m.getLayer(l) && m.getLayoutProperty(l, 'visibility') === 'visible');
+      const hits = layers.length ? m.queryRenderedFeatures(e.point, { layers }) : [];
+      const unit = hits.find((h) => h.layer.id === 'geology-fill');
+      const gap = hits.find((h) => h.layer.id === 'geology-gaps');
+      if (unit) {
+        const p = unit.properties ?? {};
+        const name = p.unit_name == null ? null : String(p.unit_name);
+        setHover(name);
+        showPopup(`unit:${name}`, e.lngLat, () => unitHtml(p, name));
+      } else if (gap) {
+        setHover(null);
+        showPopup('gap', e.lngLat, gapHtml);
+      } else clearGeologyHover();
     });
   }
 
@@ -876,6 +917,8 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       pitch: Math.min(75, Math.max(0, camera.pitch)),
       bearing: camera.bearing,
     };
+    // a user's zoom or its inertia must not cancel or bend the story's flight
+    map.stop();
     if (durationMs <= 0 || reduceMotion) map.jumpTo(opts);
     else map.easeTo({ ...opts, duration: durationMs, easing, essential: true });
   }
@@ -921,6 +964,13 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         attributionControl: false,
         refreshExpiredTiles: false,
         maxTileCacheSize: 300,
+        // The wheel scrolls the story and Ctrl/⌘ + wheel zooms; on touch one finger scrolls the page, two move the map.
+        cooperativeGestures: true,
+        locale: {
+          'CooperativeGesturesHandler.WindowsHelpText': S('map_hint.wheel_windows', 'Use Ctrl + scroll to zoom the map'),
+          'CooperativeGesturesHandler.MacHelpText': S('map_hint.wheel_mac', 'Use ⌘ + scroll to zoom the map'),
+          'CooperativeGesturesHandler.MobileHelpText': S('map_hint.touch', 'Use two fingers to move the map'),
+        },
       });
       map.on('dataloading', () => setLoading(true));
       map.on('idle', () => {
@@ -928,6 +978,8 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         if (keyDirty) scheduleKey();
       });
       map.on('moveend', () => { keyDirty = true; });
+      // a story camera flight (no originalEvent) moves the terrain away under the popup and the highlight
+      map.on('movestart', (ev) => { if (!(ev as { originalEvent?: unknown }).originalEvent) clearGeologyHover(); });
       map.on('sourcedata', (ev) => { if (ev.sourceId === 'geology' && ev.tile) keyDirty = true; });
       map.on('error', (ev) => console.warn('[terrain] map error:', ev.error?.message ?? ev));
       applyLock();
@@ -942,6 +994,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
 
     async setState(state: SceneState) {
       lastTime = state.time;
+      clearGeologyHover();
       const nextEmphasis = state.emphasis ?? null;
       if (nextEmphasis?.start_ma !== emphasis?.start_ma || nextEmphasis?.end_ma !== emphasis?.end_ma) {
         emphasis = nextEmphasis;
@@ -983,6 +1036,8 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
 
     pause() {
       paused = true;
+      // leaving the terrain view (e.g. for the globe) must not leave a popup or highlight behind
+      clearGeologyHover();
       map?.stop();
       if (container) container.style.visibility = 'hidden';
     },

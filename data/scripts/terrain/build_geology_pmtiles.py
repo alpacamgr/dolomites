@@ -360,6 +360,24 @@ def norm_age(s: str) -> str:
 
 
 BASES = ("source", "legend_join", "class_rule")
+WITHHELD_REASONS = ("metamorphic_event", "contradiction", "young_bedrock", "unmappable_interval", "open_range")
+
+
+def finish_age(o, y, basis, label, reason=None) -> tuple:
+    """Tile age properties under contract 2.2 -> (age_min_ma, age_max_ma, color, age_basis, age_label, age_withheld_reason).
+    A dated unit (basis source / legend_join / class_rule with a younger interval) keeps its numbers and colour. A unit whose
+    source states an age that the site does not use for colour becomes 'withheld' (numbers and colour null, the source's
+    age text kept in age_label, reason given; a stated age without a younger chart interval is 'unmappable_interval').
+    Anything else is 'none' (no usable age in the source; age_label null)."""
+    if reason is None and basis in BASES and y is not None:
+        return y["end_ma"], (o["start_ma"] if o else None), y["color"], basis, label, None
+    if reason is None and label:
+        reason = "unmappable_interval"
+    if reason:
+        if reason not in WITHHELD_REASONS:
+            sys.exit(f"unknown age_withheld_reason {reason!r}")
+        return None, None, None, "withheld", label, reason
+    return None, None, None, "none", None, None
 
 
 class AgeContext:
@@ -504,8 +522,11 @@ class Tally:
         self.basis = collections.Counter()
         self.joined = collections.Counter()
         self.rules = collections.Counter()
+        self.withheld = collections.Counter()
+        self.headings = collections.Counter()
 
-    def add(self, age_min, age_max, strings: list[str], color, unmapped: dict[str, str], basis=None, joined=None, rule=None):
+    def add(self, age_min, age_max, strings: list[str], color, unmapped: dict[str, str], basis=None, joined=None, rule=None,
+            withheld=None, heading=None):
         bounds = (age_min is not None) + (age_max is not None)
         self.n["units"] += 1
         self.n[("units_no_bound", "units_one_bound", "units_both_bounds")[bounds]] += 1
@@ -516,6 +537,10 @@ class Tally:
             self.joined[joined] += 1
         if rule:
             self.rules[rule] += 1
+        if withheld:
+            self.withheld[withheld] += 1
+        if heading:
+            self.headings[heading] += 1
         for s, why in unmapped.items():
             self.unmapped[s] += 1
             self.reasons[s] = why
@@ -526,6 +551,9 @@ class Tally:
                "age_basis_units": dict(self.basis.most_common()),
                "units_dated_by_join_or_rule": dict(self.joined.most_common()),
                "unmapped_strings": {s: {"units": c, "reason": self.reasons[s]} for s, c in self.unmapped.most_common()}}
+        out["age_withheld_reason_units"] = dict(self.withheld.most_common())
+        if self.headings:
+            out["units_dated_from_own_legend_group_headings"] = dict(self.headings.most_common())
         if self.rules:
             out["age_rule_polygons_loaded"] = dict(self.rules.most_common())
         return out
@@ -549,21 +577,20 @@ def load_bz(ctx: AgeContext) -> tuple[list, dict]:
         if (p.get("SIGLA_1") or "").strip():
             units[p["SIGLA_1"].strip()][(old_it, young_it)] += 1
             ctx.bz_names[p["SIGLA_1"].strip()][(p.get("NOME_IT_1") or "").strip()] += 1
-        age_min = young["end_ma"] if young else None
-        age_max = old["start_ma"] if old else None
         strings = [s for s in (old_it, young_it) if s]
-        basis = "source" if (age_min is not None or age_max is not None) else None
-        tally.add(age_min, age_max, strings, young["color"] if young else None,
-                  {s: ctx.bz_terms[s]["note"] for s in strings if ctx.bz_terms[s]["chart"] is None}, basis)
+        age_min, age_max, color, basis, label, reason = finish_age(old, young, "source", " - ".join(dict.fromkeys(strings)) or None)
+        tally.add(age_min, age_max, strings, color,
+                  {s: ctx.bz_terms[s]["note"] for s in strings if ctx.bz_terms[s]["chart"] is None}, basis, withheld=reason)
         feats.append((geom, {
             "unit_name": (p.get("NOME_IT_1") or "").strip() or None,
             "unit_code": (p.get("SIGLA_1") or "").strip() or None,
             "age_min_ma": age_min,
             "age_max_ma": age_max,
-            "age_label": " - ".join(dict.fromkeys(strings)) or None,
+            "age_label": label,
             "age_basis": basis,
+            "age_withheld_reason": reason,
             "lithology": (p.get("TEG_DESC_I") or "").strip() or None,
-            "color": young["color"] if young else None,
+            "color": color,
             "source": BZ,
         }))
     if ctx.bz_units is None:
@@ -619,26 +646,29 @@ def load_pat(ctx: AgeContext) -> tuple[list, dict]:
                 if t is None:
                     sys.exit(f"PAT age string {age!r} (normalized {norm_age(age)!r}) is not in {MAPPING.name}")
             o, y = (t["o"], t["y"]) if t else (None, None)
-            basis = "source" if (o or y) else None
-            joined = None
+            basis, joined, reason = ("source" if age else None), None, None
             if age is None and sigla:
                 for re_s, re_n, jo, jy, jb, label in joins:
                     if re_s.search(sigla) and re_n.search(name):
                         o, y, basis, joined = jo, jy, jb, label
                         break
-            age_min = y["end_ma"] if y else None
-            age_max = o["start_ma"] if o else None
+            if joined is None and age is not None and y is None:
+                reason = "open_range" if re.match(r"\s*(pre|post)\b", age, re.I) else "unmappable_interval"
             unmapped = {age: t.get("note", "")} if t and not (o and y) else {}
-            tally.add(age_min, age_max, [age] if age else [], y["color"] if y else None, unmapped, basis, joined)
+            age_min, age_max, color, basis, label, reason = finish_age(o, y, basis, age if joined is None else None, reason)
+            tally.add(age_min, age_max, [age] if age else [], color, unmapped, basis,
+                      joined if basis in ("legend_join", "class_rule") else None, withheld=reason,
+                      heading=joined if (joined and basis == "source") else None)
             feats.append((g, {
                 "unit_name": name or None,
                 "unit_code": sigla or None,
                 "age_min_ma": age_min,
                 "age_max_ma": age_max,
-                "age_label": age,
+                "age_label": label,
                 "age_basis": basis,
+                "age_withheld_reason": reason,
                 "lithology": lith.get(rec[i_t]) if layer == "sintemi" else None,
-                "color": y["color"] if y else None,
+                "color": color,
                 "source": PAT,
             }))
     joined_keys = {k for k, r in units.items() if not r["age"] and r["sigla"]
@@ -670,11 +700,10 @@ def load_veneto(ctx: AgeContext) -> tuple[list, dict]:
         o, y, basis = ages[p["depositi_a"]]
         m = re.search(r"\(([^()]*)\)\s*$", p["depositi_a"])
         label = m.group(1).strip() if (m and basis == "source") else None
-        age_min = y["end_ma"] if y else None
-        age_max = o["start_ma"] if o else None
         unmapped = {p["depositi_a"]: terms[p["depositi_a"]].get("note", "")} if not (o and y) else {}
         joined = p["depositi_a"] if basis in ("legend_join", "class_rule") else None
-        tally.add(age_min, age_max, [label] if label else [], y["color"] if y else None, unmapped, basis, joined)
+        age_min, age_max, color, basis, label, reason = finish_age(o, y, basis, label)
+        tally.add(age_min, age_max, [label] if label else [], color, unmapped, basis, joined, withheld=reason)
         feats.append((g, {
             "unit_name": p["depositi_a"],
             "unit_code": p.get("uc_lege"),
@@ -682,8 +711,9 @@ def load_veneto(ctx: AgeContext) -> tuple[list, dict]:
             "age_max_ma": age_max,
             "age_label": label,
             "age_basis": basis,
+            "age_withheld_reason": reason,
             "lithology": p.get("materiali_"),
-            "color": y["color"] if y else None,
+            "color": color,
             "source": VEN,
         }))
     stats = {"source_features": len(fc["features"]), "source_features_in_bbox": len(feats), **tally.stats()}
@@ -737,15 +767,20 @@ def load_swisstopo(ctx: AgeContext) -> tuple[list, dict]:
                     contradictions[(mm.group(0), pair, (_text(r.get(f["name"])) or "")[:80])] += 1
                     o = y = None
                     rule = "description_contradiction"
-        age_min = y["end_ma"] if y else None
-        age_max = o["start_ma"] if o else None
-        basis = "source" if (age_min is not None or age_max is not None) else None
+        reason = None
+        if rule == "null_pair":
+            reason = cfg["null_pair_reasons"].get(pair)
+            if reason is None:
+                sys.exit(f"{SWISS}: null pair {pair!r} has no reason in null_pair_reasons")
+        elif rule == "description_contradiction":
+            reason = "contradiction"
         name = _text(r.get(f["name"]))
         if name is None or name.lower() in ("unbekannt", "not applicable", "nicht anwendbar"):
             name = _text(r.get(f["lithology"])) or name
-        label = (base_s if base_s == top_s else " - ".join(s for s in (base_s, top_s) if s)) if basis else None
-        tally.add(age_min, age_max, [s for s in (base_s, top_s) if s], y["color"] if y else None,
-                  {s: "no chart unit" for s in (base_s, top_s) if s and terms.get(s) is None}, basis, rule=rule)
+        label = (base_s if base_s == top_s else " - ".join(s for s in (base_s, top_s) if s)) if (base_s or top_s) else None
+        age_min, age_max, color, basis, label, reason = finish_age(o, y, "source", label, reason)
+        tally.add(age_min, age_max, [s for s in (base_s, top_s) if s], color,
+                  {s: "no chart unit" for s in (base_s, top_s) if s and terms.get(s) is None}, basis, rule=rule, withheld=reason)
         feats.append((r["geom"], {
             "unit_name": name,
             "unit_code": _text(r.get(f["code"])),
@@ -753,8 +788,9 @@ def load_swisstopo(ctx: AgeContext) -> tuple[list, dict]:
             "age_max_ma": age_max,
             "age_label": label,
             "age_basis": basis,
+            "age_withheld_reason": reason,
             "lithology": _text(r.get(f["lithology"])),
-            "color": y["color"] if y else None,
+            "color": color,
             "source": SWISS,
         }))
     geoms = [valid(g) for g, _ in feats]
@@ -808,13 +844,15 @@ def load_ispra(ctx: AgeContext) -> tuple[list, dict]:
             else:
                 sys.exit(f"{where}: unknown decision {row['decision']!r}")
         o, y, basis = ages[uid]
+        reason = row.get("withheld_reason") if row["decision"] == "null" else None
+        if row["decision"] == "null" and reason is None and row["rule"] != "no_geological_age":
+            sys.exit(f"{ISPRA} unit {uid}: null decision {row['rule']!r} without withheld_reason; re-run review_ispra_100k_units.py")
         label = None
-        if basis == "source":
+        if basis == "source" or reason:
             label = u["older_title"] if u["older_title"] == u["younger_title"] else f"{u['older_title']} - {u['younger_title']}"
-        age_min = y["end_ma"] if y else None
-        age_max = o["start_ma"] if o else None
-        tally.add(age_min, age_max, [label] if label else [], y["color"] if y else None, {}, basis,
-                  u["name"] if basis == "legend_join" else None, rule=row["rule"])
+        age_min, age_max, color, basis, label, reason = finish_age(o, y, basis, label, reason)
+        tally.add(age_min, age_max, [label] if label else [], color, {}, basis,
+                  u["name"] if basis == "legend_join" else None, rule=row["rule"], withheld=reason)
         feats.append((g, {
             "unit_name": u["name"],
             "unit_code": uid,
@@ -822,8 +860,9 @@ def load_ispra(ctx: AgeContext) -> tuple[list, dict]:
             "age_max_ma": age_max,
             "age_label": label,
             "age_basis": basis,
+            "age_withheld_reason": reason,
             "lithology": ", ".join(u["materials"]) or None,
-            "color": y["color"] if y else None,
+            "color": color,
             "source": ISPRA,
         }))
     stats = {"units_in_file": len(units), "mapped_features_in_file": d["mapped_features"], "polygons_near_bbox": len(feats),
@@ -854,18 +893,18 @@ def load_geosphere(ctx: AgeContext) -> tuple[list, dict]:
         o, y = ctx.chart(cfg["age_names"][o_s], where), ctx.chart(cfg["age_names"][y_s], where)
         if o and y and o["start_ma"] < y["start_ma"]:
             o, y = y, o
-        rule = "source"
+        rule, reason = "source", None
+        label = o_s if o_s == y_s else f"{o_s} - {y_s}"
         if uid in cfg["null_units"]:
             o = y = None
+            label = None
             rule = "null_unit"
         elif cfg["event_process"][proc] != "formation":
             o = y = None
             rule = "event_not_formation"
-        age_min = y["end_ma"] if y else None
-        age_max = o["start_ma"] if o else None
-        basis = "source" if (o or y) else None
-        label = (o_s if o_s == y_s else f"{o_s} - {y_s}") if basis else None
-        tally.add(age_min, age_max, [label] if label else [], y["color"] if y else None, {}, basis, rule=rule)
+            reason = cfg["withheld_reasons"][proc]
+        age_min, age_max, color, basis, label, reason = finish_age(o, y, "source" if label else None, label, reason)
+        tally.add(age_min, age_max, [label] if label else [], color, {}, basis, rule=rule, withheld=reason)
         feats.append((g, {
             "unit_name": _text(r[fl["name"]]),
             "unit_code": uid,
@@ -873,8 +912,9 @@ def load_geosphere(ctx: AgeContext) -> tuple[list, dict]:
             "age_max_ma": age_max,
             "age_label": label,
             "age_basis": basis,
+            "age_withheld_reason": reason,
             "lithology": _text(r[fl["lithology"]]),
-            "color": y["color"] if y else None,
+            "color": color,
             "source": GEOS,
         }))
     stats = {"polygons_in_bbox": len(feats), **tally.stats()}
@@ -1213,7 +1253,7 @@ def write_archive(chart_version: str, workers: int) -> dict:
             "vector_layers": [{
                 "id": "units", "description": "Geological units", "minzoom": MIN_Z, "maxzoom": MAX_Z,
                 "fields": {"unit_name": "String", "unit_code": "String", "age_min_ma": "Number", "age_max_ma": "Number",
-                           "age_label": "String", "age_basis": "String", "lithology": "String", "color": "String",
+                           "age_label": "String", "age_basis": "String", "age_withheld_reason": "String", "lithology": "String", "color": "String",
                            "source": "String"},
             }],
             "source_datasets": ORDER,
@@ -1288,7 +1328,9 @@ def archive_unit_stats(keys: list, props: list) -> dict:
     for sid in ORDER:
         sel = [p for (s, _), p in zip(keys, props) if s == sid]
         out[sid] = {"polygons": len(sel), "with_color": sum(p["color"] is not None for p in sel),
-                    "age_basis": dict(collections.Counter(str(p["age_basis"]) for p in sel).most_common())}
+                    "age_basis": dict(collections.Counter(str(p["age_basis"]) for p in sel).most_common()),
+                    "age_withheld_reason": dict(collections.Counter(p["age_withheld_reason"] for p in sel
+                                                                    if p.get("age_withheld_reason")).most_common())}
     out[ISPRA]["units"] = dict(collections.Counter(p["unit_code"] for (s, _), p in zip(keys, props) if s == ISPRA))
     return out
 
@@ -1331,7 +1373,7 @@ def write_coverage(extents: dict) -> None:
             sys.exit(f"coverage outline of {sid} is invalid after repair")
         features.append({"type": "Feature", "properties": {
             "source": sid, "attribution": SOURCES[sid]["attribution"], "license": SOURCES[sid]["license"],
-            "scale": SOURCES[sid]["scale"], "scale_denominator": SOURCES[sid]["scale_denominator"], "label": "observed"},
+            "scale": SOURCES[sid]["scale"], "scale_denominator": SOURCES[sid]["scale_denominator"], "label": "interpreted"},
             "geometry": mapping(r)})
     write_geojson(COVERAGE, {
         "type": "FeatureCollection", "name": "geology-coverage",
@@ -1624,7 +1666,7 @@ def write_meta(result: dict, verification: dict, gaps_stats: dict | None) -> Non
             "coarser_than_1_25000": s["scale_denominator"] > DETAILED_DENOMINATOR,
             "scale_note": (f"{s['scale']}: much coarser than the 1:10,000-1:25,000 provincial maps; its polygons are not detailed "
                            "mapping at z11-13." if s["scale_denominator"] > DETAILED_DENOMINATOR else None),
-            "label": "observed",
+            "label": "interpreted",
             "clipping": result["clip_stats"][sid],
             "features_in_archive": result["features_in_archive_per_source"][sid],
             "archive_polygons": {k: val for k, val in arch.items() if k != "units"},
@@ -1635,7 +1677,7 @@ def write_meta(result: dict, verification: dict, gaps_stats: dict | None) -> Non
     scales = "; ".join(f"{sid} {SOURCES[sid]['scale']}" for sid in ORDER)
     meta = {
         "dataset_id": "geology-dolomites",
-        "label": "observed",
+        "label": "interpreted",
         "source_ref": ORDER,
         "attribution": " | ".join(SOURCES[s]["attribution"] for s in ORDER),
         "license": " + ".join(f"{SOURCES[s]['license']} ({s})" for s in ORDER),
@@ -1732,6 +1774,50 @@ def write_meta(result: dict, verification: dict, gaps_stats: dict | None) -> Non
         "verification": {**verification, "served_tiles_check": checks},
         "preview": "data/processed/terrain/preview/" + PREVIEW.name,
     }
+    meta["label_note"] = ("Label 'interpreted' (docs/03-data-policy.md): a geological map is drawn by researchers from field "
+                          "evidence, and the numeric ages and colours are derived by this project from the maps' stage names; "
+                          "the polygons are not measurements.")
+    meta["properties_schema"].update({
+        "age_min_ma": f"younger bound in Ma: end_ma of the younger ICS interval (chart {v}); null unless the unit is dated (age_basis source, legend_join or class_rule)",
+        "age_max_ma": f"older bound in Ma: start_ma of the older ICS interval (chart {v}); null if the older bound is unmappable or the unit is not dated. age_min_ma <= age_max_ma",
+        "age_label": ("the source's own age text: 'MAX - MIN' ETA_CODICE_*_IT (South Tyrol); the 'Eta:' statement of the PAT unit legend "
+                      "(Trentino); the parenthesised age in depositi_a (Veneto); 'CHRONO_BASE - CHRONO_TOP' (swisstopo, German); "
+                      "'olderNamedAge - youngerNamedAge' (ISPRA, GeoSphere). Present when age_basis is 'source' or 'withheld'; null for "
+                      "legend_join, class_rule and none"),
+        "age_basis": ("'source' = dated with the age stated by the polygon's own map; 'legend_join' = dated by joining formation names to "
+                      "another cited legend (envelope of their ages); 'class_rule' = dated by a deposit-type rule with a cited basis; "
+                      "'withheld' = the source states an age that this site does not use for colour (see age_withheld_reason; "
+                      "age_label keeps the source's text, numbers and colour are null); 'none' = the source gives no usable age "
+                      "(no age, or water, ice, anthropic or unmappable ground)"),
+        "age_withheld_reason": ("only for age_basis 'withheld', else null: 'metamorphic_event' (the source's age is a metamorphic, "
+                                "deformation or subduction event: ISPRA metamorphicProcess/faulting, GeoSphere subduction); "
+                                "'contradiction' (the source's attributes contradict each other: ISPRA name/description/age review, "
+                                "swisstopo description vs age fields or legend); 'young_bedrock' (ISPRA gives a Cenozoic or Quaternary "
+                                "age to volcanic, plutonic, dyke, metamorphic or lithified bedrock without a cited Cenozoic body); "
+                                "'unmappable_interval' (a stated age with no ICS chart interval for its younger bound, e.g. 'Terziario (?)', "
+                                "'frühes Paläozoikum', 'Unknown'); 'open_range' (an age open on one side or spanning eons, e.g. "
+                                "'pre-Permiano', 'post-Carbonifero', Proterozoikum-Känozoikum)"),
+        "color": f"ICS chart {v} colour of the younger interval of a dated unit; null for withheld and none",
+    })
+    meta["ages"]["honesty_note"] = (meta["ages"]["honesty_note"].replace("the maps' (observed)", "the maps' (interpreted: drawn by researchers from field evidence)")
+                                    + " Since 2026-09-13 every uncoloured unit says why: age_basis 'withheld' with age_withheld_reason where "
+                                    "the source states an age the site does not use, 'none' where the source gives no usable age. ISPRA "
+                                    "1:100,000 units with a Cenozoic or Quaternary age on volcanic, plutonic, dyke, metamorphic or lithified "
+                                    "bedrock (e.g. the Bolzano porphyries and the Brixen granite given as 'Cenozoic') are withheld as "
+                                    "young_bedrock unless a formation name joins to the South Tyrol / Trentino legends or the source gives a "
+                                    "specific epoch that a cited authority confirms for that body (Adamello-Presanella tonalites, Paleogene "
+                                    "basalts of the Veneto).")
+    meta["ages"]["basement_ages_across_sources"] = (
+        "One rule for all sources: an age is withheld when the source's own attributes say it is a metamorphic or deformation "
+        "event (ISPRA eventProcess metamorphicProcess or faulting; GeoSphere eventProcess subduction), an open range ('pre-Permiano', "
+        "Proterozoikum-Känozoikum) or contradictory; otherwise the stated range is taken as the formation (protolith) age. The "
+        "sources describe the same crystalline basement differently, so colours still jump at their borders: GeoSphere gives "
+        "formation ranges ('Altkristallin' paragneiss 'deposition' Neoproterozoic-Devonian, orthogneiss 'magmatic process' "
+        "Ordovician-Carboniferous), swisstopo gives chronostratigraphic ranges (e.g. Proterozoikum-Paläozoikum), South Tyrol CARG "
+        "gives 'Paleozoico' for phyllites and orthogneisses, while the ISPRA 1:100,000 map gives a metamorphic event age (withheld) "
+        "and Trentino only 'pre-Permiano' (withheld, open_range). No source gives both the protolith and the metamorphic age, so the "
+        "inconsistency is not harmonised; the coloured basement on the Austrian and Swiss side and the uncoloured basement on the "
+        "Italian 1:100,000 side of the border reflect how each map records age, not a geological boundary.")
     tmp = META.with_name(META.name + ".tmp")
     tmp.write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     replace_with_retry(tmp, META)

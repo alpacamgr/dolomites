@@ -35,7 +35,7 @@ size_bytes: 116242765
 checksum:
   algorithm: sha256
   value: "91400fc51e2161858c5d7a105d4a2b33fe4fe778b3c68dcc566d30a9544decb2"  # Carta_geologica_100k_INSPIRE-GE_nord.zip
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - Priority 5 in the merged Dolomites geology: fills only what South Tyrol, Trentino, Veneto and swisstopo leave empty (the
     South Tyrol areas outside the published CARG sheets, e.g. Bolzano, Bletterbach, Brixen, Bruneck; the Lombardy edge; the
@@ -62,7 +62,18 @@ caveats: |
     Lopingian-Olenekian); 10 with a name/description mismatch between two Quaternary deposit types keep their Quaternary age;
     137 are uncoloured as metamorphic/faulting/unknown events (the other metamorphic units are among the contradictions);
     2 glacier/water units and 1 'Unknown' age stay null. The detailed-map check reads the previous build's ages, so the
-    Veneto joins changed its verdict for 11 units (9 of them not in the tiles). The unit_name property is still ISPRA's name.
+    Veneto joins changed its verdict for 11 units (9 of them not in the tiles).
+  - Young bedrock (review of 2026-09-13): ISPRA gives a Cenozoic or Quaternary age to many volcanic, plutonic, dyke,
+    metamorphic and lithified bedrock units (e.g. the Bolzano porphyries "porfidi quarziferi" and their tuffs, the Brixen
+    granite "graniti biotitici" and the Sondalo gabbro as "Cenozoic"). 73 such units (2 003 polygons in the bbox, 1 406 in the
+    tiles, about 425 km2) are withheld (tile age_basis withheld, age_withheld_reason young_bedrock, ISPRA's age text kept in
+    age_label); 2 join to a Trentino / South Tyrol formation instead ("granodioriti del M. Bruffione" -> Eocene, "granito di
+    monte croce" -> Cisuralian); 8 keep ISPRA's specific Paleogene age because a cited authority dates the named body in the
+    Cenozoic (Adamello-Presanella tonalites from the Trentino unit legend; Paleogene basalts of the Veneto). Review counts after
+    this rule: 590 source, 235 contradiction (withheld), 136 metamorphic/faulting events (withheld), 73 young bedrock
+    (withheld), 19 + 2 legend joins, 8 young bedrock kept with citation, 6 Quaternary name/description mismatches kept, 2
+    glacier/water (none), 1 'Unknown' (withheld, unmappable_interval). The one unit with event 'unknown' ("bassure di
+    risorgiva", Holocene) is now dated. The unit_name property is still ISPRA's name.
     A reviewer with geological training should check the units that fill the gaps (listed in the meta, ages.ispra_review).
   - The Atom feed's bbox attributes for the three zips look mislabelled ("nord" is advertised as "35.5 8.1 41.3 18.5");
     the downloaded "nord" file does cover northern Italy.

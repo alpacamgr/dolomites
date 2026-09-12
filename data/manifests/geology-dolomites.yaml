@@ -37,7 +37,7 @@ size_bytes: 0  # see archive_bytes and served_tile_bytes_per_zoom in app/public/
 checksum:
   algorithm: sha256
   value: ""  # derived file, rebuilt from the source manifests' checksummed inputs
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - Priority South Tyrol > Trentino > Veneto > swisstopo > ISPRA 1:100k > GeoSphere 1:500k; a lower source only fills area
     that no higher source covers. The three gap-fill maps are much coarser (1:100,000 surveys of 1880-1980, 1:500,000) and

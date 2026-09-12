@@ -30,7 +30,7 @@ size_bytes: 205513402
 checksum:
   algorithm: sha256
   value: "9e83e2e8a3a5ffe1243b4cf20c62ec85e784a7b802bdad00a4344ed1ceaf981d"  # GeologicalUnits-Detailed.geojson
-honesty_label: observed
+honesty_label: interpreted  # geological map: drawn by researchers from field evidence; ages derived by this project (2026-09-13)
 caveats: |
   - Coverage is the Province of Bolzano / South Tyrol only, not the whole
     Dolomites: Trentino and Belluno provinces are covered separately (see

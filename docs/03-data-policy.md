@@ -8,9 +8,9 @@ Every visual element on the site carries exactly one of these labels, visible on
 
 | Label | Meaning | Examples |
 |---|---|---|
-| **Observed** | Measured today. | LiDAR terrain, geological map units, glacier outlines, fault traces. |
+| **Observed** | Measured today. | LiDAR terrain, glacier outlines, fault traces. |
 | **Modeled** | Output of a published numerical model, cited with version. | Ice thickness from an ice-sheet model, plate positions from a rotation model, paleo-topography rasters. |
-| **Interpreted** | Drawn by researchers from field evidence, published in a paper or map. | Triassic platform-and-basin sketch maps, stratigraphic columns, restored cross-sections. |
+| **Interpreted** | Drawn by researchers from field evidence, published in a paper or map. | Geological map units (a researcher's map drawn from field evidence) and their stratigraphic ages, including ages this project derives from them (legend joins, deposit-type rules); ages the project withholds are not shown as colour. Triassic platform-and-basin sketch maps, stratigraphic columns, restored cross-sections. |
 | **Illustrative** | Artwork or a schematic with no claim to spatial accuracy. | Reef life reconstructions, block diagrams, cartoon volcanoes. |
 
 Two qualifiers may be added to a label where they help: **dated** (an observed or interpreted item whose age comes from a chronometer with a quoted uncertainty, e.g. cosmogenic exposure ages) and **compiled** (a harmonized multi-source database such as a glacier inventory or a proxy compilation). They refine a label; they never replace it.
