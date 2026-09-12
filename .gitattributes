@@ -1,0 +1,7 @@
+# Normalise text line endings; never touch binary map data (a small MVT tile can look like text to git's heuristic)
+* text=auto
+*.pbf binary
+*.webp binary
+*.png binary
+*.jpg binary
+*.pmtiles binary
