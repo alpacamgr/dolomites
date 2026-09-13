@@ -5,7 +5,7 @@ status: draft
 sources: [tarquini-2023, copernicus-dem, bolzano-geologia, pat-geologia, veneto-litologia, swisstopo-geocover, ispra-geologia-100k, geosphere-ge-500k]
 ---
 
-Das sind die Dolomiten, wie sie heute liegen. Scrollen Sie nach oben, dann läuft die Zeit rückwärts, dreihundert Millionen Jahre lang. Die Erzählung wechselt zwischen zwei Bühnen. Ein Globus trägt die plattentektonischen Kapitel, weil Plattenbewegung nur auf dieser Skala verständlich wird. Dasselbe Gelände, nach dem Alter des Gesteins eingefärbt, trägt die lokalen Kapitel: die triassischen Riffe, die alpine Kollision, die Eiszeiten, die Gegenwart.
+Das sind die Dolomiten, wie sie heute liegen. Scrollen Sie weiter, dann springt die Geschichte dreihundert Millionen Jahre zurück und läuft von dort bis heute. Die Erzählung wechselt zwischen zwei Bühnen. Ein Globus trägt die plattentektonischen Kapitel, weil Plattenbewegung nur auf dieser Skala verständlich wird. Dasselbe Gelände, nach dem Alter des Gesteins eingefärbt, trägt die lokalen Kapitel: die triassischen Riffe, die alpine Kollision, die Eiszeiten, die Gegenwart.
 
 Alles auf dem Bildschirm trägt eines von vier Ehrlichkeits-Etiketten. Beobachtet ist heute gemessen. Modelliert stammt aus einem veröffentlichten numerischen Modell. Interpretiert ist die Karte einer Forscherin, gezeichnet aus Geländebefunden. Illustration ist Zeichnung. Was keine Quelle hat, erscheint nicht.
 

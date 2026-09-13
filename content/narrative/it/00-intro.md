@@ -5,7 +5,7 @@ status: draft
 sources: [tarquini-2023, copernicus-dem, bolzano-geologia, pat-geologia, veneto-litologia, swisstopo-geocover, ispra-geologia-100k, geosphere-ge-500k]
 ---
 
-Queste sono le Dolomiti come sono oggi. Scorrete verso l'alto e il tempo corre all'indietro, per trecento milioni di anni. Il racconto alterna due palcoscenici. Un globo porta i capitoli tettonici, perché il moto delle placche si legge solo a quella scala. Lo stesso terreno, colorato secondo l'età della roccia, porta i capitoli locali: le scogliere triassiche, la collisione alpina, le glaciazioni, il presente.
+Queste sono le Dolomiti come sono oggi. Scorrendo, il racconto salta indietro di trecento milioni di anni e da lì corre fino a oggi. Il racconto alterna due palcoscenici. Un globo porta i capitoli tettonici, perché il moto delle placche si legge solo a quella scala. Lo stesso terreno, colorato secondo l'età della roccia, porta i capitoli locali: le scogliere triassiche, la collisione alpina, le glaciazioni, il presente.
 
 Tutto ciò che vedete porta una delle quattro etichette di onestà. Osservato è misurato oggi. Modellato proviene da un modello numerico pubblicato. Interpretato è la carta di una ricercatrice, disegnata dai dati di campo. Illustrativo è disegno. Ciò che non ha una fonte non compare.
 

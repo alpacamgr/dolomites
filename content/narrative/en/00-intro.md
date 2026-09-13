@@ -5,7 +5,7 @@ status: draft
 sources: [tarquini-2023, copernicus-dem, bolzano-geologia, pat-geologia, veneto-litologia, swisstopo-geocover, ispra-geologia-100k, geosphere-ge-500k]
 ---
 
-These are the Dolomites as they stand today. Scroll up, and time runs backward, three hundred million years of it. The story alternates between two stages. A globe carries the plate-tectonic chapters, because plate motion only makes sense at that scale. This same terrain, coloured by the age of the rock, carries the local chapters: the Triassic reefs, the Alpine collision, the ice ages, the present.
+These are the Dolomites as they stand today. Scroll on, and the story jumps back three hundred million years, then runs forward to today. The story alternates between two stages. A globe carries the plate-tectonic chapters, because plate motion only makes sense at that scale. This same terrain, coloured by the age of the rock, carries the local chapters: the Triassic reefs, the Alpine collision, the ice ages, the present.
 
 Everything on the screen carries one of four honesty labels. Observed is measured today. Modeled comes from a published numerical model. Interpreted is a researcher's map drawn from field evidence. Illustrative is drawing. If a fact has no source, it does not appear.
 
