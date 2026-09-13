@@ -96,6 +96,102 @@ kept as tuned in the previous pass, checked after.
 
 Tile counts and served bytes per zoom before / after (fill in after the build).
 
+## Seam fix (2026-09-13, post-review)
+
+A reviewer decoded the first ring build's z9 tiles and found a one-pixel-wide
+N-S trench of false low ground along 10 E and (fainter) 13 E. Example: in
+`app/public/data/terrain/elevation/9/270/180.webp` the column at lon ~9.9996 E
+(col 113) reads a mean height of ~1027 m, roughly 53% below its neighbours
+(col 112 = 2205 m, col 114 = 2184 m), while the raw GLO-90 E009 tile and
+GLO-30 both read ~2400 m at that point.
+
+Cause. `data/scripts/terrain/build_terrain_pmtiles.py:load_glo90_mosaic()`
+called `rasterio.merge.merge` on the six GLO-90 tiles (N45..N47 x E009 and
+E013). The result is a single 9-14 E raster whose 10-13 E middle is empty
+because no tile was fetched there (correctly so: GLO-30 covers 10-13 E). GLO-90
+tiles set no nodata attribute, so `rio_merge` fills that empty area with 0 m
+(a valid elevation, not nodata). The subsequent bilinear
+`rasterio.warp.reproject(..., src_nodata=None, ...)` in `read_glo30_window`
+then treats the fill as real data, and destination pixels just west of 10 E or
+just east of 13 E get a bilinear average of a real GLO-90 cell and a 0 m fill
+cell -> the low column at the seam.
+
+Fix. Build one gap-free mosaic per longitude strip instead of merging the two
+strips into one raster with a hole. `load_glo90_strip_mosaics` groups the
+tiles by the `E<lon>` tag in the filename and merges each group on its own, so
+each source array only holds contiguous observed cells. `read_glo30_window`
+now reprojects each strip separately into the fill array; no fill value ever
+enters the bilinear kernel.
+
+Additionally, the GLO-90 E009 strip's east edge (~9.99958 E) sits ~28 m west
+of the GLO-30 mosaic's west edge (~9.99986 E), leaving a sliver where a
+destination pixel is off the east end of the strip and off the west end of
+GLO-30. To bridge that sliver without inventing data, `load_glo90_strip_mosaics`
+pads the strip by one GLO-90 pixel of edge-nearest values on the side facing
+the GLO-30 mosaic (a ~90 m nearest extrapolation of the observed edge cell).
+No padding on the outer sides, so pixels beyond the ring bbox at 9 E / 14 E
+still fall through to 0 m as before. The 13 E seam had no gap (GLO-30 east
+edge already overlaps the E013 strip's west edge by ~28 m), only the seam
+kernel picking up the zero fill; per-strip mosaicking is enough there.
+
+Before / after, per `data/scripts/terrain/check_ring_seams.py` (column mean
+across the tile, metres; rel = (centre - mean(left,right)) / mean(left,right)):
+
+10 E seam at z9 (col 113, seam-lon 9.9996 E):
+
+| tile             | col 112 | col 113 before | col 113 after | col 114 | rel before | rel after |
+|------------------|---------|----------------|---------------|---------|------------|-----------|
+| `9/270/178.webp` | 730.1   | 341.2          | 730.2         | 731.9   | -53.3%     | -0.1%     |
+| `9/270/179.webp` | 1492.3  | 699.6          | 1497.1        | 1503.5  | -53.3%     | -0.0%     |
+| `9/270/180.webp` | 2205.4  | 1027.5         | 2197.7        | 2183.6  | -53.2%     | +0.1%     |
+| `9/270/181.webp` | 2116.7  | 986.8          | 2110.7        | 2097.0  | -53.2%     | +0.2%     |
+| `9/270/182.webp` | 967.5   | 448.8          | 959.5         | 947.9   | -53.1%     | +0.2%     |
+| `9/270/183.webp` | 80.6    | 37.6           | 80.5          | 80.3    | -53.3%     | -0.0%     |
+
+13 E seam at z9 (col 250, seam-lon 13.0003 E):
+
+| tile             | col 249 | col 250 before | col 250 after | col 251 | rel before | rel after |
+|------------------|---------|----------------|---------------|---------|------------|-----------|
+| `9/274/178.webp` | 733.3   | 641.2          | 735.2         | 736.5   | -12.8%     | +0.0%     |
+| `9/274/179.webp` | 1489.9  | 1314.6         | 1507.4        | 1522.9  | -12.7%     | +0.1%     |
+| `9/274/180.webp` | 1651.4  | 1453.1         | 1651.2        | 1648.1  | -11.9%     | +0.1%     |
+
+z8 spot checks: same seam columns at `8/135/{88..92}.webp` (col 56, 9.9989 E)
+and `8/137/{89..91}.webp` (col 125, 13.0009 E) all fall within +/- 1 % of the
+neighbour mean after the fix (previously off by tens of percent).
+
+Cross-check against raw sources (single-pixel decode of the WebP vs the raw
+GLO-90 / GLO-30 cell at the same lon/lat):
+
+| tile pixel                                | before | after  | GLO-90 raw | note |
+|-------------------------------------------|--------|--------|-----------|------|
+| `8/135/90.webp` px (256, 56), 9.9989 E    | 2030.5 | 2828.2 | 2864.2    | fix restores height to within 1.3 % of the raw source (was ~30 % low) |
+| `9/274/179.webp` px (100, 250), 13.0003 E | 1028.3 | 1179.0 | 1158.8    | fix aligns with raw source; was ~10 % low |
+| `9/274/179.webp` px (256, 250), 13.0003 E | 1103.6 | 1265.5 | 1247.0    | fix aligns with raw source; was ~12 % low |
+
+Changed tiles per zoom (from `git status`):
+
+| zoom | changed | byte delta |
+|------|---------|------------|
+| z6   |   3     | +1 310     |
+| z7   |   5     | +3 402     |
+| z8   |  12     | +10 098    |
+| z9   |  13     | -246       |
+| z10  |   4     | -262       |
+| z11  |   0     | 0          |
+| z12  |   0     | 0          |
+
+The 4 changed z10 tiles are all at `x=548, y in {359, 360, 361, 365}`. Their
+Web-Mercator extent is 12.6563-13.0078 E, so each tile's easternmost column
+(col 500) sits at 13.0000 E. That column is east of the GLO-30 mosaic's east
+edge (12.99986 E) and previously read the merged-mosaic zero fill in the
+10-13 E gap; the fix corrects it (e.g. `10/548/359.webp` col 500 row 499:
+2507.8 -> 2788.7 m). No other core z10-12 tile crosses either seam, so
+z11 and z12 are byte-identical.
+
+Verification: `data/scripts/terrain/check_ring_seams.py` prints per-column
+means at both seams at z9; run it after every rebuild.
+
 ## Notes
 
 - No fabricated data. GLO-90 is measured elevation; it is labelled the same as

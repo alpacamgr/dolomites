@@ -220,23 +220,74 @@ def load_glo30_mosaic() -> tuple[np.ndarray, rasterio.Affine]:
     return arr, transform
 
 
-def load_glo90_mosaic() -> tuple[np.ndarray, rasterio.Affine] | None:
-    """Merge the GLO-90 outer-ring tiles into a single in-memory float32 array.
-    Returns None when no GLO-90 tile is present (build proceeds without a ring)."""
+def load_glo90_strip_mosaics(
+    glo30_lon_bounds: tuple[float, float],
+) -> list[tuple[np.ndarray, rasterio.Affine]]:
+    """Load the GLO-90 outer-ring tiles as one gap-free mosaic per longitude strip.
+
+    The fetched GLO-90 grid is two disconnected 3-tile columns (E009 and E013).
+    Merging both into one raster leaves the 10-13 E middle empty and rio_merge
+    fills that gap with 0 m (the sources set no nodata). A subsequent
+    bilinear reproject next to 10 E or 13 E then averages real heights with
+    those zeros and paints a one-pixel-wide N-S trench along both seams
+    (reviewer report 2026-09-13). Building one mosaic per contiguous strip
+    keeps each source array gap-free, so resampling never mixes real elevations
+    with fill values.
+
+    The east edge of the E009 strip (~9.99958 E) also sits ~28 m west of the
+    GLO-30 mosaic's west edge (~9.99986 E); a destination pixel that falls in
+    that sliver is off the east end of the strip and off the west end of
+    GLO-30, so bilinear/nearest reproject both leave it as nodata (which then
+    encodes as 0 m). To bridge that gap without inventing heights the strip is
+    padded by one GLO-90 pixel of edge-nearest values on the side facing the
+    GLO-30 mosaic (an ~90 m nearest extrapolation of the strip's edge cell,
+    the closest observed elevation). No padding is applied on the outer side
+    of each strip so pixels beyond the ring bbox at 9 E / 14 E still fall
+    through to 0 m as before. Returns [] when no GLO-90 tile is present.
+    """
     tifs = sorted(GLO90_DIR.glob("Copernicus_DSM_COG_30_*_DEM.tif"))
     if not tifs:
         print(f"no GLO-90 tifs in {GLO90_DIR}; ring will read as GLO-30 nodata (0 m)")
-        return None
-    print(f"opening {len(tifs)} GLO-90 tiles and merging")
-    dss = [rasterio.open(p) for p in tifs]
-    try:
-        merged, transform = rio_merge(dss, method="first", resampling=Resampling.nearest)
-    finally:
-        for ds in dss:
-            ds.close()
-    arr = merged[0].astype("float32")
-    print(f"GLO-90 mosaic: {arr.shape} float32, {arr.nbytes/1e6:.0f} MB")
-    return arr, transform
+        return []
+    # Group by the E<lon> tag in the filename (Copernicus_DSM_COG_30_N<lat>_00_E<lon>_00_DEM.tif).
+    groups: dict[str, list[Path]] = {}
+    for p in tifs:
+        try:
+            key = p.stem.split("_E", 1)[1].split("_", 1)[0]
+        except IndexError:
+            raise SystemExit(f"unexpected GLO-90 filename: {p.name}")
+        groups.setdefault(key, []).append(p)
+    print(f"opening {len(tifs)} GLO-90 tiles as {len(groups)} strip mosaics: E{', E'.join(sorted(groups))}")
+    glo30_west, glo30_east = glo30_lon_bounds
+    strips: list[tuple[np.ndarray, rasterio.Affine]] = []
+    for key in sorted(groups):
+        dss = [rasterio.open(p) for p in sorted(groups[key])]
+        try:
+            merged, transform = rio_merge(dss, method="first", resampling=Resampling.nearest)
+        finally:
+            for ds in dss:
+                ds.close()
+        arr = merged[0].astype("float32")
+        strip_west = transform.c
+        strip_east = transform.c + arr.shape[1] * transform.a
+        # Strip lies west of the GLO-30 mosaic -> pad east; lies east of it -> pad west.
+        # Pad only when there is a real gap (fractional-pixel overlap needs no padding).
+        gap_east_m = (glo30_west - strip_east) * 111_000.0
+        gap_west_m = (strip_west - glo30_east) * 111_000.0
+        note = ""
+        if gap_east_m > 0.1:
+            arr = np.pad(arr, ((0, 0), (0, 1)), mode="edge")
+            note = f"; padded east by 1 px (nearest) to bridge a {gap_east_m:.0f} m gap to GLO-30"
+        elif gap_west_m > 0.1:
+            arr = np.pad(arr, ((0, 0), (1, 0)), mode="edge")
+            transform = rasterio.Affine(
+                transform.a, transform.b, transform.c - transform.a,
+                transform.d, transform.e, transform.f,
+            )
+            note = f"; padded west by 1 px (nearest) to bridge a {gap_west_m:.0f} m gap to GLO-30"
+        strips.append((arr, transform))
+        print(f"  E{key} strip: {arr.shape} float32, {arr.nbytes/1e6:.1f} MB{note}")
+    return strips
 
 
 def tile_intersects_bbox(z: int, x: int, y: int, bbox_ll: tuple[float, float, float, float]) -> bool:
@@ -256,8 +307,11 @@ def build_pmtiles(out_path: Path) -> dict:
         for ds in tin_datasets
     ]
     glo_arr, glo_transform = load_glo30_mosaic()
-    glo90 = load_glo90_mosaic()
-    glo90_arr, glo90_transform = (None, None) if glo90 is None else glo90
+    # GLO-30 mosaic lon bounds (needed by GLO-90 loader to decide which side of each
+    # strip to pad toward the GLO-30 grid; see docstring).
+    glo30_west = glo_transform.c
+    glo30_east = glo_transform.c + glo_arr.shape[1] * glo_transform.a
+    glo90_strips = load_glo90_strip_mosaics((glo30_west, glo30_east))
 
     from pyproj import Transformer
     to_utm = Transformer.from_crs("EPSG:3857", tin_datasets[0].crs, always_xy=True)
@@ -336,22 +390,26 @@ def build_pmtiles(out_path: Path) -> dict:
             dst_nodata=GLO_NODATA,
             init_dest_nodata=False,
         )
-        if glo90_arr is not None:
+        if glo90_strips:
             missing = dst == GLO_NODATA
             if missing.any():
+                # Reproject each 1-degree strip within its own window. Each
+                # strip mosaic is contiguous (no fill), so bilinear resampling
+                # near 10 E and 13 E never averages real heights with a gap.
                 fill = np.full((H, W), GLO_NODATA, dtype=np.float32)
-                reproject(
-                    source=glo90_arr,
-                    destination=fill,
-                    src_transform=glo90_transform,
-                    src_crs="EPSG:4326",
-                    dst_transform=dst_transform,
-                    dst_crs="EPSG:3857",
-                    resampling=WarpResampling.bilinear,
-                    src_nodata=None,
-                    dst_nodata=GLO_NODATA,
-                    init_dest_nodata=False,
-                )
+                for arr, tr in glo90_strips:
+                    reproject(
+                        source=arr,
+                        destination=fill,
+                        src_transform=tr,
+                        src_crs="EPSG:4326",
+                        dst_transform=dst_transform,
+                        dst_crs="EPSG:3857",
+                        resampling=WarpResampling.bilinear,
+                        src_nodata=None,
+                        dst_nodata=GLO_NODATA,
+                        init_dest_nodata=False,
+                    )
                 dst = np.where(missing, fill, dst)
         # Any remaining nodata (should not happen inside the ring bbox) becomes 0
         dst[dst == GLO_NODATA] = 0.0
