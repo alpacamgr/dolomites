@@ -43,7 +43,7 @@
     }
   },
   "layers": {
-    "dolomites-terrain": "Elevation (TINITALY 10 m, Copernicus 30 m)",
+    "dolomites-terrain": "Elevation (TINITALY 10 m, Copernicus 30 m; outer area 90 m)",
     "geology-suedtirol": "Geological maps (6 open sources)",
     "ispra-carg-50k": "Geological map of Italy (ISPRA CARG)",
     "scotese-paleodem-2018-v2": "Paleogeography (PaleoDEM)",
@@ -85,6 +85,7 @@
     "undated": "Mapped, age not given",
     "gap": "No open geological map here",
     "edge": "Edge of the open geological maps",
+    "extent": "Extent of the geological maps",
     "shades": "Shades: finer ICS divisions.",
     "hint": "Point at a row to highlight it on the map.",
     "none": "No mapped units in view",

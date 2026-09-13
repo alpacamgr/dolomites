@@ -96,6 +96,12 @@
         {/if}
       </span>
     </li>
+    <li>
+      <!-- outer boundary of the geological data: reads with the dashed line drawn on the map when the DEM ring extends beyond it -->
+      <span class="gkey-row static">
+        <span class="gkey-swatch extent" aria-hidden="true"></span><span class="gkey-label">{t('geology_key.extent')}</span>
+      </span>
+    </li>
   </ul>
   {#if rows.length === 0 && !data.undated && !data.withheld}
     <p class="gkey-note">{t('geology_key.none')}</p>

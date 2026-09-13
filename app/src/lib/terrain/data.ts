@@ -27,6 +27,18 @@ export interface DetectedTerrain extends ResolvedTileJson {
   label: string;
   /** true when the global stand-in tiles are used instead of the project DEM */
   fallback: boolean;
+  /**
+   * Inner "core" bbox where high-zoom tiles exist. Outside this, tiles are only built up to
+   * `ringMaxZoom`; the engine short-circuits requests for higher zooms so MapLibre falls
+   * back to the parent tile without a 404 round trip. Null when the meta does not declare a ring.
+   */
+  coreBounds: Bounds | null;
+  ringMaxZoom: number | null;
+}
+
+interface TerrainMeta extends Meta {
+  core_bbox_wgs84?: number[];
+  ring_max_zoom?: number;
 }
 
 export interface IceIndex {
@@ -111,8 +123,11 @@ export async function readTileJson(dataBase: string, path: string): Promise<Reso
 export async function detectTerrain(dataBase: string): Promise<DetectedTerrain> {
   const [tj, meta] = await Promise.all([
     readTileJson(dataBase, 'terrain/elevation/tiles.json'),
-    fetchJson<Meta>(`${dataBase}/terrain/dolomites-terrain.meta.json`),
+    fetchJson<TerrainMeta>(`${dataBase}/terrain/dolomites-terrain.meta.json`),
   ]);
+  const cb = meta?.core_bbox_wgs84;
+  const coreBounds = Array.isArray(cb) && cb.length === 4 && cb[2] > cb[0] && cb[3] > cb[1] ? (cb as Bounds) : null;
+  const ringMaxZoom = typeof meta?.ring_max_zoom === 'number' ? meta.ring_max_zoom : null;
   if (tj) {
     return {
       ...tj,
@@ -122,6 +137,8 @@ export async function detectTerrain(dataBase: string): Promise<DetectedTerrain> 
       attribution: meta?.attribution ?? tj.attribution,
       label: meta?.label ?? 'observed',
       fallback: false,
+      coreBounds,
+      ringMaxZoom,
     };
   }
   console.info('[terrain] terrain/elevation/tiles.json unavailable; using AWS Terrain Tiles as a stand-in');
@@ -136,5 +153,7 @@ export async function detectTerrain(dataBase: string): Promise<DetectedTerrain> 
     attribution: TILEZEN_ATTRIBUTION,
     label: 'observed',
     fallback: true,
+    coreBounds: null,
+    ringMaxZoom: null,
   };
 }

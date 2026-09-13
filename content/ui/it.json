@@ -43,7 +43,7 @@
     }
   },
   "layers": {
-    "dolomites-terrain": "Altimetria (TINITALY 10 m, Copernicus 30 m)",
+    "dolomites-terrain": "Altimetria (TINITALY 10 m, Copernicus 30 m; area esterna 90 m)",
     "geology-suedtirol": "Carte geologiche (6 fonti aperte)",
     "ispra-carg-50k": "Carta geologica d'Italia (ISPRA CARG)",
     "scotese-paleodem-2018-v2": "Paleogeografia (PaleoDEM)",
@@ -127,6 +127,7 @@
     "undated": "Cartografate, età non indicata",
     "gap": "Qui nessuna carta geologica aperta",
     "edge": "Limite delle carte geologiche aperte",
+    "extent": "Estensione delle carte geologiche",
     "shades": "Sfumature: suddivisioni ICS più fini.",
     "hint": "Passa su una riga per evidenziarla sulla mappa.",
     "none": "Nessuna unità cartografata in vista",

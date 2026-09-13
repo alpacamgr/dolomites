@@ -312,6 +312,13 @@ button.gkey-row:hover, .gkey-row[aria-pressed="true"] { background: rgba(255, 25
 .gkey-swatch.gap { background: repeating-linear-gradient(135deg, rgba(70, 62, 52, 0.6) 0 1px, rgba(246, 243, 238, 0.32) 1px 5px), var(--swatch-base); }
 .gkey-swatch.edge { position: relative; box-shadow: none; }
 .gkey-swatch.edge::after { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 1.5px; background: rgba(40, 34, 28, 0.75); }
+/* Matches the dashed line the terrain engine draws at the geology-data outer bbox. */
+.gkey-swatch.extent { position: relative; box-shadow: none; background: transparent; }
+.gkey-swatch.extent::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 1.5px;
+  background-image: linear-gradient(to right, rgba(40, 34, 28, 0.7) 0 60%, transparent 60% 100%);
+  background-size: 6px 1.5px; background-repeat: repeat-x;
+}
 .gkey-note { margin: 6px 0 0; font-size: 0.7rem; line-height: 1.4; color: var(--panel-mute); }
 .gkey-note.coarse { color: #e8c170; }
 .gkey-hint { display: none; }
