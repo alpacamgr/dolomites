@@ -64,9 +64,52 @@ high ground.
 
 ## Verification
 
-After changes: `qa-after/` (same script, same ports, same chapters). Screenshots compared with
-`qa-live/` per chapter. Frame time at the reefs camera captured through
-`tools/qa/screenshot-chapters.mjs`'s built-in `console.time` (reported at end of run).
+Ran `tools/qa/screenshot-chapters.mjs` against `npx astro preview --port 4362` on the built
+site. Screenshots saved to `scratchpad/qa-after/` (per chapter, p10/p50/p90); DE and IT spot
+runs to `scratchpad/qa-after-de/`, `qa-after-it/`; hover check to `qa-after-hover/`.
+
+- **en 5 chapters x 3 progresses**: `console errors: 0` (`qa-after/console-errors.txt`).
+- **de intro+ice-ages**: `console errors: 0`.
+- **it intro+ice-ages**: `console errors: 0`.
+- **hover** (`.gkey-list.grid li:nth-child(4)` = Cretaceous row at the reef view): the row
+  highlights on the map, other units dim with the coarse wash, popup unaffected. Renders in
+  `qa-after-hover/05-triassic-reefs-p50-hover.png`.
+- **type check**: `npx astro check` -> 0 errors / 0 warnings / 0 hints.
+
+Before/after observations per chapter:
+
+- **intro p50**: baseline was a paint job dominating the DEM; after, the relief is clearly
+  visible under the ICS tint and Quaternary yellow reads as a wash on shaded slopes
+  (`qa-live/00-intro-p50.png` vs `qa-after/00-intro-p50.png`). Coarse-note wording matches
+  the visible softer wash on Veneto/ISPRA/GeoSphere polygons.
+- **reefs p10**: baseline was flat magenta everywhere emphasised; after, magenta units keep a
+  crisp outline (see especially Marmolada/Sella/Latemar) while surrounding rock stays visible
+  and shaded. (`qa-live/05-triassic-reefs-p10.png` vs `qa-after/05-triassic-reefs-p10.png`.)
+- **collision p50**: baseline showed the DEM bbox as a hard rectangle at bottom-right; after,
+  the edge fades into the horizon (still slightly visible under the low-pitch camera, but
+  reads as atmospheric distance, not as a screen cut). (`qa-live/06-collision-uplift-p50.png`
+  vs `qa-after/06-collision-uplift-p50.png`.)
+- **ice ages**:
+  - 102 ka p10 (mid-Pleniglacial build-up): baseline was near-invisible ice. Model: broad
+    ice sheet with peaks as nunataks. After: pale-blue sheet clearly readable over most
+    high ground, valleys darker where thickness rises to a few hundred metres, ice-free
+    lowlands still bare. (`qa-after/07-ice-ages-p10.png`.)
+  - 56 ka p50 (renewed cold): baseline invisible against summits. Model: near-full valley
+    fill except the highest peaks. After: valleys clearly ice-filled, ridges pale, nunataks
+    still bare rock. (`qa-after/07-ice-ages-p50.png`.)
+  - 11 ka p90 (Younger Dryas remnant): baseline showed a hint. Model: only high-elevation
+    cirque and valley-head fragments. After: those small remnants are legible.
+    (`qa-after/07-ice-ages-p90.png`.)
+- **today p50**: unchanged intent; the elevation-only view (Marmolada glacier) reads as
+  before, no new artifacts from the sky/fog changes at pitch 62.
+
+Frame time at the reefs camera: qualitatively no regression expected. The change adds two
+`case` expressions on the geology fill/line paints (one for coarse-source wash, one for
+emphasis outline), both zoom- and property-driven and cached per feature by MapLibre, and
+lifts the hillshade exaggeration and fill opacities (paint constants, no extra draw calls).
+A quantitative sampling loop (`scratchpad/perf.mjs`) did not exercise the map thread reliably
+(idle rAF returned an empty summary); not blocking, but worth revisiting if a jank report
+lands after ship.
 
 ## Follow-up recommendations (not applied in this pass)
 
