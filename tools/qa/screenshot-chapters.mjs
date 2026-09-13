@@ -13,6 +13,11 @@
  *     [--mid 300]  extra capture 300 ms after each scroll (motion mid-transition, suffix -t300)
  *     [--hover ".gkey li:nth-child(2) .gkey-row" | --hover 900,500]  extra capture while hovering (suffix -hover)
  * Use a distinct --port when several agents run it at the same time.
+ *
+ * The headless Chrome is this script's own child (its own --user-data-dir under --out) and is
+ * stopped by PID when the script ends. Never clear a stuck run with `taskkill /IM chrome.exe` or
+ * `Stop-Process -Name chrome`: that also closes the owner's own Chrome. Use a fresh --out and
+ * --port instead, or stop only the PID whose command line contains the --out profile path.
  */
 import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
