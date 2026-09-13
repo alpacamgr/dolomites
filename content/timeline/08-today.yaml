@@ -62,7 +62,7 @@ scene:
     start: 0
     end: 0
   camera:
-    terrain: { lon: 11.86, lat: 46.434, zoom: 12, pitch: 60, bearing: 20 }
+    terrain: { lon: 11.86, lat: 46.434, zoom: 12, pitch: 60, bearing: 170 }
   layers:
     - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
     - { id: "rgi7-region11", label: observed, source_ref: "rgi-7" }

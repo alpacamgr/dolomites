@@ -1026,7 +1026,10 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         e.preventDefault();
         const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
         const nextZoom = map.getZoom() - px * 0.0025;
-        map.easeTo({ zoom: nextZoom, duration: 120, easing: easeOutCubic, essential: true });
+        // zoom about the pointer, as MapLibre's own scroll zoom does, so the ground under the cursor stays put
+        const rect = map.getCanvas().getBoundingClientRect();
+        const around = map.unproject([e.clientX - rect.left, e.clientY - rect.top]);
+        map.easeTo({ zoom: nextZoom, around, duration: 120, easing: easeOutCubic, essential: true });
       };
       el.addEventListener('wheel', onWheel, { passive: false });
       cleanupGestures = () => el.removeEventListener('wheel', onWheel);
