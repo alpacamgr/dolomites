@@ -4,7 +4,7 @@
   "source_ref": "tinitaly-2023",
   "attribution": "TINITALY 1.1 (Tarquini et al. 2023, doi:10.13127/tinitaly/1.1) - INGV - CC BY 4.0; outside Italy: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; outer area (9-14 E, 45-48 N outside 10-13 E): produced using Copernicus WorldDEM-90 with the same rights and attribution",
   "license": "CC BY 4.0 (TINITALY 1.1) + ESA User License for the use of Copernicus Contributing Missions data (Copernicus DEM GLO-30 Public and GLO-90 Public)",
-  "generated": "2026-09-13",
+  "generated": "2026-09-13 (seam fix)",
   "script": "data/scripts/terrain/build_terrain_pmtiles.py",
   "sources": [
     {
@@ -44,7 +44,7 @@
     }
   ],
   "archive": "dolomites-terrain.pmtiles",
-  "archive_bytes": 320727642,
+  "archive_bytes": 320742800,
   "encoding": "mapbox",
   "tile_format": "png",
   "tile_size_px": 512,
@@ -82,8 +82,7 @@
   },
   "ring": {
     "note": "docs/ux/2026-09-13-terrain-ring.md. z6-9 tiles cover the widened bbox 9-14 E / 45-48 N; z10-12 tiles are emitted only where the tile intersects the core bbox 10.3-12.7 E / 45.8-47.2 N. MapLibre falls back to the parent DEM tile for the missing z10-12 outside the core.",
-    "core_bbox": [10.3, 45.8, 12.7, 47.2],
-    "ring_max_zoom": 9
+    "core_bbox": [10.3, 45.8, 12.7, 47.2]
   },
   "datum_handling": {
     "glo30": "EGM2008 (EPSG:3855), Copernicus DEM Product Handbook v5.0 sec. 1.2",
@@ -101,25 +100,27 @@
       {
         "z": 8,
         "centre_lonlat": [
-          11.9545,
+          10.5482,
           46.5579
         ],
-        "diff_vs_tinitaly_m": -1.74,
+        "diff_vs_tinitaly_m": -19.56,
+        "diff_vs_glo30_m": -24.94,
         "tile_min_max_m": [
-          161.9,
-          3408.7
+          190.5,
+          3905.8
         ]
       },
       {
         "z": 10,
         "centre_lonlat": [
           11.4261,
-          46.4376
+          46.6794
         ],
-        "diff_vs_tinitaly_m": -0.2,
+        "diff_vs_tinitaly_m": 0.22,
+        "diff_vs_glo30_m": -8.69,
         "tile_min_max_m": [
-          209.0,
-          2807.2
+          418.7,
+          2760.7
         ]
       },
       {
