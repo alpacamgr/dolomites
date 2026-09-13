@@ -46,7 +46,12 @@ Every dataset directory contains a `meta.json` with: `dataset_id` (matches `data
 
 Served layout (ADR 0006, 2026-09-12): individual lossless WebP tiles under `terrain/elevation/`, described by a TileJSON 3.0 file `tiles.json` (`tiles: ["{base}/terrain/elevation/{z}/{x}/{y}.webp"]` with a path relative to the data base, plus `minzoom`, `maxzoom`, `bounds`, `attribution`, `encoding: "mapbox"`, `tileSize: 512`). Heights keep the 0.1 m Terrain-RGB precision; no rounding. The PMTiles archive `data/processed/terrain/dolomites-terrain.pmtiles` is the pipeline intermediate the tiles are exported from and is not shipped.
 
-Tile properties: 512 px tiles, EPSG:3857, Mapbox Terrain-RGB encoding (`height = -10000 + (R * 65536 + G * 256 + B) * 0.1`), zoom 6 to 12 (512 px tiles at z12 give 13 m per pixel at 46.5 N, the finest level the 10 m source supports without upsampling), bounding box 10.3 E to 12.7 E, 45.8 N to 47.2 N. Source priority: TINITALY 10 m inside Italy, Copernicus GLO-30 for voids and areas outside Italy; both are recorded in meta.json. Metadata in the archive: `attribution`, `encoding: mapbox`, `minzoom`, `maxzoom`, `bounds`.
+Tile properties: 512 px tiles, EPSG:3857, Mapbox Terrain-RGB encoding (`height = -10000 + (R * 65536 + G * 256 + B) * 0.1`), zoom 6 to 12. Bounding box 9.0 E to 14.0 E, 45.0 N to 48.0 N (widened 2026-09-13, docs/ux/2026-09-13-terrain-ring.md). Two nested coverage areas:
+
+- **Core** 10.3-12.7 E / 45.8-47.2 N: tiles at z6-12 (512 px tiles at z12 give 13 m per pixel at 46.5 N, the finest level the 10 m source supports without upsampling). Source priority: TINITALY 10 m inside Italy, Copernicus GLO-30 for voids and areas outside Italy.
+- **Ring** 9.0-14.0 E / 45.0-48.0 N: tiles at z6-9 only (a 90 m source is honesty-capped at z9 by the 0.7 x source guideline). Source priority: TINITALY > GLO-30 > Copernicus GLO-90. GLO-90 fills the two outer strips (9-10 E and 13-14 E) that lie outside the GLO-30 raw tiles. z10-12 tiles are only emitted inside the core bbox; MapLibre falls back to the parent DEM tile for the missing z10-12 outside the core.
+
+All three sources are recorded in `meta.json`; the archive also carries `core_bbox` (as [minLon, minLat, maxLon, maxLat]) and `ring_max_zoom` (9) for clients that want to know which z10-12 tiles to short-circuit. Metadata in the archive: `attribution`, `encoding: mapbox`, `minzoom`, `maxzoom`, `bounds`, `core_bbox`, `ring_max_zoom`, `source_datasets`, `seam_feather_m`.
 
 ### 2.2 Geology — served as `terrain/geology/{z}/{x}/{y}.pbf` + `terrain/geology/tiles.json`
 

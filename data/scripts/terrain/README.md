@@ -41,6 +41,10 @@ will regenerate the PMTiles archives. Pass `--force` to force a rebuild.
    the nine Copernicus DEM GLO-30 tiles N45..N47 x E010..E012, 377 MB, from the
    public AWS bucket into `data/raw/copernicus-dem-glo30/` and writes
    `checksums.json`).
+2b. `python data/scripts/terrain/fetch_copernicus_glo90.py` (~10 s; downloads
+   six Copernicus DEM GLO-90 tiles N45..N47 x E009 and E013, ~29 MB, for the
+   two outer strips of the widened ring bbox 9-14 E / 45-48 N; see
+   docs/ux/2026-09-13-terrain-ring.md).
 3. `python data/scripts/terrain/build_terrain_pmtiles.py --force`
    (produces the intermediate `data/processed/terrain/dolomites-terrain.pmtiles` plus
    `verification.json`, the full-bbox z9 hillshade and the z10 northern-edge
@@ -112,8 +116,11 @@ will regenerate the PMTiles archives. Pass `--force` to force a rebuild.
 
 ## Choice of source DEM
 
-Per `docs/04-data-contracts.md` 2.1: TINITALY 10 m inside Italy, Copernicus
-GLO-30 for voids and areas outside Italy.
+Per `docs/04-data-contracts.md` 2.1: core (10.3-12.7 E / 45.8-47.2 N, z6-12)
+uses TINITALY 10 m inside Italy, Copernicus GLO-30 for voids and areas outside
+Italy. Ring (9-14 E / 45-48 N, z6-9 only) additionally uses Copernicus GLO-90
+in the two outer strips (9-10 E and 13-14 E) that lie outside the fetched
+GLO-30 raw tiles.
 
 - **TINITALY 1.1** (INGV, CC BY 4.0) is the primary source. Direct-download
   zips live under `https://tinitaly.pi.ingv.it/data_1.1/<tileid>_s10/<tileid>_s10.zip`;
@@ -125,6 +132,11 @@ GLO-30 for voids and areas outside Italy.
   the Austrian side north of ~46.9 N, the Marmolada north-face strip and the
   missing ridge cells. These used to be encoded as 0 m, which drew a cliff
   along the border.
+- **Copernicus DEM GLO-90** (same licence as GLO-30, see
+  `data/manifests/copernicus-dem-glo90.yaml`) fills the two outer strips of
+  the ring (9-10 E and 13-14 E). Six raw tiles at ~5 MB each. Used only at
+  z6-9 (0.7 x 90 m = 63 m; z9 tile pixel is 105 m at 46.5 N, safe; z10 tile
+  pixel is 52.6 m, below the honesty floor).
 
 ### Border fill
 
@@ -224,11 +236,12 @@ bilinear resampling onto 13-53 m tile pixels, compared against a single
 nearest 10 m or 30 m source cell (larger on steep slopes). At the Austrian
 points TINITALY is nodata, so the old build would have encoded 0 m there.
 
-Archive: 958 tiles, 309 847 777 bytes (309.8 MB; the 0 m-fill build was
-221.5 MB, and the extra bytes are the real relief north of the border). The
-archive header and metadata read back with z6-12, the 10.3-12.7 E /
-45.8-47.2 N bounds, both attributions, `source_datasets` and
-`seam_feather_m: 300`.
+Archive (core-only build of 2026-09-12): 958 tiles, 309 847 777 bytes (309.8 MB;
+the 0 m-fill build was 221.5 MB, and the extra bytes are the real relief north
+of the border). The ring build of 2026-09-13 has 1 017 tiles and 320 727 642
+bytes (see `dolomites-terrain.meta.json`); its header and metadata read back
+with z6-12, the 9-14 E / 45-48 N bounds (core 10.3-12.7 E / 45.8-47.2 N above
+z9), the attributions, `source_datasets` and `seam_feather_m: 300`.
 
 Seam inspection: `data/processed/terrain/preview/border-fill.png` is a z10
 hillshade (4094 x 1534 px, whole tiles covering 46.7-47.2 N across the bbox)

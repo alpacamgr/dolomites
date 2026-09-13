@@ -11,6 +11,10 @@ Inputs
 9 Copernicus DEM GLO-30 GeoTIFF tiles under data/raw/copernicus-dem-glo30/
 (EPSG:4326, ~30 m, no nodata over the study area). Fills the Austrian side
 of the border (north of ~46.9 N) and any TINITALY voids inside Italy.
+6 Copernicus DEM GLO-90 GeoTIFF tiles under data/raw/copernicus-dem-glo90/
+(EPSG:4326, ~90 m, N45..N47 x E009 and E013). Covers the two outer strips of
+the ring bbox 9-14 E / 45-48 N that lie outside GLO-30 coverage
+(10-13 E / 45-48 N); ring z6-9 only, see docs/ux/2026-09-13-terrain-ring.md.
 
 Output
 ------
@@ -18,7 +22,10 @@ data/processed/terrain/dolomites-terrain.pmtiles (intermediate)
 
 Encoding: 512 px PNG tiles in EPSG:3857 with Mapbox Terrain-RGB heights
   height_m = -10000 + (R * 65536 + G * 256 + B) * 0.1
-Zoom 6 to 12, bounds 10.3 to 12.7 E and 45.8 to 47.2 N.
+Zoom 6 to 12, bounds 9.0 to 14.0 E and 45.0 to 48.0 N (ring). At z6-9 tiles
+cover the whole ring; at z10-12 tiles are emitted only where the tile
+intersects the core bbox 10.3-12.7 E / 45.8-47.2 N (MapLibre falls back to
+parent tiles for the missing z10-12 outside the core).
 
 Choice of maxzoom
 -----------------
@@ -96,21 +103,30 @@ from scipy.ndimage import distance_transform_edt
 
 RAW_DIR = Path(r"E:/Projects/Dolomites/data/raw/tinitaly-v1-1-10m")
 GLO30_DIR = Path(r"E:/Projects/Dolomites/data/raw/copernicus-dem-glo30")
+GLO90_DIR = Path(r"E:/Projects/Dolomites/data/raw/copernicus-dem-glo90")
 OUT_DIR = Path(r"E:/Projects/Dolomites/app/public/data/terrain")
 PROCESSED_DIR = Path(r"E:/Projects/Dolomites/data/processed/terrain")
 PREVIEW_DIR = PROCESSED_DIR / "preview"
 
 DATASET_ID = "tinitaly-v1-1-10m"
 DATASET_ID_FILL = "copernicus-dem-glo30"
+DATASET_ID_RING = "copernicus-dem-glo90"
 ATTRIBUTION = (
     "TINITALY 1.1 &copy; INGV (Tarquini et al. 2023, "
     "<a href='https://doi.org/10.13127/tinitaly/1.1'>doi:10.13127/tinitaly/1.1</a>), CC BY 4.0; "
     "outside Italy: produced using Copernicus WorldDEM-30 &copy; DLR e.V. 2010-2014 "
     "and &copy; Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS "
-    "by the European Union and ESA; all rights reserved"
+    "by the European Union and ESA; all rights reserved; "
+    "outer area (9-14 E, 45-48 N outside 10-13 E): produced using Copernicus "
+    "WorldDEM-90 with the same rights and attribution"
 )
 
-BBOX_LL = (10.3, 45.8, 12.7, 47.2)  # minLon, minLat, maxLon, maxLat
+# Widened ring bbox for z6-9 coverage (docs/ux/2026-09-13-terrain-ring.md).
+BBOX_LL = (9.0, 45.0, 14.0, 48.0)
+# Original core bbox: TINITALY + GLO-30, kept for z10-12.
+CORE_BBOX_LL = (10.3, 45.8, 12.7, 47.2)
+# Ring source (GLO-90) is honesty-capped at z9 (105 m/px at 46.5 N is >= 0.7 x 90 m).
+MAX_Z_RING = 9
 MIN_Z = 6
 MAX_Z = 12
 TILE_PX = 512
@@ -118,6 +134,10 @@ EARTH_R = 6378137.0
 ORIGIN_M = math.pi * EARTH_R  # ~20037508.342789
 FEATHER_M = 300.0  # ground-metres of cross-fade along the TINITALY validity edge
 TINITALY_NODATA = -9999.0
+# Sentinel for "no GLO-30 data here" so the reprojection falls through to GLO-90
+# in the outer ring strips (9-10 E and 13-14 E). Chosen well below any real
+# elevation so it never collides with a valid height.
+GLO_NODATA = -32768.0
 
 
 # ---------------------------------------------------------------- Web Mercator
@@ -200,6 +220,33 @@ def load_glo30_mosaic() -> tuple[np.ndarray, rasterio.Affine]:
     return arr, transform
 
 
+def load_glo90_mosaic() -> tuple[np.ndarray, rasterio.Affine] | None:
+    """Merge the GLO-90 outer-ring tiles into a single in-memory float32 array.
+    Returns None when no GLO-90 tile is present (build proceeds without a ring)."""
+    tifs = sorted(GLO90_DIR.glob("Copernicus_DSM_COG_30_*_DEM.tif"))
+    if not tifs:
+        print(f"no GLO-90 tifs in {GLO90_DIR}; ring will read as GLO-30 nodata (0 m)")
+        return None
+    print(f"opening {len(tifs)} GLO-90 tiles and merging")
+    dss = [rasterio.open(p) for p in tifs]
+    try:
+        merged, transform = rio_merge(dss, method="first", resampling=Resampling.nearest)
+    finally:
+        for ds in dss:
+            ds.close()
+    arr = merged[0].astype("float32")
+    print(f"GLO-90 mosaic: {arr.shape} float32, {arr.nbytes/1e6:.0f} MB")
+    return arr, transform
+
+
+def tile_intersects_bbox(z: int, x: int, y: int, bbox_ll: tuple[float, float, float, float]) -> bool:
+    """True when the tile (z,x,y) intersects the lon/lat bbox in Web Mercator."""
+    tb = tile_bounds_m(z, x, y)
+    bx0, by0 = lonlat_to_merc(bbox_ll[0], bbox_ll[1])
+    bx1, by1 = lonlat_to_merc(bbox_ll[2], bbox_ll[3])
+    return tb[2] > bx0 and tb[0] < bx1 and tb[3] > by0 and tb[1] < by1
+
+
 # ---------------------------------------------------------------- Tile read
 
 def build_pmtiles(out_path: Path) -> dict:
@@ -209,6 +256,8 @@ def build_pmtiles(out_path: Path) -> dict:
         for ds in tin_datasets
     ]
     glo_arr, glo_transform = load_glo30_mosaic()
+    glo90 = load_glo90_mosaic()
+    glo90_arr, glo90_transform = (None, None) if glo90 is None else glo90
 
     from pyproj import Transformer
     to_utm = Transformer.from_crs("EPSG:3857", tin_datasets[0].crs, always_xy=True)
@@ -267,8 +316,11 @@ def build_pmtiles(out_path: Path) -> dict:
                     return vrt.read(1).astype(np.float32)
 
     def read_glo30_window(e_minx, e_miny, e_maxx, e_maxy, W, H) -> np.ndarray:
-        """Reproject the pre-merged GLO-30 mosaic into a (H, W) float32 array."""
-        dst = np.empty((H, W), dtype=np.float32)
+        """Reproject the pre-merged GLO-30 mosaic into a (H, W) float32 array.
+        Where GLO-30 has no data (outside its 10-13 E / 45-48 N coverage), fall
+        through to GLO-90 (outer ring). Where neither source has data, keep 0.
+        """
+        dst = np.full((H, W), GLO_NODATA, dtype=np.float32)
         dst_transform = rasterio.transform.from_bounds(
             e_minx, e_miny, e_maxx, e_maxy, W, H
         )
@@ -280,7 +332,29 @@ def build_pmtiles(out_path: Path) -> dict:
             dst_transform=dst_transform,
             dst_crs="EPSG:3857",
             resampling=WarpResampling.bilinear,
+            src_nodata=None,
+            dst_nodata=GLO_NODATA,
+            init_dest_nodata=False,
         )
+        if glo90_arr is not None:
+            missing = dst == GLO_NODATA
+            if missing.any():
+                fill = np.full((H, W), GLO_NODATA, dtype=np.float32)
+                reproject(
+                    source=glo90_arr,
+                    destination=fill,
+                    src_transform=glo90_transform,
+                    src_crs="EPSG:4326",
+                    dst_transform=dst_transform,
+                    dst_crs="EPSG:3857",
+                    resampling=WarpResampling.bilinear,
+                    src_nodata=None,
+                    dst_nodata=GLO_NODATA,
+                    init_dest_nodata=False,
+                )
+                dst = np.where(missing, fill, dst)
+        # Any remaining nodata (should not happen inside the ring bbox) becomes 0
+        dst[dst == GLO_NODATA] = 0.0
         return dst
 
     def read_tile_hybrid(z: int, x: int, y: int) -> np.ndarray:
@@ -330,15 +404,26 @@ def build_pmtiles(out_path: Path) -> dict:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
 
-    # PMTiles writer needs tiles in ascending tileid order (clustered layout)
+    # PMTiles writer needs tiles in ascending tileid order (clustered layout).
+    # z6-9 span the whole ring bbox; z10-12 are emitted only where the tile
+    # intersects the core bbox (MapLibre falls back to parent tiles outside).
     tiles_by_id: list[tuple[int, int, int, int]] = []
+    per_zoom_counts: dict[int, int] = {}
     for z in range(MIN_Z, MAX_Z + 1):
-        tx0, ty0, tx1, ty1 = tile_range(z, BBOX_LL)
+        bbox = BBOX_LL if z <= MAX_Z_RING else CORE_BBOX_LL
+        tx0, ty0, tx1, ty1 = tile_range(z, bbox)
         for x in range(tx0, tx1 + 1):
             for y in range(ty0, ty1 + 1):
+                # z10-12: the core bbox may partially cover a tile that also lies outside;
+                # keep only tiles whose Web Mercator extent actually intersects the core.
+                if z > MAX_Z_RING and not tile_intersects_bbox(z, x, y, CORE_BBOX_LL):
+                    continue
                 tiles_by_id.append((zxy_to_tileid(z, x, y), z, x, y))
+                per_zoom_counts[z] = per_zoom_counts.get(z, 0) + 1
     tiles_by_id.sort(key=lambda t: t[0])
     print(f"total tiles to build: {len(tiles_by_id)}")
+    for z in sorted(per_zoom_counts):
+        print(f"  z{z}: {per_zoom_counts[z]} tiles")
 
     t0 = time.time()
     # Build into data/processed/terrain/ (never at the final path, which the app
@@ -353,8 +438,10 @@ def build_pmtiles(out_path: Path) -> dict:
     min_lat_e7 = int(BBOX_LL[1] * 10_000_000)
     max_lon_e7 = int(BBOX_LL[2] * 10_000_000)
     max_lat_e7 = int(BBOX_LL[3] * 10_000_000)
-    center_lon_e7 = (min_lon_e7 + max_lon_e7) // 2
-    center_lat_e7 = (min_lat_e7 + max_lat_e7) // 2
+    # Center on the core bbox so a default zoom-in lands on the Dolomites,
+    # not the widened ring's geometric centre.
+    center_lon_e7 = int((CORE_BBOX_LL[0] + CORE_BBOX_LL[2]) / 2 * 10_000_000)
+    center_lat_e7 = int((CORE_BBOX_LL[1] + CORE_BBOX_LL[3]) / 2 * 10_000_000)
     center_zoom = 10
 
     log_every = max(1, len(tiles_by_id) // 40)
@@ -402,11 +489,14 @@ def build_pmtiles(out_path: Path) -> dict:
             center_lat_e7=center_lat_e7,
         )
         metadata = {
-            "name": "Dolomites terrain (TINITALY 10 m + Copernicus GLO-30 fill)",
+            "name": "Dolomites terrain (TINITALY 10 m + Copernicus GLO-30 + GLO-90 ring)",
             "description": (
                 "Elevation for the Dolomites, Mapbox Terrain-RGB. "
-                "TINITALY inside Italy; GLO-30 fills the Austrian side and any "
-                "TINITALY voids, cross-faded over 300 m along the seam."
+                "Core (10.3-12.7 E, 45.8-47.2 N, z6-12): TINITALY inside Italy, "
+                "GLO-30 fills the Austrian side and any TINITALY voids, "
+                "cross-faded over 300 m along the seam. "
+                "Ring (9-14 E, 45-48 N, z6-9 only): GLO-30 where available, "
+                "GLO-90 in the two outer strips (E009 and E013)."
             ),
             "attribution": ATTRIBUTION,
             "encoding": "mapbox",
@@ -417,12 +507,14 @@ def build_pmtiles(out_path: Path) -> dict:
             "maxzoom": MAX_Z,
             "bounds": list(BBOX_LL),
             "center": [
-                (BBOX_LL[0] + BBOX_LL[2]) / 2,
-                (BBOX_LL[1] + BBOX_LL[3]) / 2,
+                (CORE_BBOX_LL[0] + CORE_BBOX_LL[2]) / 2,
+                (CORE_BBOX_LL[1] + CORE_BBOX_LL[3]) / 2,
                 center_zoom,
             ],
-            "source_datasets": [DATASET_ID, DATASET_ID_FILL],
+            "source_datasets": [DATASET_ID, DATASET_ID_FILL, DATASET_ID_RING],
             "seam_feather_m": FEATHER_M,
+            "core_bbox": list(CORE_BBOX_LL),
+            "ring_max_zoom": MAX_Z_RING,
         }
         w.finalize(header, metadata)
         fh.flush()

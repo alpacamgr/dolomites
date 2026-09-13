@@ -100,6 +100,7 @@ interface GeologyMeta extends Meta {
 const ORDER = [
   // geology sits under the hillshade so relief keeps reading through the unit colours
   'color-relief', 'geology-fill', 'hillshade', 'geology-gaps', 'geology-line', 'geology-coverage',
+  'geology-extent',
   'ice-a', 'ice-b', 'lgm-line', 'lia-line', 'rgi-fill', 'rgi-line', 'faults-casing', 'faults-line',
 ];
 
@@ -121,6 +122,45 @@ interface GeoJsonOverlay {
 
 const zoomWidth = (z0: number, w0: number, z1: number, w1: number) =>
   ['interpolate', ['linear'], ['zoom'], z0, w0, z1, w1] as never;
+
+/**
+ * Returns a per-URL rewrite that short-circuits ring-only tile requests. Tiles inside the DEM
+ * bounds but with z > ringMaxZoom outside the core bbox do not exist as files; MapLibre would
+ * hit a 404 for each before falling back to the parent tile. We hand it a `data:,` URL instead,
+ * which the browser drops locally: no network round trip, and MapLibre still gets an
+ * "unusable tile" and uses its parent (verified: mesh, hillshade and color-relief keep drawing).
+ * Only elevation tiles are inspected; every other URL is left as-is.
+ */
+function ringTileShortCircuit(t: DetectedTerrain): ((url: string) => { url: string }) | null {
+  const core = t.coreBounds;
+  const ringMax = t.ringMaxZoom;
+  if (!core || ringMax == null) return null;
+  const R = 6378137, ORIGIN = Math.PI * R;
+  const merc = (lon: number, lat: number): [number, number] => [
+    (lon * Math.PI * R) / 180,
+    Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360)) * R,
+  ];
+  const [wLon, sLat, eLon, nLat] = core;
+  const [minX, minY] = merc(wLon, sLat);
+  const [maxX, maxY] = merc(eLon, nLat);
+  const tilePath = /\/elevation\/(\d+)\/(\d+)\/(\d+)\.[^/]+(?:\?|$)/;
+  const drop = { url: 'data:,' };
+  return (url) => {
+    const m = tilePath.exec(url);
+    if (!m) return { url };
+    const z = +m[1];
+    if (z <= ringMax) return { url };
+    const x = +m[2], y = +m[3];
+    const span = (2 * ORIGIN) / 2 ** z;
+    const tMinX = -ORIGIN + x * span;
+    const tMaxX = tMinX + span;
+    const tMaxY = ORIGIN - y * span;
+    const tMinY = tMaxY - span;
+    // no intersection with the core bbox -> tile does not exist; drop the request
+    if (tMaxX <= minX || tMinX >= maxX || tMaxY <= minY || tMinY >= maxY) return drop;
+    return { url };
+  };
+}
 
 /**
  * DISS 3.3.1 fault traces only. Composite sources come as `composite_top` LineStrings
@@ -197,6 +237,7 @@ const OPACITY: Record<string, [string, number]> = {
   hillshade: ['hillshade-exaggeration', 0.5],
   'geology-gaps': ['fill-opacity', 0.9],
   'geology-coverage': ['line-opacity', 0.55],
+  'geology-extent': ['line-opacity', 0.45],
   'lgm-line': ['line-opacity', 0.55],
   'lia-line': ['line-opacity', 0.9],
   'rgi-fill': ['fill-opacity', 0.85],
@@ -765,6 +806,26 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         paint: { 'line-color': '#4a4238', 'line-width': zoomWidth(8, 0.8, 12, 1.4), 'line-opacity': OPACITY['geology-coverage'][1] },
       });
     }
+    // Outer boundary of the geological data. With the DEM extended into an outer ring, the drape
+    // stops visibly at this rectangle; a quiet line reads "extent of the geological maps" rather
+    // than "screen cut". Drawn from the geology tileset's own bounds so it stays truthful.
+    const [gw, gs, ge, gn] = tj.bounds;
+    m.addSource('geology-extent', {
+      type: 'geojson',
+      data: {
+        type: 'Feature', properties: {},
+        geometry: { type: 'LineString', coordinates: [[gw, gs], [ge, gs], [ge, gn], [gw, gn], [gw, gs]] },
+      } as never,
+    });
+    addOrdered({
+      id: 'geology-extent', type: 'line', source: 'geology-extent',
+      paint: {
+        'line-color': '#4a4238',
+        'line-width': zoomWidth(6, 0.6, 12, 1.2),
+        'line-opacity': OPACITY['geology-extent'][1],
+        'line-dasharray': [3, 2.5],
+      },
+    });
     const meta = geologyMeta;
     const sourceInfo = (id: unknown) => {
       const s = meta?.sources?.find((x) => x.dataset_id === id);
@@ -917,6 +978,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
     // with a gaps layer the hatch explains unmapped areas (and the key shows its swatch, not the edge);
     // the source outline would add unexplained lines along the thin seams
     show('geology-coverage', on(ID.GEOLOGY) && !map.getLayer('geology-gaps'), op(ID.GEOLOGY));
+    show('geology-extent', on(ID.GEOLOGY), op(ID.GEOLOGY));
     for (const o of OVERLAYS) for (const l of o.layers) show(l.id, on(o.id), op(o.id));
     if (!on(ID.GEOLOGY)) { hidePopup(); publishKey(null); } else keyDirty = true;
     if (ice) {
@@ -991,18 +1053,24 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       applyProbe(probe);
       if (disposed) return;
       const [w, s, e, n] = t.bounds;
-      // Wider max bounds so a whole-region zoom-out no longer hits background; the DEM
-      // still stops at [w,s,e,n], but the atmospheric fade in the sky settings keeps its
-      // edge from cutting hard against the page. minZoom drops to 6.5 for the same reason.
-      const mx = (e - w) * 0.5, my = (n - s) * 0.5;
+      // maxBounds is the DEM bbox itself (the outer ring): at pitch 0 the viewport can never
+      // show page background beyond the data, and MapLibre raises the effective minimum zoom
+      // until the ring fills the stage, so a zoom-out settles on the whole region. Pitched
+      // views still look past the ring at the horizon, where the fog takes over.
+      const mx = 0, my = 0;
+      // With the widened ring, z10-12 tiles only exist inside the core bbox; short-circuit
+      // requests for those tiles outside the core to a URL the browser drops locally
+      // (no 404 round trip) so MapLibre falls back to the parent DEM tile from z<=ringMaxZoom.
+      const short = ringTileShortCircuit(t);
       map = new maplibregl.Map({
         container: el,
         style: buildStyle(t),
         center: [(w + e) / 2, (s + n) / 2],
         zoom: 8.3,
         pitch: 45,
-        minZoom: 6.5,
+        minZoom: 7,
         maxZoom: t.maxzoom,
+        transformRequest: short ? (url, resourceType) => (resourceType === 'Tile' ? short(url) : { url }) : undefined,
         maxPitch: 75,
         maxBounds: [[w - mx, s - my], [e + mx, n + my]],
         renderWorldCopies: false,

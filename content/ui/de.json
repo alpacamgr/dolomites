@@ -43,7 +43,7 @@
     }
   },
   "layers": {
-    "dolomites-terrain": "Höhenmodell (TINITALY 10 m, Copernicus 30 m)",
+    "dolomites-terrain": "Höhenmodell (TINITALY 10 m, Copernicus 30 m; Randbereich 90 m)",
     "geology-suedtirol": "Geologische Karten (6 offene Quellen)",
     "ispra-carg-50k": "Geologische Karte Italiens (ISPRA CARG)",
     "scotese-paleodem-2018-v2": "Paläogeographie (PaleoDEM)",
@@ -127,6 +127,7 @@
     "undated": "Kartiert, ohne Altersangabe",
     "gap": "Hier keine offene geologische Karte",
     "edge": "Rand der offenen geologischen Karten",
+    "extent": "Ausdehnung der geologischen Karten",
     "shades": "Abstufungen: feinere ICS-Einheiten.",
     "hint": "Zeile berühren: auf der Karte hervorheben.",
     "none": "Keine kartierten Einheiten im Bild",

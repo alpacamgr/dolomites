@@ -2,9 +2,9 @@
   "dataset_id": "tinitaly-v1-1-10m",
   "label": "observed",
   "source_ref": "tinitaly-2023",
-  "attribution": "TINITALY 1.1 (Tarquini et al. 2023, doi:10.13127/tinitaly/1.1) - INGV - CC BY 4.0; outside Italy: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
-  "license": "CC BY 4.0 (TINITALY 1.1) + ESA User License for the use of Copernicus Contributing Missions data (Copernicus DEM GLO-30 Public)",
-  "generated": "2026-09-12",
+  "attribution": "TINITALY 1.1 (Tarquini et al. 2023, doi:10.13127/tinitaly/1.1) - INGV - CC BY 4.0; outside Italy: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; outer area (9-14 E, 45-48 N outside 10-13 E): produced using Copernicus WorldDEM-90 with the same rights and attribution",
+  "license": "CC BY 4.0 (TINITALY 1.1) + ESA User License for the use of Copernicus Contributing Missions data (Copernicus DEM GLO-30 Public and GLO-90 Public)",
+  "generated": "2026-09-13",
   "script": "data/scripts/terrain/build_terrain_pmtiles.py",
   "sources": [
     {
@@ -22,27 +22,46 @@
       "dataset_id": "copernicus-dem-glo30",
       "label": "observed",
       "source_ref": "copernicus-dem",
-      "role": "fill: TINITALY nodata (Austria north of ~46.9 N, Marmolada north-face strip, missing ridge cells)",
+      "role": "fill: TINITALY nodata (Austria north of ~46.9 N, Marmolada north-face strip, missing ridge cells); also the ring inside 10-13 E / 45-48 N",
       "attribution": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
       "license": "ESA User License for the use of Copernicus Contributing Missions data (GLO-30 Public, free)",
       "resolution_m": 30,
       "surface_type": "DSM (includes canopy and buildings)",
       "vertical_reference": "EGM2008 (EPSG:3855)",
       "manifest": "data/manifests/copernicus-dem-glo30.yaml"
+    },
+    {
+      "dataset_id": "copernicus-dem-glo90",
+      "label": "observed",
+      "source_ref": "copernicus-dem",
+      "role": "outer ring only (z6-9), 9-10 E and 13-14 E strips outside the GLO-30 raw coverage; docs/ux/2026-09-13-terrain-ring.md",
+      "attribution": "produced using Copernicus WorldDEM-90 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+      "license": "ESA User License for the use of Copernicus Contributing Missions data (GLO-90 Public, free)",
+      "resolution_m": 90,
+      "surface_type": "DSM (includes canopy and buildings)",
+      "vertical_reference": "EGM2008 (EPSG:3855)",
+      "manifest": "data/manifests/copernicus-dem-glo90.yaml"
     }
   ],
   "archive": "dolomites-terrain.pmtiles",
-  "archive_bytes": 309847777,
+  "archive_bytes": 320727642,
   "encoding": "mapbox",
   "tile_format": "png",
   "tile_size_px": 512,
   "crs": "EPSG:3857",
   "bounds_wgs84": [
+    9.0,
+    45.0,
+    14.0,
+    48.0
+  ],
+  "core_bbox_wgs84": [
     10.3,
     45.8,
     12.7,
     47.2
   ],
+  "ring_max_zoom": 9,
   "min_zoom": 6,
   "max_zoom": 12,
   "source_resolution_m": {
@@ -56,10 +75,15 @@
     "note": "512-px tile m/pix at latitude 46.5 N = 53892 / 2^z. z12 (13.2 m/pix) is safely coarser than the 10 m TINITALY source; z13 (6.6 m/pix) would upsample beyond the 0.7x-source honesty guideline."
   },
   "void_fill": {
-    "method": "TINITALY where valid, else Copernicus GLO-30 reprojected with bilinear resampling to the same tile grid; cosine cross-fade on ground distance to the TINITALY nodata edge (distance transform), weights only, no synthetic heights",
+    "method": "TINITALY where valid, else Copernicus GLO-30 reprojected with bilinear resampling to the same tile grid; cosine cross-fade on ground distance to the TINITALY nodata edge (distance transform), weights only, no synthetic heights. In the outer ring, GLO-30 falls through to GLO-90 (both DSMs on EGM2008; no cross-fade between them because the step at 10 E and 13 E is smaller than the tile pixel at z6-9).",
     "seam_feather_m": 300,
-    "feather_formula": "w = 0.5 - 0.5*cos(pi*clip(d/300 m, 0, 1)); h = w*TINITALY + (1-w)*GLO30",
+    "feather_formula": "w = 0.5 - 0.5*cos(pi*clip(d/300 m, 0, 1)); h = w*TINITALY + (1-w)*GLO",
     "low_zoom_note": "at z6-z8 a tile pixel (105-840 m) is wider than the feather, so the seam is effectively a hard switch there"
+  },
+  "ring": {
+    "note": "docs/ux/2026-09-13-terrain-ring.md. z6-9 tiles cover the widened bbox 9-14 E / 45-48 N; z10-12 tiles are emitted only where the tile intersects the core bbox 10.3-12.7 E / 45.8-47.2 N. MapLibre falls back to the parent DEM tile for the missing z10-12 outside the core.",
+    "core_bbox": [10.3, 45.8, 12.7, 47.2],
+    "ring_max_zoom": 9
   },
   "datum_handling": {
     "glo30": "EGM2008 (EPSG:3855), Copernicus DEM Product Handbook v5.0 sec. 1.2",
@@ -68,7 +92,8 @@
     "correction_applied": "none (both orthometric)"
   },
   "caveats": [
-    "North of the Italian border (and in the other TINITALY voids) heights are GLO-30: a ~30 m surface model including forest canopy and buildings. At z12 (and partly z11) these tiles are bilinear interpolations of 30 m data, smooth and without 13 m detail; do not present them as 13 m data."
+    "North of the Italian border (and in the other TINITALY voids) heights are GLO-30: a ~30 m surface model including forest canopy and buildings. At z12 (and partly z11) these tiles are bilinear interpolations of 30 m data, smooth and without 13 m detail; do not present them as 13 m data.",
+    "In the outer ring outside the GLO-30 raw coverage (9-10 E and 13-14 E strips of the widened bbox), heights are GLO-90: a ~90 m surface model. Ring tiles exist only at z6-9, capped by the 0.7 x source honesty guideline."
   ],
   "verification": {
     "method": "(a) read back tiles at z=8, 10, 12 at the bbox centre, decode Terrain-RGB, compare the centre pixel with the raw TINITALY cell at that point; (b) at z=12, decode the pixel containing three Austrian points (compared with GLO-30, nearest source cell) and three Italian points (compared with TINITALY, nearest source cell)",
