@@ -194,7 +194,7 @@ const OVERLAYS: GeoJsonOverlay[] = [
 /** Paint property that carries LayerRef.opacity for each style layer, with its base value. */
 const OPACITY: Record<string, [string, number]> = {
   'color-relief': ['color-relief-opacity', 1],
-  hillshade: ['hillshade-exaggeration', 0.34],
+  hillshade: ['hillshade-exaggeration', 0.5],
   'geology-gaps': ['fill-opacity', 0.9],
   'geology-coverage': ['line-opacity', 0.55],
   'lgm-line': ['line-opacity', 0.55],
@@ -205,10 +205,14 @@ const OPACITY: Record<string, [string, number]> = {
   'faults-line': ['line-opacity', 0.85],
 };
 /**
- * Geology fill opacities. Dated units at 0.7 keep pale Quaternary colours visible under the
- * hillshade; undated units get a lighter neutral wash; a focus lifts matching units and dims the rest.
+ * Geology fill opacities. Dated units at 0.55 keep the hillshade reading under the ICS
+ * colours (mountains-first, unit colours as a tint, like a printed geological map on
+ * shaded relief); undated units get a lighter neutral wash; a focus lifts matching units
+ * and dims the rest, but never so hard that context disappears. Coarse-source polygons
+ * (>1:25,000 scale) get an extra multiplier so they read as "less detailed" instead of
+ * as a different paint job.
  */
-const GEOLOGY_OPACITY = { dated: 0.7, undated: 0.5, hoverLift: 0.2, focus: 0.88, dimmed: 0.1 };
+const GEOLOGY_OPACITY = { dated: 0.55, undated: 0.34, hoverLift: 0.2, focus: 0.72, dimmed: 0.3, coarse: 0.75 };
 /**
  * Gap parts narrower than this mean width (metres) are thin seams along map-sheet borders; hatched,
  * they read as stripes across the mountains, so they stay plain terrain (no hatch, no outline, no popup).
@@ -466,18 +470,51 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
     }
     return any.length > 1 ? any : ['literal', false];
   }
-  /** Dated units at the base opacity, undated units as a light wash; a focus dims everything it does not match. */
+  /**
+   * Dated units at the base opacity, undated units as a light wash; a focus dims everything
+   * it does not match. Coarse sources (>1:25,000) get an extra factor so they read as a
+   * lighter wash than the detailed maps in the same view; the ICS hue is not touched, so
+   * legend swatches stay identical.
+   */
   function geologyFillOpacity(): unknown[] {
     const o = geologyOpacity;
     const G = GEOLOGY_OPACITY;
-    const byDated = (d: number, u: number) => ['case', geologyIsDatedExpression, Math.min(1, d * o), Math.min(1, u * o)];
+    const coarseIds = [...coarseSources.keys()];
+    const coarse = (v: number): number | unknown[] => (coarseIds.length
+      ? ['case', ['in', ['get', 'source'], ['literal', coarseIds]], Math.min(1, v * G.coarse), Math.min(1, v)]
+      : Math.min(1, v));
+    const byDated = (d: number, u: number) => ['case', geologyIsDatedExpression, coarse(d * o), coarse(u * o)];
     const f = focusExpression();
-    const base = f ? ['case', f, G.focus * o, G.dimmed * o] : byDated(G.dated, G.undated);
+    // dimmed units keep the coarse wash so a dimmed coarse polygon does not read louder than the emphasised bedrock
+    const base = f ? ['case', f, Math.min(1, G.focus * o), coarse(G.dimmed * o)] : byDated(G.dated, G.undated);
     return ['case', ['boolean', ['feature-state', 'hover'], false], byDated(G.dated + G.hoverLift, G.undated + G.hoverLift), base];
+  }
+  /** Emphasis outline: firmer at low zoom (0.9 px) than at high zoom, so the focus reads even before z11. */
+  function geologyLineWidth(): unknown[] {
+    const f = focusExpression();
+    const hairline: unknown[] = ['interpolate', ['linear'], ['zoom'], 10, 0, 11, 0.3, 13, 0.6];
+    const focus: unknown[] = ['interpolate', ['linear'], ['zoom'], 8, 0.7, 11, 1.2, 13, 1.6];
+    const hover: unknown[] = ['interpolate', ['linear'], ['zoom'], 8, 1.2, 11, 1.6, 13, 2];
+    return ['case',
+      ['boolean', ['feature-state', 'hover'], false], hover,
+      f ?? false, focus,
+      hairline];
+  }
+  function geologyLineOpacity(): unknown[] {
+    const f = focusExpression();
+    const hairline: unknown[] = ['interpolate', ['linear'], ['zoom'], 10, 0, 11, 0.2, 13, 0.35];
+    return ['case',
+      ['boolean', ['feature-state', 'hover'], false], 0.75,
+      f ?? false, 0.85,
+      hairline];
   }
   function refreshGeologyPaint() {
     if (!map?.getLayer('geology-fill')) return;
     map.setPaintProperty('geology-fill', 'fill-opacity', geologyFillOpacity() as never);
+    if (map.getLayer('geology-line')) {
+      map.setPaintProperty('geology-line', 'line-width', geologyLineWidth() as never);
+      map.setPaintProperty('geology-line', 'line-opacity', geologyLineOpacity() as never);
+    }
     // paint changes do not invalidate the terrain render-to-texture cache
     map.terrain?.tileManager.releaseAllRTT();
     map.triggerRepaint();
@@ -614,12 +651,14 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       sources: { dem, 'dem-terrain': { ...dem } },
       terrain: { source: 'dem-terrain', exaggeration },
       sky: {
+        // Softer, longer atmospheric fade so the DEM bbox edge dissolves into the horizon
+        // instead of cutting hard against the page background at pitched cameras.
         'sky-color': '#c6d6e3',
-        'horizon-color': '#f1ede6',
-        'fog-color': '#eeebe5',
-        'sky-horizon-blend': 0.7,
-        'horizon-fog-blend': 0.5,
-        'fog-ground-blend': 0.75,
+        'horizon-color': '#e7e2d8',
+        'fog-color': background,
+        'sky-horizon-blend': 0.8,
+        'horizon-fog-blend': 0.75,
+        'fog-ground-blend': 0.45,
         'atmosphere-blend': 0,
       },
       layers: [
@@ -636,9 +675,9 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
             'hillshade-method': 'multidirectional',
             'hillshade-illumination-direction': [335, 285, 25],
             'hillshade-illumination-altitude': [42, 50, 50],
-            'hillshade-highlight-color': ['rgba(255,252,244,0.30)', 'rgba(255,252,244,0.08)', 'rgba(255,252,244,0.08)'],
-            'hillshade-shadow-color': ['rgba(78,84,104,0.55)', 'rgba(92,98,116,0.18)', 'rgba(92,98,116,0.18)'],
-            'hillshade-exaggeration': 0.34,
+            'hillshade-highlight-color': ['rgba(255,252,244,0.38)', 'rgba(255,252,244,0.10)', 'rgba(255,252,244,0.10)'],
+            'hillshade-shadow-color': ['rgba(78,84,104,0.62)', 'rgba(92,98,116,0.20)', 'rgba(92,98,116,0.20)'],
+            'hillshade-exaggeration': 0.5,
           },
         },
       ],
@@ -684,13 +723,15 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         'fill-antialias': true,
       },
     });
-    // Unit boundaries only when zoomed in, as hairlines; a hovered unit gets a firmer edge.
+    // Unit boundaries at low zoom show only around focused/emphasised units (a crisp edge so
+    // an emphasis reads without a flat saturated block); at high zoom every unit gets a
+    // hairline, a hovered unit a firmer edge.
     addOrdered({
-      id: 'geology-line', type: 'line', source: 'geology', 'source-layer': 'units', minzoom: 11,
+      id: 'geology-line', type: 'line', source: 'geology', 'source-layer': 'units',
       paint: {
         'line-color': '#3d352c',
-        'line-width': ['case', ['boolean', ['feature-state', 'hover'], false], 1.4, 0.3],
-        'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.75, 0.2],
+        'line-width': geologyLineWidth() as never,
+        'line-opacity': geologyLineOpacity() as never,
       },
     });
     if (geologyGaps) {
@@ -946,14 +987,17 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       applyProbe(probe);
       if (disposed) return;
       const [w, s, e, n] = t.bounds;
-      const mx = (e - w) * 0.15, my = (n - s) * 0.15;
+      // Wider max bounds so a whole-region zoom-out no longer hits background; the DEM
+      // still stops at [w,s,e,n], but the atmospheric fade in the sky settings keeps its
+      // edge from cutting hard against the page. minZoom drops to 6.5 for the same reason.
+      const mx = (e - w) * 0.5, my = (n - s) * 0.5;
       map = new maplibregl.Map({
         container: el,
         style: buildStyle(t),
         center: [(w + e) / 2, (s + n) / 2],
         zoom: 8.3,
         pitch: 45,
-        minZoom: 7,
+        minZoom: 6.5,
         maxZoom: t.maxzoom,
         maxPitch: 75,
         maxBounds: [[w - mx, s - my], [e + mx, n + my]],

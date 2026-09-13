@@ -71,15 +71,20 @@ export function faultColorExpression(): unknown[] {
  * white-blue, thin ice translucent so the bed relief still reads, thick ice
  * nearly opaque. Applied on the client to the published frames by inverting
  * their own `thickness_stops_m` (see ice.ts), so no thickness value is invented.
+ *
+ * Thin ice (0-80 m) sits over a near-white summit tint, so it is drawn a shade
+ * cooler and with a higher minimum alpha than the summits themselves; that keeps
+ * the ice legible without ever showing ice where the model has none.
  */
 export const ICE_DISPLAY_STOPS: Array<[number, [number, number, number, number]]> = [
-  // thin ice: near-white and translucent; thick trunk glaciers: deeper blue, so ice-filled
-  // valleys read darker than thinly covered ridges and ice-free nunataks stay bare rock
-  [0, [240, 246, 251, 0]],
-  [10, [240, 246, 251, 0.35]],
-  [80, [232, 241, 249, 0.55]],
-  [250, [212, 229, 245, 0.72]],
-  [600, [184, 211, 236, 0.82]],
-  [1200, [156, 191, 225, 0.87]],
-  [2000, [138, 178, 218, 0.9]],
+  // thin ice: pale blue with a firm minimum alpha, so it separates from the near-white
+  // summit tint; thick trunk glaciers: deeper blue, ice-filled valleys read darker than
+  // thinly covered ridges and ice-free nunataks stay bare rock
+  [0, [216, 230, 244, 0]],
+  [10, [206, 224, 242, 0.62]],
+  [80, [196, 217, 238, 0.78]],
+  [250, [178, 205, 233, 0.86]],
+  [600, [156, 189, 226, 0.9]],
+  [1200, [138, 176, 219, 0.93]],
+  [2000, [124, 166, 214, 0.95]],
 ];

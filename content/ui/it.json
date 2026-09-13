@@ -130,8 +130,8 @@
     "shades": "Sfumature: suddivisioni ICS più fini.",
     "hint": "Passa su una riga per evidenziarla sulla mappa.",
     "none": "Nessuna unità cartografata in vista",
-    "coarse_one": "Carta meno dettagliata in vista: {list}.",
-    "coarse_many": "Carte meno dettagliate in vista: {list}.",
+    "coarse_one": "Carta meno dettagliata in vista, rappresentata un po' più chiara delle carte dettagliate: {list}.",
+    "coarse_many": "Carte meno dettagliate in vista, rappresentate un po' più chiare delle carte dettagliate: {list}.",
     "period_not_given_many": "Periodo non indicato: {names}",
     "undated_withheld": "Cartografate, età assente o non abbastanza affidabile per il colore",
     "withheld": "Cartografate, età non abbastanza affidabile per il colore"

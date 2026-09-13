@@ -130,8 +130,8 @@
     "shades": "Abstufungen: feinere ICS-Einheiten.",
     "hint": "Zeile berühren: auf der Karte hervorheben.",
     "none": "Keine kartierten Einheiten im Bild",
-    "coarse_one": "Gröbere Karte im Bild: {list}.",
-    "coarse_many": "Gröbere Karten im Bild: {list}.",
+    "coarse_one": "Gröbere Karte im Bild, etwas heller als die detaillierten Karten dargestellt: {list}.",
+    "coarse_many": "Gröbere Karten im Bild, etwas heller als die detaillierten Karten dargestellt: {list}.",
     "period_not_given_many": "Periode nicht angegeben: {names}",
     "undated_withheld": "Kartiert, Alter fehlt oder zu unsicher für die Farbe",
     "withheld": "Kartiert, Alter zu unsicher für die Farbe"
