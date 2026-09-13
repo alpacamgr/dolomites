@@ -1,0 +1,64 @@
+id: copernicus-dem-glo90
+title: Copernicus DEM GLO-90 Public (global 90 m Digital Surface Model)
+provider: European Space Agency / European Union (Copernicus); AWS Open Data distribution managed by Sinergise
+version: "Copernicus DEM 2021 release (version stated on the AWS registry for the copernicus-dem-90m bucket)"
+citation: >-
+  Copernicus Digital Elevation Model (DEM) was accessed on 2026-09-13 from
+  https://registry.opendata.aws/copernicus-dem. (Citation text as given on the
+  AWS registry; ESA dataset DOI from the Copernicus Data Space COP-DEM page.)
+doi: 10.5270/ESA-c5d3d65
+landing_page: https://registry.opendata.aws/copernicus-dem/
+download_url: https://copernicus-dem-90m.s3.amazonaws.com/Copernicus_DSM_COG_30_<lat>_00_<lon>_00_DEM/Copernicus_DSM_COG_30_<lat>_00_<lon>_00_DEM.tif
+download_date: 2026-09-13
+license:
+  # AWS registry [verified 2026-09-13]: "GLO-30 Public and GLO-90 are available on a
+  # free basis for the general public under the terms and conditions of the Licence"
+  # linked to the Copernicus Data Space COP-DEM page, which names the
+  # "ESA User License for the use of CCM data" and gives the attribution below
+  # for modified / derived products. Same licence as GLO-30 (see
+  # data/manifests/copernicus-dem-glo30.yaml).
+  name: "ESA User License for the use of Copernicus Contributing Missions (CCM) data - GLO-90 Public, free for the general public"
+  url: https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM
+  attribution_text: >-
+    produced using Copernicus WorldDEM-90 © DLR e.V. 2010-2014 and © Airbus
+    Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European
+    Union and ESA; all rights reserved
+  derivatives_allowed: true      # permitted with the attribution above
+  share_alike: false
+spatial:
+  crs: EPSG:4326 (horizontal WGS84) + EPSG:3855 (vertical EGM2008)
+  # 6 one-degree tiles: N45..N47 x E009 and E013 (the two outer strips of the
+  # ring bbox 9-14 E / 45-48 N that are outside the existing GLO-30 coverage
+  # 10-13 E / 45-48 N). See docs/ux/2026-09-13-terrain-ring.md.
+  bbox: [9.0, 45.0, 14.0, 48.0]
+  resolution: "3 arc-second grid (1200x1200 per tile; ~63 m E-W x ~93 m N-S at 46.5 N)"
+temporal:
+  coverage: "present (WorldDEM / TanDEM-X based; copyright years 2010-2018 in the licence notice)"
+  step: "single snapshot"
+format: "Cloud-Optimised GeoTIFF, float32, RasterPixelIsPoint, 1 deg x 1 deg tiles"
+size_bytes: 31272888  # 6 tiles totalling ~31.3 MB (measured 2026-09-13)
+checksum:
+  algorithm: sha256
+  # per-tile sha256 recorded in data/raw/copernicus-dem-glo90/checksums.json (6 tiles)
+  value: "see data/raw/copernicus-dem-glo90/checksums.json"
+honesty_label: observed
+caveats: |
+  - Same vertical datum as GLO-30 (EGM2008, EPSG:3855) [verified 2026-09-13,
+    Copernicus DEM Product Handbook v5.0, sec. 1.2]. No geoid correction is
+    applied at the GLO-30 / GLO-90 seam (10 E, 13 E).
+  - GLO-90 is a Digital Surface Model (includes canopy and buildings), same as
+    GLO-30. The outer ring reads as ~90 m ground detail.
+  - The 0.7 x source honesty guideline (docs/03 rule 6 and README) caps GLO-90
+    at maxzoom z9 (a 512-px tile pixel at z9 is 105 m at 46.5 N; z10 would be
+    52.6 m, below 0.7 x 90 = 63 m). Ring tiles are therefore built at z6-9
+    only; z10-12 remain built only inside the core bbox where TINITALY 10 m
+    and GLO-30 30 m support them.
+  - RasterPixelIsPoint: GDAL shifts the geotransform by half a pixel on read;
+    no manual shift is applied.
+processing:
+  - step: "Download 6 GLO-90 tiles from the AWS public bucket copernicus-dem-90m"
+    script: data/scripts/terrain/fetch_copernicus_glo90.py
+    output: data/raw/copernicus-dem-glo90/*.tif (+ checksums.json, fetch.log)
+  - step: "Merge in memory with the existing GLO-30 mosaic (GLO-30 wherever it exists, GLO-90 in the outer strips), then use as the third mosaic behind TINITALY (Italy) and GLO-30 (Austria + TINITALY nodata) for the ring bbox 9-14 E / 45-48 N at z6-9. z10-12 remain core-only."
+    script: data/scripts/terrain/build_terrain_pmtiles.py
+    output: data/processed/terrain/dolomites-terrain.pmtiles
