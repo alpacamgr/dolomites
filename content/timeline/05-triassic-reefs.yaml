@@ -67,7 +67,7 @@ scene:
     start: 0
     end: 0
   camera:
-    terrain: { lon: 11.66, lat: 46.5, zoom: 10.4, pitch: 64, bearing: 20 }
+    terrain: { lon: 11.66, lat: 46.52, zoom: 10.4, pitch: 55, bearing: 20 }
   # emphasise units whose mapped age range lies within the Middle Triassic (docs/04 section 5)
   emphasis: { age_start_ma: 247.0, age_end_ma: 237.0 }
   layers:

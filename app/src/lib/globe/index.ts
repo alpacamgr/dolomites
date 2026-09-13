@@ -84,6 +84,9 @@ const SLICE_MA = 5;
 const FOV_DEG = 45;
 const NORMAL_AMOUNT = 0.8;
 const CAMERA_EASE_MS = 1200;
+/** Framing floor: at least this much stage height is empty around the sphere (rail + legend + air).
+ *  distance >= 1 / (FIT_FRACTION * tan(FOV / 2)) keeps the sphere at ≤ FIT_FRACTION of stage height. */
+const FIT_FRACTION = 0.72;
 /** Normal maps are requested only once a slice pair has been stable this long: halves GPU uploads while scrubbing. */
 const NORMAL_DELAY_MS = 300;
 const DEFAULT_VIEW: GlobeView = { lat: 20, lon: 10, distance: 2.6 };
@@ -149,8 +152,6 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
   let blankTex: THREE.DataTexture | null = null;
   let flatNormalTex: THREE.DataTexture | null = null;
   let controls: GlobeControls | null = null;
-  let hintEl: HTMLDivElement | null = null;
-  let hintTimer = 0;
   let overlays: Overlays | null = null;
   let store: TextureStore | null = null;
   let ro: ResizeObserver | null = null;
@@ -513,11 +514,23 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
 
   // ADR 0004: at most two CSS pixels per texture texel at the sub-camera point.
   // px per texel = (360 / texW) / ((d - 1) * FOV_DEG / viewportH)  =>  d >= 1 + 360 * H / (2 * FOV_DEG * texW)
+  // Also enforce a framing floor so the sphere fits with air around it (2026-09-13 pass).
   function applyDistanceLimits() {
     if (!controls) return;
     const texW = size === '4k' ? 4096 : 2048;
     const rule = 1 + (360 * Math.max(1, viewportH)) / (2 * FOV_DEG * texW);
-    controls.setDistanceLimits(Math.min(Math.max(minDistance, rule), maxDistance - 0.3), maxDistance);
+    const fit = fitDistance();
+    controls.setDistanceLimits(Math.min(Math.max(minDistance, rule, fit), maxDistance - 0.3), maxDistance);
+  }
+
+  function fitDistance(): number {
+    const half = (FOV_DEG * Math.PI) / 360;
+    return 1 / (FIT_FRACTION * Math.tan(half));
+  }
+
+  /** Lift a chapter's declared distance to the framing floor so the sphere always sits inside the stage. */
+  function frameView(v: GlobeCamera): { lat: number; lon: number; distance: number } {
+    return { lat: v.lat, lon: v.lon, distance: Math.max(v.distance, fitDistance()) };
   }
 
   function applyLayers(layers: LayerRef[]) {
@@ -622,24 +635,10 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
       scene.add(overlays.group);
       if (pendingLayers) { applyLayers(pendingLayers); pendingLayers = null; }
 
-      // Short gesture hint over the globe, like MapLibre's cooperative-gestures screen on the terrain.
-      hintEl = document.createElement('div');
-      hintEl.className = 'gl-hint';
-      hintEl.setAttribute('aria-hidden', 'true');
-      el.appendChild(hintEl);
-      const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
-      const hs = options.strings ?? {};
-      const showHint = (kind: 'wheel' | 'touch') => {
-        if (!hintEl) return;
-        hintEl.textContent = kind === 'touch'
-          ? hs['map_hint.globe_touch'] ?? 'Use two fingers to turn the globe'
-          : isMac ? hs['map_hint.globe_wheel_mac'] ?? 'Use ⌘ + scroll to zoom the globe'
-            : hs['map_hint.globe_wheel_windows'] ?? 'Use Ctrl + scroll to zoom the globe';
-        hintEl.classList.add('on');
-        window.clearTimeout(hintTimer);
-        hintTimer = window.setTimeout(() => hintEl?.classList.remove('on'), 1200);
-      };
-      controls = new GlobeControls(canvas, markDirty, { minDistance, maxDistance, fovDeg: FOV_DEG }, showHint);
+      // No gesture hint: plain wheel scrolls the page silently; the reader discovers Ctrl/⌘ + wheel.
+      // The full-stage veil the previous hint painted was a constant dark flash while reading
+      // (docs/ux/2026-09-13-motion-and-framing.md).
+      controls = new GlobeControls(canvas, markDirty, { minDistance, maxDistance, fovDeg: FOV_DEG });
       controls.setLocked(locked);
       controls.jumpTo(pendingView ?? DEFAULT_VIEW);
       pendingView = null;
@@ -664,7 +663,7 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
       if (fallback) return fallback.setState(state);
       const v = state.camera.globe;
       if (v) {
-        const view = { lat: v.lat, lon: v.lon, distance: v.distance };
+        const view = frameView(v);
         if (!controls) pendingView = view;
         else if (hadState && !options.reduceMotion) controls.easeTo(view, CAMERA_EASE_MS, performance.now());
         else controls.jumpTo(view);
@@ -687,7 +686,7 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
     setCamera(cam: GlobeCamera | TerrainCamera, durationMs = 0) {
       if (fallback) { fallback.setCamera(cam, durationMs); return; }
       if (!('distance' in cam)) return;
-      const view = { lat: cam.lat, lon: cam.lon, distance: cam.distance };
+      const view = frameView(cam);
       if (!controls) { pendingView = view; return; }
       if (durationMs > 0) controls.easeTo(view, durationMs, performance.now());
       else controls.jumpTo(view);
@@ -766,9 +765,6 @@ export function createGlobeEngine(options: GlobeOptions = {}): SceneEngine & Glo
         renderer.dispose();
         try { renderer.forceContextLoss(); } catch { /* already lost */ }
         renderer.domElement.remove();
-        window.clearTimeout(hintTimer);
-        hintEl?.remove();
-        hintEl = null;
       }
       renderer = null; controls = null; overlays = null; store = null; ro = null;
       globeMesh = null; atmoMesh = null; globeMat = null; atmoMat = null; stars = null;

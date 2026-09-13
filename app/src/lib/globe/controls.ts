@@ -57,8 +57,6 @@ export class GlobeControls {
     private readonly el: HTMLElement,
     private readonly onInput: () => void,
     private readonly opts: ControlsOptions,
-    /** shows a short hint when a gesture is left to the page (wheel without Ctrl/⌘, one-finger touch) */
-    private readonly hint?: (kind: 'wheel' | 'touch') => void,
   ) {
     const on = <K extends keyof HTMLElementEventMap>(type: K, fn: (e: HTMLElementEventMap[K]) => void, o?: AddEventListenerOptions) => {
       el.addEventListener(type, fn, o);
@@ -190,7 +188,6 @@ export class GlobeControls {
     p.y = e.clientY;
     if (e.pointerType === 'touch' && this.pointers.size < 2) {
       // one finger belongs to the page; the browser normally cancels this pointer as it starts scrolling
-      this.hint?.('touch');
       return;
     }
     if (this.pointers.size >= 2) {
@@ -229,10 +226,7 @@ export class GlobeControls {
   private wheel(e: WheelEvent) {
     if (this.locked) return; // let the page scroll
     // The wheel scrolls the story; Ctrl/⌘ + wheel (and a trackpad pinch, which reports ctrlKey) zooms.
-    if (!(e.ctrlKey || e.metaKey)) {
-      this.hint?.('wheel');
-      return;
-    }
+    if (!(e.ctrlKey || e.metaKey)) return;
     e.preventDefault();
     this.easing = false;
     const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;

@@ -42,8 +42,16 @@ export interface EngineManagerOptions {
   engineOptions?: Record<string, unknown>;
 }
 
-export const CROSSFADE_MS = 650;
-const CROSSFADE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
+/**
+ * Sequenced fade: the outgoing engine fades to the stage background first, then the incoming
+ * engine fades in. Both engines are never visible at once, so the two scenes cannot overlay
+ * (docs/ux/2026-09-13-motion-and-framing.md). The old CROSSFADE_MS is kept as the total budget
+ * for the CSS mirror in global.css (transitions only fire on inline changes anyway).
+ */
+export const FADE_OUT_MS = 260;
+export const FADE_IN_MS = 380;
+export const CROSSFADE_MS = FADE_OUT_MS + FADE_IN_MS;
+const FADE_EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 async function loadFactory(kind: EngineKind): Promise<(opts?: Record<string, unknown>) => SceneEngine> {
   // a chunk missing after a deploy reloads the page once (chunkReload.ts); other failures use the stub
@@ -72,9 +80,9 @@ export function createEngineManager(
   const statusOff: Partial<Record<EngineKind, () => void>> = {};
   const pauseTimers: Partial<Record<EngineKind, number>> = {};
 
-  function setSlotVisible(kind: EngineKind, visible: boolean) {
+  function setSlotVisible(kind: EngineKind, visible: boolean, durationMs: number) {
     const el = slots[kind].el;
-    el.style.transition = reduceMotion ? 'none' : `opacity ${CROSSFADE_MS}ms ${CROSSFADE_EASING}`;
+    el.style.transition = reduceMotion ? 'none' : `opacity ${durationMs}ms ${FADE_EASING}`;
     el.style.opacity = visible ? '1' : '0';
     el.style.pointerEvents = visible ? 'auto' : 'none';
   }
@@ -115,15 +123,26 @@ export function createEngineManager(
 
   function fadeSwap(next: EngineKind, prev: EngineKind | null) {
     window.clearTimeout(pauseTimers[next]);
-    setSlotVisible(next, true);
-    if (prev && prev !== next) {
-      setSlotVisible(prev, false);
-      // pause the outgoing engine once the fade is over, unless the reader came back meanwhile
+    // First-view case: no fade-out sequence; just show the incoming layer at full opacity.
+    if (!prev || prev === next || reduceMotion) {
+      setSlotVisible(next, true, 0);
+      slots[next].engine?.resume();
+      return;
+    }
+    // Two-phase sequence: fade the outgoing layer to the stage background, then fade the
+    // incoming layer in. The incoming layer stays at opacity 0 until the fade-in begins so
+    // the two scenes never overlay (docs/ux/2026-09-13-motion-and-framing.md).
+    setSlotVisible(next, false, 0);
+    slots[next].engine?.resume();
+    setSlotVisible(prev, false, FADE_OUT_MS);
+    pauseTimers[next] = window.setTimeout(() => {
+      if (active !== next) return;
+      setSlotVisible(next, true, FADE_IN_MS);
+      // pause the outgoing engine once the fade-in has started, unless the reader came back meanwhile
       pauseTimers[prev] = window.setTimeout(() => {
         if (active !== prev) slots[prev].engine?.pause();
-      }, reduceMotion ? 0 : CROSSFADE_MS + 50);
-    }
-    slots[next].engine?.resume();
+      }, FADE_IN_MS + 40);
+    }, FADE_OUT_MS);
   }
 
   let applyToken = 0;

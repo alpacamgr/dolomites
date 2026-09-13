@@ -63,5 +63,5 @@ scene:
   camera:
     globe: { lat: 20, lon: 25, distance: 2.6 }
   layers:
-    - { id: "scotese-wright-2018-model", label: modeled, source_ref: "scotese-2018", style: "continents+boundaries" }
+    - { id: "scotese-wright-2018-model", label: modeled, source_ref: "scotese-2018", style: "continents+boundaries+landmass" }
     - { id: "scotese-paleodem-2018-v2", label: interpreted, source_ref: "scotese-2018" }
