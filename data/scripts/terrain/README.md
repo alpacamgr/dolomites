@@ -236,11 +236,12 @@ bilinear resampling onto 13-53 m tile pixels, compared against a single
 nearest 10 m or 30 m source cell (larger on steep slopes). At the Austrian
 points TINITALY is nodata, so the old build would have encoded 0 m there.
 
-Archive: 958 tiles, 309 847 777 bytes (309.8 MB; the 0 m-fill build was
-221.5 MB, and the extra bytes are the real relief north of the border). The
-archive header and metadata read back with z6-12, the 10.3-12.7 E /
-45.8-47.2 N bounds, both attributions, `source_datasets` and
-`seam_feather_m: 300`.
+Archive (core-only build of 2026-09-12): 958 tiles, 309 847 777 bytes (309.8 MB;
+the 0 m-fill build was 221.5 MB, and the extra bytes are the real relief north
+of the border). The ring build of 2026-09-13 has 1 017 tiles and 320 727 642
+bytes (see `dolomites-terrain.meta.json`); its header and metadata read back
+with z6-12, the 9-14 E / 45-48 N bounds (core 10.3-12.7 E / 45.8-47.2 N above
+z9), the attributions, `source_datasets` and `seam_feather_m: 300`.
 
 Seam inspection: `data/processed/terrain/preview/border-fill.png` is a z10
 hillshade (4094 x 1534 px, whole tiles covering 46.7-47.2 N across the bbox)

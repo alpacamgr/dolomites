@@ -1053,11 +1053,11 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
       applyProbe(probe);
       if (disposed) return;
       const [w, s, e, n] = t.bounds;
-      // maxBounds pads the DEM bbox by a quarter so a zoom-out settles on the ring with a
-      // little sky above; minZoom = 6 lets that ring view fit the viewport. With the outer
-      // ring in place there is no more page background at the horizon, so the extra padding
-      // that was needed before (0.5x) is cut back to 0.25x.
-      const mx = (e - w) * 0.25, my = (n - s) * 0.25;
+      // maxBounds is the DEM bbox itself (the outer ring): at pitch 0 the viewport can never
+      // show page background beyond the data, and MapLibre raises the effective minimum zoom
+      // until the ring fills the stage, so a zoom-out settles on the whole region. Pitched
+      // views still look past the ring at the horizon, where the fog takes over.
+      const mx = 0, my = 0;
       // With the widened ring, z10-12 tiles only exist inside the core bbox; short-circuit
       // requests for those tiles outside the core to a URL the browser drops locally
       // (no 404 round trip) so MapLibre falls back to the parent DEM tile from z<=ringMaxZoom.
@@ -1068,7 +1068,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         center: [(w + e) / 2, (s + n) / 2],
         zoom: 8.3,
         pitch: 45,
-        minZoom: 6,
+        minZoom: 7,
         maxZoom: t.maxzoom,
         transformRequest: short ? (url, resourceType) => (resourceType === 'Tile' ? short(url) : { url }) : undefined,
         maxPitch: 75,
