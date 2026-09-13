@@ -121,40 +121,59 @@ export function createEngineManager(
     return slot.mountPromise;
   }
 
-  function fadeSwap(next: EngineKind, prev: EngineKind | null) {
+  /** Pause an outgoing engine after `afterMs`, unless the reader has come back to it meanwhile. */
+  function pauseLater(kind: EngineKind, afterMs: number) {
+    window.clearTimeout(pauseTimers[kind]);
+    pauseTimers[kind] = window.setTimeout(() => {
+      if (active !== kind) slots[kind].engine?.pause();
+    }, afterMs);
+  }
+
+  let revealTimer = 0;
+  /**
+   * Start a view switch: the outgoing slot fades to the stage background at once. Returns the
+   * reveal step for the incoming slot; applyState runs it only once the incoming engine is
+   * mounted and holds its chapter camera, and the reveal itself waits for the fade-out to end,
+   * so the two scenes never overlay and a camera jump is never on screen, however slow the
+   * mount. A slot the reader returns to while it is still fading out is brought straight back
+   * from its current opacity (no cut to black).
+   */
+  function beginSwap(next: EngineKind, prev: EngineKind | null): () => void {
     window.clearTimeout(pauseTimers[next]);
-    // First-view case: no fade-out sequence; just show the incoming layer at full opacity.
     if (!prev || prev === next || reduceMotion) {
       setSlotVisible(next, true, 0);
-      slots[next].engine?.resume();
-      return;
+      if (prev && prev !== next) { setSlotVisible(prev, false, 0); pauseLater(prev, 0); }
+      return () => {};
     }
-    // Two-phase sequence: fade the outgoing layer to the stage background, then fade the
-    // incoming layer in. The incoming layer stays at opacity 0 until the fade-in begins so
-    // the two scenes never overlay (docs/ux/2026-09-13-motion-and-framing.md).
-    setSlotVisible(next, false, 0);
-    slots[next].engine?.resume();
     setSlotVisible(prev, false, FADE_OUT_MS);
-    pauseTimers[next] = window.setTimeout(() => {
-      if (active !== next) return;
-      setSlotVisible(next, true, FADE_IN_MS);
-      // pause the outgoing engine once the fade-in has started, unless the reader came back meanwhile
-      pauseTimers[prev] = window.setTimeout(() => {
-        if (active !== prev) slots[prev].engine?.pause();
-      }, FADE_IN_MS + 40);
-    }, FADE_OUT_MS);
+    const shown = parseFloat(getComputedStyle(slots[next].el).opacity) || 0;
+    if (shown > 0) {
+      setSlotVisible(next, true, Math.round(FADE_IN_MS * (1 - shown)));
+      pauseLater(prev, FADE_OUT_MS + 40);
+      return () => {};
+    }
+    setSlotVisible(next, false, 0);
+    const fadedOutAt = performance.now() + FADE_OUT_MS;
+    return () => {
+      window.clearTimeout(revealTimer);
+      revealTimer = window.setTimeout(() => {
+        if (active !== next) return;
+        setSlotVisible(next, true, FADE_IN_MS);
+        pauseLater(prev, FADE_IN_MS + 40);
+      }, Math.max(0, fadedOutAt - performance.now()));
+    };
   }
 
   let applyToken = 0;
   async function applyState(state: SceneState): Promise<void> {
     const token = ++applyToken;
-    // Swap the containers right away. The crossfade must not wait for the incoming
-    // engine: a slow mount (tiles, textures, a backgrounded tab) would otherwise keep
-    // the previous view on screen for a chapter it does not belong to.
+    // The outgoing view leaves right away: a slow mount (tiles, textures, a backgrounded tab)
+    // must not keep the previous view on screen for a chapter it does not belong to.
     const prev = active;
     active = state.view;
+    let reveal = () => {};
     if (prev !== state.view) {
-      fadeSwap(state.view, prev);
+      reveal = beginSwap(state.view, prev);
       // re-announce the incoming engine's last status so the legend swaps attributions
       const s = lastStatus[state.view];
       if (s) statusListeners.forEach((cb) => cb(s));
@@ -163,7 +182,11 @@ export function createEngineManager(
     // A later chapter change superseded this one while the engine was loading.
     if (token !== applyToken) return;
     engine.resume();
-    await engine.setState(state);
+    // setState places the chapter camera synchronously before it waits for data,
+    // so the slot can be revealed right after it starts.
+    const settled = engine.setState(state);
+    reveal();
+    await settled;
   }
 
   function applyTime(unit: 'ma' | 'ka', value: number): void {

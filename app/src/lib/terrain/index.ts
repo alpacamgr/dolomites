@@ -1092,7 +1092,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         if (locked || !map) return;
         if (!(e.ctrlKey || e.metaKey)) return;
         e.preventDefault();
-        const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+        const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 120 : e.deltaY;
         const nextZoom = map.getZoom() - px * 0.0025;
         // zoom about the pointer, as MapLibre's own scroll zoom does, so the ground under the cursor stays put
         const rect = map.getCanvas().getBoundingClientRect();

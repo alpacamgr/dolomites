@@ -45,7 +45,7 @@ The rail head always answers two questions in this order:
 | Axis lens (inset width) | Eased with the same damping loop, tau = 160 ms (~0.7 s). |
 | Subject readout / interval name swap | 180 ms opacity crossfade. |
 | View crossfade (globe <-> terrain) | Two-phase sequence (2026-09-13): 260 ms fade of the outgoing engine to the stage background, then 380 ms fade of the incoming engine in. Both engines are never visible at once, so the two scenes cannot overlay. `FADE_OUT_MS` / `FADE_IN_MS` live in one place (`engineManager.ts`) and are applied inline, so CSS and JS cannot drift. |
-| Terrain camera | Same view: 1800 ms ease-in-out (2026-09-13, raised from 1100). On a view switch the incoming terrain camera jumps to the chapter position while the incoming layer is still hidden by the fade; the first time the terrain is shown it jumps too (no flight from the default camera). |
+| Terrain camera | Same view: 1800 ms ease-in-out (2026-09-13, raised from 1100). On a view switch the incoming terrain camera jumps to the chapter position while the incoming layer is still hidden: the layer is revealed only after the fade-out has ended *and* its engine is mounted with the camera set (review fix 2026-09-13), so a slow mount shows the stage background, never a jump; a slot the reader returns to mid-fade is brought straight back from its current opacity. The first time the terrain is shown it jumps too (no flight from the default camera). |
 | Digits | `font-variant-numeric: tabular-nums` on all readouts. |
 | `prefers-reduced-motion` | No damping (time follows scroll), no lens animation, no crossfade (instant swap), camera jumps. |
 

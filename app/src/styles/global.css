@@ -115,8 +115,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .stage { position: relative; width: 100%; height: 100%; overflow: hidden; }
-/* matches CROSSFADE_MS in lib/story/engineManager.ts, which also sets it inline */
-.stage .engine-slot { position: absolute; inset: 0; opacity: 0; transition: opacity 650ms cubic-bezier(0.4, 0, 0.2, 1); }
+/* matches FADE_IN_MS in lib/story/engineManager.ts, which sets every fade inline */
+.stage .engine-slot { position: absolute; inset: 0; opacity: 0; transition: opacity 380ms cubic-bezier(0.4, 0, 0.2, 1); }
 .stage .engine-slot.active { opacity: 1; }
 .stage .engine-slot.globe { background: var(--stage-bg); }
 .stage .engine-slot.terrain { background: #202226; }

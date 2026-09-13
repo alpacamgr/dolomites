@@ -44,7 +44,9 @@ movements etc" and "it doesn't really feel professional/fun/interesting enough".
 3. **Terrain camera flights are longer and gentler.** `CAMERA_MS` raised
    from 1100 to 1800 ms with the existing ease-in-out. `CAMERA_AFTER_
    SWITCH_MS` (formerly 900 ms of ease-out during the crossfade) is now 0:
-   the camera jumps while the incoming layer is still hidden by the fade.
+   the camera jumps while the incoming layer is still hidden by the fade. (Review fix, same
+   day: the reveal now also waits for the incoming engine to be mounted with its camera set,
+   so this holds on slow mounts too, and a flip-back mid-fade no longer cuts to black.)
    Chapter yamls: `06-collision-uplift.yaml` pitch tightened from 30 to
    45 and zoom raised from 8.4 to 8.9 so the DEM bounds fill the frame and
    the hard right-hand edge of the data rectangle is out of view. Bearings

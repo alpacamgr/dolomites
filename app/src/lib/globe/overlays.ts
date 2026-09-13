@@ -64,7 +64,7 @@ const STYLE: Record<PlateKind, { color: number; width: number; opacity: number }
   transform: { color: 0xffd36e, width: 1.1, opacity: 0.85 },
   other: { color: 0xc9b8ff, width: 0.8, opacity: 0.3 },  // untyped PALEOMAP plate edges: kept (they are model boundaries) but visually recessive
 };
-const LANDMASS_FALLBACK_OPACITY = 0.3;
+const LANDMASS_FALLBACK_OPACITY = 0.2; // quieter than STYLE.landmass: the fallback is the coarser block union
 
 interface GeoEntry {
   age: number;
