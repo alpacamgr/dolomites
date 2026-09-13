@@ -59,9 +59,11 @@ interface StartOptions {
   engineOptions?: Record<string, unknown>;
 }
 
-/** Damping time constants (ms): inside a chapter, and while the rail catches up after a chapter change. */
+/** Damping time constants (ms): inside a chapter, and while the rail catches up after a chapter change.
+ *  TAU_CHAPTER raised from 200 to 350 in 2026-09-13 so the readout does not race through 300 Myr
+ *  in a blink on intro → Permian; see docs/ux/2026-09-13-motion-and-framing.md. */
 const TAU_SCROLL = 90;
-const TAU_CHAPTER = 200;
+const TAU_CHAPTER = 350;
 /** Reading line position inside the reading band (0 = band top, 1 = viewport bottom). */
 const READING_LINE = 0.4;
 /** A programmatic jump counts as finished after this long without scroll events. */

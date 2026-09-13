@@ -63,7 +63,7 @@ scene:
     start: 0
     end: 0
   camera:
-    terrain: { lon: 11.45, lat: 46.2, zoom: 8.4, pitch: 30, bearing: 0 }
+    terrain: { lon: 11.55, lat: 46.35, zoom: 8.9, pitch: 45, bearing: 20 }
   layers:
     - { id: "dolomites-terrain", label: observed, source_ref: "tarquini-2023" }
     - { id: "diss-3-3-1", label: interpreted, source_ref: "diss-3-3-1", style: "fault-lines" }

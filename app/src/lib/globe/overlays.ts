@@ -55,7 +55,8 @@ const MAX_ATTEMPTS = 4;
 const BOUNDARY_KINDS: readonly PlateKind[] = ['subduction', 'ridge', 'transform', 'other'];
 
 const STYLE: Record<PlateKind, { color: number; width: number; opacity: number }> = {
-  landmass: { color: 0xf7f3e8, width: 1.1, opacity: 0.5 },
+  // faint enough to give the paleogeography texture a coast to read against without overpowering it
+  landmass: { color: 0xf7f3e8, width: 1.0, opacity: 0.28 },
   continent: { color: 0xe8eef8, width: 0.8, opacity: 0.16 },
   coastline: { color: 0xfbf7ea, width: 1.0, opacity: 0.5 },
   subduction: { color: 0xff6a4d, width: 1.6, opacity: 0.9 },

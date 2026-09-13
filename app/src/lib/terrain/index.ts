@@ -221,9 +221,10 @@ const GEOLOGY_OPACITY = { dated: 0.55, undated: 0.34, hoverLift: 0.2, focus: 0.7
 const GAP_MIN_WIDTH_M = 200;
 const GAP_HATCH_FILTER = ['any', ['!', ['has', 'mean_width_m']], ['>=', ['to-number', ['get', 'mean_width_m'], 0], GAP_MIN_WIDTH_M]];
 
-/** Camera timing (docs/ux/2026-09-timeline-and-geology-ux.md): same view, and right after a view switch. */
-const CAMERA_MS = 1100;
-const CAMERA_AFTER_SWITCH_MS = 900;
+/** Camera timing (docs/ux/2026-09-13-motion-and-framing.md): same view; on a view switch the
+ *  camera jumps while the incoming layer is still hidden by the sequenced fade. */
+const CAMERA_MS = 1800;
+const CAMERA_AFTER_SWITCH_MS = 0;
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
@@ -391,6 +392,7 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
   let paused = false;
   let resumedAt = 0;
   let cameraApplied = false;
+  let cleanupGestures: (() => void) | null = null;
   let wanted = new Map<string, LayerRef>();
   let lastTime: { unit: TimeUnit; value: number } | null = null;
   let popup: maplibregl.Popup | null = null;
@@ -521,7 +523,9 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
   }
   function applyLock() {
     if (!map) return;
-    for (const h of [map.scrollZoom, map.boxZoom, map.dragRotate, map.dragPan, map.keyboard,
+    // scrollZoom stays permanently disabled: a custom wheel handler zooms only with
+    // Ctrl/⌘ so plain wheel scrolls the page silently (no cooperative-gestures veil).
+    for (const h of [map.boxZoom, map.dragRotate, map.dragPan, map.keyboard,
       map.doubleClickZoom, map.touchZoomRotate, map.touchPitch]) {
       if (locked) h.disable(); else h.enable();
     }
@@ -1008,14 +1012,24 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
         attributionControl: false,
         refreshExpiredTiles: false,
         maxTileCacheSize: 300,
-        // The wheel scrolls the story and Ctrl/⌘ + wheel zooms; on touch one finger scrolls the page, two move the map.
-        cooperativeGestures: true,
-        locale: {
-          'CooperativeGesturesHandler.WindowsHelpText': S('map_hint.wheel_windows', 'Use Ctrl + scroll to zoom the map'),
-          'CooperativeGesturesHandler.MacHelpText': S('map_hint.wheel_mac', 'Use ⌘ + scroll to zoom the map'),
-          'CooperativeGesturesHandler.MobileHelpText': S('map_hint.touch', 'Use two fingers to move the map'),
-        },
+        // cooperativeGestures painted a dark full-map veil on every plain wheel tick, so it is
+        // off; a custom wheel handler zooms only with Ctrl/⌘ and touch-action gives one-finger
+        // page-scroll on touch (docs/ux/2026-09-13-motion-and-framing.md).
+        cooperativeGestures: false,
       });
+      // Silent plain wheel: the page scrolls, the map does nothing. Ctrl/⌘ + wheel zooms.
+      map.scrollZoom.disable();
+      el.style.touchAction = 'pan-x pan-y';
+      const onWheel = (e: WheelEvent) => {
+        if (locked || !map) return;
+        if (!(e.ctrlKey || e.metaKey)) return;
+        e.preventDefault();
+        const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * 400 : e.deltaY;
+        const nextZoom = map.getZoom() - px * 0.0025;
+        map.easeTo({ zoom: nextZoom, duration: 120, easing: easeOutCubic, essential: true });
+      };
+      el.addEventListener('wheel', onWheel, { passive: false });
+      cleanupGestures = () => el.removeEventListener('wheel', onWheel);
       map.on('dataloading', () => setLoading(true));
       map.on('idle', () => {
         setLoading(false);
@@ -1103,6 +1117,8 @@ export function createTerrainEngine(options: TerrainOptions = {}): TerrainEngine
 
     dispose() {
       disposed = true;
+      cleanupGestures?.();
+      cleanupGestures = null;
       hidePopup();
       markers.forEach((mk) => mk.remove());
       ice?.dispose();

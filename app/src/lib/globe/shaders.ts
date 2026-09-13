@@ -47,7 +47,11 @@ export const globeFragmentShader = /* glsl */ `
     // Always sample (no texture reads inside branches: keeps mip selection valid).
     vec3 ca = texture2D(mapA, vUv).rgb;
     vec3 cb = texture2D(mapB, vUv).rgb;
-    vec3 albedo = mix(baseColor, mix(ca, cb, mixAmount), texturesReady);
+    // PaleoDEM is honest at 5 Myr steps: hold slice A for most of the interval and dissolve to B
+    // only in the last ~22 % (2026-09-13). A linear mix produced a permanent double image of the
+    // continents that read as "weird plate movements".
+    float sliceMix = smoothstep(0.78, 1.0, mixAmount);
+    vec3 albedo = mix(baseColor, mix(ca, cb, sliceMix), texturesReady);
 
     // Tangent-space normals. The pipeline (data/scripts/textures/render.py)
     // encodes green as +dz toward image-down (south); flip to north-up.
@@ -56,7 +60,8 @@ export const globeFragmentShader = /* glsl */ `
     na.y = -na.y;
     nb.y = -nb.y;
     const vec3 flatN = vec3(0.0, 0.0, 1.0);
-    vec3 nts = mix(mix(flatN, na, normalStrengthA), mix(flatN, nb, normalStrengthB), mixAmount);
+    // Normals follow the same smoothstep dissolve as the colour so relief and colour agree.
+    vec3 nts = mix(mix(flatN, na, normalStrengthA), mix(flatN, nb, normalStrengthB), sliceMix);
     // render.py divides dz/dx by cos(lat) (clamped at 0.05), which exaggerates
     // relief toward the poles and draws a radial fan there: fade normals out
     // poleward of ~70 degrees (|sin lat| 0.94..0.995).

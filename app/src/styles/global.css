@@ -120,13 +120,8 @@ img { max-width: 100%; height: auto; display: block; }
 .stage .engine-slot.active { opacity: 1; }
 .stage .engine-slot.globe { background: var(--stage-bg); }
 .stage .engine-slot.terrain { background: #202226; }
-/* globe gesture hint (the terrain uses MapLibre's own cooperative-gestures screen) */
-.gl-hint {
-  position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; padding: 1rem;
-  background: rgba(0, 0, 0, 0.45); color: #fff; font: 500 1.05rem/1.3 var(--font-sans); text-align: center;
-  opacity: 0; transition: opacity 250ms ease; pointer-events: none;
-}
-.gl-hint.on { opacity: 1; }
+/* Gesture hints removed 2026-09-13: plain wheel scrolls the page silently on both stages;
+   Ctrl/⌘ + wheel zooms. docs/ux/2026-09-13-motion-and-framing.md */
 
 /* --- Stage overlay ----------------------------------------------------- */
 
@@ -516,7 +511,6 @@ section.chapter:first-of-type { border-top: none; }
   .stage .engine-slot { transition: none; }
   .legend-toggle .chev, .credits > summary::after, .lane-btn, .gkey-row, .rail-marker { transition: none; }
   .timerail .age, .rail-subject { animation: none; }
-  .gl-hint { transition: none; }
   .loading-dot { animation: none; }
   * { scroll-behavior: auto !important; }
 }

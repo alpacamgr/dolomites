@@ -40,12 +40,12 @@ The rail head always answers two questions in this order:
 | What | Behaviour |
 |---|---|
 | Displayed time inside a chapter | Exponential damping toward the scroll target, frame-rate independent: `x += (target - x) * (1 - exp(-dt / tau))`, tau = 90 ms (settles in ~0.4 s). One rAF loop in the controller; runs only while not settled (threshold 0.02 % of the chapter span or 0.01 unit), then stops. |
-| Across a chapter change | The rail number and marker continue from the previous value (converted to Ma) and ease to the new target with tau = 200 ms. Engines receive the new chapter's target time directly in `setState` (no replay of meaningless intermediate states in the new view). |
+| Across a chapter change | The rail number and marker continue from the previous value (converted to Ma) and ease to the new target with tau = 350 ms (raised from 200 in 2026-09-13 so the readout does not race through 300 Myr in a blink; see `2026-09-13-motion-and-framing.md`). Engines receive the new chapter's target time directly in `setState` (no replay of meaningless intermediate states in the new view). |
 | Engine `setTime` | At most once per frame, only when the eased value changed by more than the threshold; never while settled. |
 | Axis lens (inset width) | Eased with the same damping loop, tau = 160 ms (~0.7 s). |
 | Subject readout / interval name swap | 180 ms opacity crossfade. |
-| View crossfade (globe <-> terrain) | 650 ms, `cubic-bezier(0.4, 0, 0.2, 1)`; outgoing engine pauses 50 ms after the fade. The value lives in one constant and is applied inline, so CSS and JS cannot drift. |
-| Terrain camera | Same view: 1100 ms ease-in-out. On a view switch the incoming terrain camera eases for 900 ms so the flight settles as the fade completes; the first time the terrain is shown it jumps (no flight from the default camera). |
+| View crossfade (globe <-> terrain) | Two-phase sequence (2026-09-13): 260 ms fade of the outgoing engine to the stage background, then 380 ms fade of the incoming engine in. Both engines are never visible at once, so the two scenes cannot overlay. `FADE_OUT_MS` / `FADE_IN_MS` live in one place (`engineManager.ts`) and are applied inline, so CSS and JS cannot drift. |
+| Terrain camera | Same view: 1800 ms ease-in-out (2026-09-13, raised from 1100). On a view switch the incoming terrain camera jumps to the chapter position while the incoming layer is still hidden by the fade; the first time the terrain is shown it jumps too (no flight from the default camera). |
 | Digits | `font-variant-numeric: tabular-nums` on all readouts. |
 | `prefers-reduced-motion` | No damping (time follows scroll), no lens animation, no crossfade (instant swap), camera jumps. |
 
