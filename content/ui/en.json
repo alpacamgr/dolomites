@@ -88,8 +88,8 @@
     "shades": "Shades: finer ICS divisions.",
     "hint": "Point at a row to highlight it on the map.",
     "none": "No mapped units in view",
-    "coarse_one": "Coarser map in view: {list}.",
-    "coarse_many": "Coarser maps in view: {list}.",
+    "coarse_one": "Coarser map in view, drawn a little lighter than the detailed maps: {list}.",
+    "coarse_many": "Coarser maps in view, drawn a little lighter than the detailed maps: {list}.",
     "period_not_given_many": "Period not given: {names}",
     "undated_withheld": "Mapped, age not given or not reliable enough to colour",
     "withheld": "Mapped, age not reliable enough to colour"
